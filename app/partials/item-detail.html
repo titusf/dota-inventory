@@ -1,0 +1,50 @@
+
+<div class="text-center section">
+    <h1>{{item.item_name}} <small>Dota 2 Item</small></h1>
+</div>
+
+<div class="section">
+    <div class="row">
+        <div class="col-md-3">
+            <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
+            <a ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}">View On Market</a>
+        </div>
+        <div class="col-md-6" id="item-details">
+            <div class="row" id="item-hero" ng-hide="noHero">
+                <div class="col-md-3">
+                    <img class="img-responsive pull-left" ng-src="img/heroes/{{item.hero_db}}_full.png">
+                    
+                </div>
+                <div class="col-md-9"><h3><a href='#/items/hero/{{item.hero_db}}'>{{item.hero_name}}</a></h3></div>
+            </div>
+            <div class="row text-center" id="item-classes">
+                <div class="col-md-4 rarity {{item.item_rarity}}">
+                    <a href="#/items/rarity/{{item.item_rarity}}">{{item.item_rarity}}</a>
+                </div>
+                <div class="col-md-4">{{item.item_type_name}}</div>
+                <div class="col-md-4">{{item.item_set}}</div>
+            </div>
+            <p id="item-description">{{item.item_description}}</p>
+        </div>
+        <div class="col-md-3 text-center text-muted">
+            <div ng-hide="loggedIn">
+                <p>You are not logged in.</p>
+
+                <p>Sign in to see which of your friends own this item.</p>
+            </div>
+            <div ng-show="loggedIn">
+                <p>You are logged in!</p><p>{{friendsOwning.length}} friends own this item</p>
+                
+                <div ng-repeat="friend in friendsOwning">
+                    <a href="#/users/{{friend.steamid}}">{{friend.personaname}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section text-center text-muted">
+    <h3>Item Owners</h3>
+    <p>Coming Soon...</p>
+</div>
+
+

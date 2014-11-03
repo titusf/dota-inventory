@@ -1,0 +1,54 @@
+<!-- Loading placeholder -->
+<div class="loading text-center" ng-show="loadingUser">
+    <img src="img/ajax_loader_256.gif" />
+    <h1>Loading User and FriendsList</h1>
+    <p>Please wait. Loading may take some time for each new user.</p>
+</div>
+<!-- Generic user block container -->
+<div class="user-section" ng-hide="loadingUser">
+
+    <div class='alert alert-info text-center'>Try reloading the page if it gets stuck.</div>
+    <p class="temporary">Partial view for user: {{steamId}} friendslist.</p>
+    <!-- basic profile information - display on all user pages -->
+    <div class="section" user-title user="user"></div>
+
+    <div class="loading text-center" ng-show="loadingFriends">
+        <img src="img/ajax_loader_256.gif" />
+        <h1>Loading Friends</h1>
+        <p>Please wait. Loading may take some time for each new user.</p>
+    </div>
+    <!-- Block containing user's friends avatars - only on friendslist page -->
+    <div class="section" ng-hide="loadingFriends">
+        <div id="loadingbar">
+            <p>Background progress:</p>
+            <progressbar class="progress-striped active text-center" max="100" value="percentComplete" type="info"><span style=" white-space:nowrap; text-shadow:1px 1px #000;">{{friendsLoaded}} / {{friendCount}} ({{friendsPrivate}} friends unavailable)</span></progressbar>
+        </div>
+        <p class="text-center text-primary" ng-show="friendsPrivate > 0">!! {{friendsPrivate}} friends have their inventories set to private. Tell them to change this !!</p>
+        <div class="friend-users">
+            <div class="steam-user" popover="{{friend.personaname}}" popover-trigger="mouseenter" ng-repeat="friend in friendslist" >
+                <a href="#/users/{{friend.steamid}}/">
+                    <img ng-class="{faded: friend.loading}" ng-src="{{friend.avatar_url}}">
+                    <span class="glyphicon glyphicon-lock steam-user-warning warning-yellow" ng-if="friend.inventory_private" ></span>
+                    <span class="glyphicon glyphicon-lock steam-user-warning warning-black" ng-if="friend.community_visibility_state !== '3'" ></span>
+                </a>
+            </div>
+        </div>
+
+        <div id="friends-label" class="row" style="color:#ddd; text-align: center;">
+            <div class="col-md-4"><p><span class="glyphicon glyphicon-chevron-up"></span></p><p>Your friends</p></div>
+            <div class="col-md-4"><p><span class="glyphicon glyphicon-chevron-up"></span></p><p>Your friends</p></div>
+            <div class="col-md-4"><p><span class="glyphicon glyphicon-chevron-up"></span></p><p>Your friends</p></div>     
+        </div> 
+    </div>
+    <!-- Block containing friendslist items. Hidden if user is private. -->
+    <div class="item-list-container section" ng-hide="user.isprivate || loadingFriends">
+        <h3 class="text-left" style="margin-left:30px;">Friends Item List</h3>
+        <div item-list items="items" owners="owners"></div> 
+    </div>
+    <!-- Block to be displayed when user is private. -->
+    <div class="private text-center" ng-show="user.isprivate">
+        <p><span style="font-size:96px;" class="glyphicon glyphicon-lock"></span></p>
+        <h3>This Profile is Private. </h3>
+        <p>If you are the owner of this account you must change your privacy settings to use this site.</p>
+    </div>
+</div>

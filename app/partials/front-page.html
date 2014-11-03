@@ -1,0 +1,37 @@
+<div id="front-container">
+    <img id="front-large" class="img-responsive" src="img/large_front.png" />
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <input ng-model="query" type="text" class="form-control input-lg" id="community-url" placeholder="Enter a hero, rarity, item type, name or Steam Community URL.">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2">
+            <p class="search-loading" ng-if="loadingQuery && query.length > 2">Searching...</p>
+            <p class="search-loading" ng-if="loadingQuery && query.length < 3 && query.length > 0">Keep Typing...</p>
+            <ul class="results" ng-hide="loadingQuery">
+                <li ng-if="results.length == 0 && query.length > 2"><span>No results found.</span></li>
+                <li ng-if="query.length < 3 && query.length != 0"><span>Keep typing...</span></li>
+                <li ng-repeat="result in results"><a href="{{result.link}}">{{result.title}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <hr />
+    <div class="text-center">
+        <p>Welcome to the <strong>new</strong> <a href="http://dotainventory.com">DotaInventory.com</a>! 
+            If you would prefer to use the old site, <a href="http://old.dotainventory.com">click here</a>.</p>
+        <p>This is an early version of the site meaning <strong>it will definitely contain bugs</strong> and may be slow. 
+            If possible, please <a href="bugs.html">report your experience here</a>. Thanks!</p>
+    </div>
+    <hr />
+    <div id='front-social' class="text-center">
+        <p>
+            <a href="http://steamcommunity.com/groups/dotainventory"><img src="img/steam_social.png" /></a>
+            <a href="http://twitter.com/dotainventory"><img src="img/twitter_social.png" /></a>
+            <a href="http://facebook.com/dotainventory"><img src="img/facebook_social.png" /></a>
+        </p>
+        <p><a href="http://steamcommunity.com/id/mchairmaster/" >Add me on Steam directly</a></p>
+    </div>
+    
+
+</div>

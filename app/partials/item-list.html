@@ -1,0 +1,191 @@
+<div class="loading text-center" ng-show="loadingItems">
+    <img src="img/ajax_loader_256.gif" />
+    <h1>Loading Items</h1>
+    <p>Please wait. Loading may take some time for each new user.</p>
+</div>
+<div class="item-list" ng-hide="loadingItems">
+    <p class="temporary">Generic Item-List partial view</p>
+    <div class="row">
+        <div class="col-md-10 item-list-filters"> 
+            <form name="item-filters" class="form-inline text-center">
+                <div class="form-group">
+                    <input ng-model="searchQuery" name="searchQuery" type="text" class="form-control" id="item-search" placeholder="Search by name">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="select-rarity" ng-model="rarity">
+                        <option value="">Any Rarity</option>
+                        <option value="common">Common</option>
+                        <option value="uncommon">Uncommon</option>
+                        <option value="rare">Rare</option>
+                        <option value="mythical">Mythical</option>
+                        <option value="legendary">Legendary</option>
+                        <option value="ancient">Ancient</option>
+                        <option value="immortal">Immortal</option>
+                        <option value="arcana">Arcana</option>
+                    </select>
+                </div>
+                <div class="form-group">   
+                    <select class="form-control" name="hero" id="select-hero" ng-model="hero">
+                        <option value="">Any Hero</option>
+                        <option value="npc_dota_hero_abaddon">Abaddon</option>
+                        <option value="npc_dota_hero_alchemist">Alchemist</option>
+                        <option value="npc_dota_hero_ancient_apparition">Ancient Apparition</option>
+                        <option value="npc_dota_hero_antimage">Anti-Mage</option>
+                        <option value="npc_dota_hero_axe">Axe</option>
+                        <option value="npc_dota_hero_bane">Bane</option>
+                        <option value="npc_dota_hero_batrider">Batrider</option>
+                        <option value="npc_dota_hero_beastmaster">Beastmaster</option>
+                        <option value="npc_dota_hero_bloodseeker">Bloodseeker</option>
+                        <option value="npc_dota_hero_bounty_hunter">Bounty Hunter</option>
+                        <option value="npc_dota_hero_brewmaster">Brewmaster</option>
+                        <option value="npc_dota_hero_bristleback">Bristleback</option>
+                        <option value="npc_dota_hero_broodmother">Broodmother</option>
+                        <option value="npc_dota_hero_centaur">Centaur Warrunner</option>
+                        <option value="npc_dota_hero_chaos_knight">Chaos Knight</option>
+                        <option value="npc_dota_hero_chen">Chen</option>
+                        <option value="npc_dota_hero_clinkz">Clinkz</option>
+                        <option value="npc_dota_hero_rattletrap">Clockwerk</option>
+                        <option value="npc_dota_hero_crystal_maiden">Crystal Maiden</option>
+                        <option value="npc_dota_hero_dark_seer">Dark Seer</option>
+                        <option value="npc_dota_hero_dazzle">Dazzle</option>
+                        <option value="npc_dota_hero_death_prophet">Death Prophet</option>
+                        <option value="npc_dota_hero_disruptor">Disruptor</option>
+                        <option value="npc_dota_hero_doom_bringer">Doom</option>
+                        <option value="npc_dota_hero_dragon_knight">Dragon Knight</option>
+                        <option value="npc_dota_hero_drow_ranger">Drow Ranger</option>
+                        <option value="npc_dota_hero_earthshaker">Earthshaker</option>
+                        <option value="npc_dota_hero_elder_titan">Elder Titan</option>
+                        <option value="npc_dota_hero_enchantress">Enchantress</option>
+                        <option value="npc_dota_hero_enigma">Enigma</option>
+                        <option value="npc_dota_hero_faceless_void">Faceless Void</option>
+                        <option value="npc_dota_hero_gyrocopter">Gyrocopter</option>
+                        <option value="npc_dota_hero_huskar">Huskar</option>
+                        <option value="npc_dota_hero_invoker">Invoker</option>
+                        <option value="npc_dota_hero_wisp">Io</option>
+                        <option value="npc_dota_hero_jakiro">Jakiro</option>
+                        <option value="npc_dota_hero_juggernaut">Juggernaut</option>
+                        <option value="npc_dota_hero_keeper_of_the_light">Keeper of the Light</option>
+                        <option value="npc_dota_hero_kunkka">Kunkka</option>
+                        <option value="npc_dota_hero_legion_commander">Legion Commander</option>
+                        <option value="npc_dota_hero_leshrac">Leshrac</option>
+                        <option value="npc_dota_hero_lich">Lich</option>
+                        <option value="npc_dota_hero_life_stealer">Lifestealer</option>
+                        <option value="npc_dota_hero_lina">Lina</option>
+                        <option value="npc_dota_hero_lion">Lion</option>
+                        <option value="npc_dota_hero_lone_druid">Lone Druid</option>
+                        <option value="npc_dota_hero_luna">Luna</option>
+                        <option value="npc_dota_hero_lycan">Lycanthrope</option>
+                        <option value="npc_dota_hero_magnataur">Magnus</option>
+                        <option value="npc_dota_hero_medusa">Medusa</option>
+                        <option value="npc_dota_hero_meepo">Meepo</option>
+                        <option value="npc_dota_hero_mirana">Mirana</option>
+                        <option value="npc_dota_hero_morphling">Morphling</option>
+                        <option value="npc_dota_hero_naga_siren">Naga Siren</option>
+                        <option value="npc_dota_hero_furion">Nature's Prophet</option>
+                        <option value="npc_dota_hero_necrolyte">Necrolyte</option>
+                        <option value="npc_dota_hero_night_stalker">Night Stalker</option>
+                        <option value="npc_dota_hero_nyx_assassin">Nyx Assassin</option>
+                        <option value="npc_dota_hero_ogre_magi">Ogre Magi</option>
+                        <option value="npc_dota_hero_omniknight">Omniknight</option>
+                        <option value="npc_dota_hero_obsidian_destroyer">Outworld Devourer</option>
+                        <option value="npc_dota_hero_phantom_assassin">Phantom Assassin</option>
+                        <option value="npc_dota_hero_phantom_lancer">Phantom Lancer</option>
+                        <option value="npc_dota_hero_puck">Puck</option>
+                        <option value="npc_dota_hero_pudge">Pudge</option>
+                        <option value="npc_dota_hero_pugna">Pugna</option>
+                        <option value="npc_dota_hero_queenofpain">Queen of Pain</option>
+                        <option value="npc_dota_hero_razor">Razor</option>
+                        <option value="npc_dota_hero_riki">Riki</option>
+                        <option value="npc_dota_hero_rubick">Rubick</option>
+                        <option value="npc_dota_hero_sand_king">Sand King</option>
+                        <option value="npc_dota_hero_shadow_demon">Shadow Demon</option>
+                        <option value="npc_dota_hero_nevermore">Shadow Fiend</option>
+                        <option value="npc_dota_hero_shadow_shaman">Shadow Shaman</option>
+                        <option value="npc_dota_hero_silencer">Silencer</option>
+                        <option value="npc_dota_hero_skeleton_king">Skeleton King</option>
+                        <option value="npc_dota_hero_skywrath_mage">Skywrath Mage</option>
+                        <option value="npc_dota_hero_slardar">Slardar</option>
+                        <option value="npc_dota_hero_slark">Slark</option>
+                        <option value="npc_dota_hero_sniper">Sniper</option>
+                        <option value="npc_dota_hero_spectre">Spectre</option>
+                        <option value="npc_dota_hero_spirit_breaker">Spirit Breaker</option>
+                        <option value="npc_dota_hero_storm_spirit">Storm Spirit</option>
+                        <option value="npc_dota_hero_sven">Sven</option>
+                        <option value="npc_dota_hero_templar_assassin">Templar Assassin</option>
+                        <option value="npc_dota_hero_tidehunter">Tidehunter</option>
+                        <option value="npc_dota_hero_shredder">Timbersaw</option>
+                        <option value="npc_dota_hero_tinker">Tinker</option>
+                        <option value="npc_dota_hero_tiny">Tiny</option>
+                        <option value="npc_dota_hero_treant">Treant Protector</option>
+                        <option value="npc_dota_hero_troll_warlord">Troll Warlord</option>
+                        <option value="npc_dota_hero_tusk">Tusk</option>
+                        <option value="npc_dota_hero_undying">Undying</option>
+                        <option value="npc_dota_hero_ursa">Ursa</option>
+                        <option value="npc_dota_hero_vengefulspirit">Vengeful Spirit</option>
+                        <option value="npc_dota_hero_venomancer">Venomancer</option>
+                        <option value="npc_dota_hero_viper">Viper</option>
+                        <option value="npc_dota_hero_visage">Visage</option>
+                        <option value="npc_dota_hero_warlock">Warlock</option>
+                        <option value="npc_dota_hero_weaver">Weaver</option>
+                        <option value="npc_dota_hero_windrunner">Windrunner</option>
+                        <option value="npc_dota_hero_witch_doctor">Witch Doctor</option>
+                        <option value="npc_dota_hero_zuus">Zeus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="select-class" ng-model="class">
+                        <option value="">Any Class</option>
+                        <option value="dota_item_wearable">Equippable</option>
+                        <option value="upgrade">Upgrades*</option>
+                        <option value="supply_crate">Treasure Chests</option>
+                        <option value="tool">Tools and Tickets</option>
+                        <option value="mysterious_eggs">Eggs*</option>
+                        <option value="player_card">Player Cards</option>
+                        <option value="bundle">Bundles</option>
+                    </select>
+                </div>
+                <select class="form-control" id="select-sorting" ng-model="orderProp">
+                    <option value="">No Sorting</option>
+                    <option value="used_by_heroes">Hero</option>
+                    <option value="rarity">Rarity</option>
+                </select>
+            </form>
+        </div>
+        <div class="col-md-2 item-count">
+            <p class="num" ng-bind="items.length">N/A</p>
+            <p>Unique Items.</p>
+        </div>
+    </div>
+    <div class="items text-center" ng-class="{grid: displayGrid}">
+        <div style="margin:0 0 8px 0;">
+            <button type="button" class="btn btn-default btn-xs" ng-click="viewAsGrid()"><span class="glyphicon glyphicon-th"></span> Grid View</button>
+            <button type="button" class="btn btn-default btn-xs" ng-click="viewAsList()"><span class="glyphicon glyphicon-list"></span> List View</button>
+        </div>
+        <div class="alert alert-info text-center" ng-hide="filteredItems.length">
+            Nothing found.
+        </div>
+        <div class="alert alert-warning text-center" ng-if="filteredItems.length > maxDisplayed">
+            Displaying {{maxDisplayed}} out of {{filteredItems.length}} items. Refine your results with filters or scroll down to show more.
+        </div>
+        <div class="dota-item" ng-repeat="item in filteredItems = (items| filter:{name:searchQuery, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitTo:maxDisplayed | orderBy:sortItems">
+            <div class="item-box {{item.item_rarity}} clearfix">
+                <a href='#/items/id/{{item.defindex}}'>
+                    <img ng-src="{{item.image_url}}" />
+                </a>
+                <div class="item-details">
+                    <h4>{{item.name}}</h4>
+                    <p class="rarity-text {{item.item_rarity}}">{{heroes[item.used_by_heroes]}}'s {{item.item_rarity}} {{item.item_type_name}}</p>
+                    <p class="description">{{item.item_description}}</p>
+                    <div class="ownership">
+                        <p ng-if="owners[item.defindex].length < 11">{{owners[item.defindex].length}} of this user's friends own this item:</p>
+                        <p ng-if="owners[item.defindex].length > 10">More than 10 of this user's friends own this item - user names will not be displayed.</p>
+                        <div ng-if="owners[item.defindex].length < 11" ng-repeat="owner in owners[item.defindex]">
+                            <a href="#/users/{{owner.details.steamid}}/">{{owner.details.personaname}}</a>
+                        </div>
+                    </div>
+                </div>      
+            </div>
+        </div> 
+        <p class="text-center" ng-click="showMore()" ng-if="filteredItems.length > maxDisplayed"><button type="button" class="btn btn-primary btn-xs">Show more</button></p>
+    </div>
+</div>

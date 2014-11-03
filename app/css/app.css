@@ -1,30 +1,527 @@
 /* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+/**General Level Styles**/
+body{
+    background-color:#f3f3f3; 
+}
+h1{
+    font-size:52px;
+}
+#navbar{
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    background-color:#222;
+    z-index:1000;
+    border-bottom: 2px solid #555;
+    border-top:3px solid #b82020;
 }
 
-.menu:before {
-  content: "[";
+#main-menu-container{
+    padding: 0px 15px 0px;
 }
 
-.menu:after {
-  content: "]";
+#main-menu-container ul.nav > li{
+    float:left;
+    margin-right:9px;
+}
+#main-menu-container ul.nav > li.active > a{
+    color: #000000;
+    text-shadow: 1px 1px #BE4848;
+    background: #b82020;
+    border-radius: 0 0 5px 5px;
+}
+#main-menu-container ul.nav > li > a{
+    padding: 20px 15px;
+    color:#fff;
+    font-weight:bold;
+}
+#main-menu-container ul.nav > li > a:hover{
+    color: #000000;
+    text-shadow: 1px 1px #DF6868;
+    background: #D04949;
+    border-radius: 0 0 5px 5px;
+}
+.nav-pills>li.active>a{
+    background-color:#99D0FF;
+}
+p.temporary{
+    text-align:center;
+    color:#ce8483;
+    font-style: italic;
+    display:none;
 }
 
-.menu > li {
-  display: inline;
+#wrap > .container{
+    padding-top: 84px;
+    padding-bottom: 13px;
+    background-color:#fff;
+    border-style:solid;
+    border-width:0 1px 0 1px;
+    border-color:#eee;
+}
+#footer p{
+    margin:10px 0;
+}
+#footer a{
+    margin: 0 10px;
+}
+/**Item List Styles**/
+div.dota-item{
+    background-color: #333;
+    vertical-align: top;
+    margin: 3px;  
+    position: relative;
+    color:#FFF;
+}
+.dota-item img{
+    float:left;
+    margin-right:14px;
+    width: 176px;
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+.items.list{
+
 }
 
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+.items.grid{
+
+}
+.items.grid .dota-item{
+    display: inline-block;
+    background-image: url(../img/unknown_item.jpg);
+    background-size: cover;
+}
+.items.grid .dota-item img{
+    width: 79px;
+    height:52px;
+    float:none;
+    margin-right:0px;
+}
+.items.grid .dota-item .item-details{
+    position:absolute;
+    bottom:60px;
+    left:-110px;
+    width:300px;
+    z-index:1000;
+    visibility:hidden;
+    background-color: #333;
+    padding: 0 10px 3px;
+    border: 3px solid #943C3C;
+    color:#eee;
+}
+.items.grid .dota-item:hover .item-details{
+    visibility:visible;
+}
+.items.grid .dota-item .item-details .description{
+    display:none;
+}
+.items.grid .dota-item .item-details h4{
+    text-align:center;
+}
+.items.grid .dota-item .item-details .rarity-text{
+    text-align:center;
+}
+
+.item-box{
+    border-style:solid;
+    border-width:3px;
+}
+.item-box.common{
+    border-color:#B0C3D9;
+}
+.item-box.uncommon{
+    border-color:#5E98D9;
+}
+.item-box.rare{
+    border-color:#4B69FF;
+}
+.item-box.mythical{
+    border-color:#8847FF;
+}
+.item-box.legendary{
+    border-color:#D32CE6;
+}
+.item-box.ancient{
+    border-color:#EB4B4B;
+}
+.item-box.immortal{
+    border-color:#E4AE33;
+}
+.item-box.arcana{
+    border-color:#ADE55C;
+}
+div.item-list{
+    padding-top: 14px;
+    text-align: center;
+}
+div.item-list .well{
+    background-color: #222;
+    border: 1px solid #424242;
+}
+div.items{
+    text-align: left;
+    padding-bottom:14px;
+}
+.item-list-container{
+    text-align: center;
+}
+.item-list-filters{
+    background-color: #eee;
+    border-radius: 0 3px 3px 0;
+}
+.item-list-filters > form{
+    margin:14px 0;
+}
+.item-count{
+    color:#333;
+}
+.item-count > .num{
+    font-size: 28px;
+    margin-bottom:0px;
+}
+/*Item details*/
+#item-details{
+    background-color:#fafafa;
+    border:1px solid #eee;
+    min-height:170px;
+}
+#item-hero{
+    background-color:#333;
+    color:#fff;
+}
+#item-classes{
+    border-top:10px solid #eee;
+    border-bottom:10px solid #eee; 
+}
+#item-description{
+    font-style:italic;
+    margin-top:10px;
+}
+/** Rarities **/
+.rarity, .rarity-text{
+    text-transform:capitalize;
+}
+.rarity > a {
+    color:#fff;
+}
+.rarity.common{
+    background-color:#B0C3D9;
+}
+.rarity.uncommon{
+    background-color:#5E98D9;
+}
+.rarity.rare{
+    background-color:#4B69FF;
+}
+.rarity.mythical{
+    background-color:#8847FF;
+}
+.rarity.legendary{
+    background-color:#D32CE6;
+}
+.rarity.ancient{
+    background-color:#EB4B4B;
+}
+.rarity.immortal{
+    background-color:#E4AE33;
+}
+.rarity.arcana{
+    background-color:#ADE55C;
+}
+.rarity-text.common{
+    color:#B0C3D9;
+}
+.rarity-text.uncommon{
+    color:#5E98D9;
+}
+.rarity-text.rare{
+    color:#4B69FF;
+}
+.rarity-text.mythical{
+    color:#8847FF;
+}
+.rarity-text.legendary{
+    color:#D32CE6;
+}
+.rarity-text.ancient{
+    color:#EB4B4B;
+}
+.rarity-text.immortal{
+    color:#E4AE33;
+}
+.rarity-text.arcana{
+    color:#ADE55C;
+}
+/**/
+.friend-users{
+    text-align:center;
+    background-color:#f6f6f6;
+}
+.steam-user{
+    display: inline-block;
+    background-color: #eee;
+    overflow: hidden;
+    height: 32px;
+    font-size:9px;
+    vertical-align:top;
+    position:relative;
+}
+.steam-user-warning{
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    z-index: 300;
+    font-size: 18px;
+
+}
+.warning-yellow{
+    color: #FFAE00;
+
+    text-shadow:1px 1px #000;
+}
+.warning-black{
+    color:#000;
+}
+.faded{
+    opacity:0.5;
+}
+/* Front page styles
+-------------------------------------------------- */
+#front-container{
+    padding-top:60px;
+}
+#front-large{
+    margin:0 auto;
+}
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -90px;
+    /* Pad bottom by footer height */
+    padding: 0 0 90px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+    height: 90px;
+    background-color: #eee;
+    text-align: center;
+    border-top:1px solid #ddd;
+    padding:10px 0 20px 0;
+}
+#logged-in-user{
+    color:#fff;
+    padding-top:14px;
+}
+#logged-in-user > div{
+
+}
+#logged-in-user > img{
+    margin-right:7px;
+    width:28px;
+}
+.loading{
+    padding:80px 0;
+
+}
+.loading > h1{
+    color:#e6e6e6;
+    text-shadow: 1px 1px #ddd; 
+}
+.loading > img {
+}
+#login-steam{
+    margin-top:10px;
+}
+#nav-logo{
+
+}
+
+.page-title{
+    padding:20px 30px;
+}
+.page-title img{
+    width:96px;
+    margin-right:16px;
+}
+.page-title h1{
+    margin-top:4px;
+}
+
+#item-categories .rarity{
+    color: #fff;
+    width: 12%;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 4px;
+    border:1px solid #666;
+    font-weight:bold;
+    text-transform:none;
+}
+#item-categories .rarity a{
+    display:block;
+    color:#fff;
+    padding:6px 0px;
+}
+#item-categories .rarity .counter{
+    background-color:#eee;
+    color:#666;
+    display:none;
+}
+
+/**UPDATE TIMER **/
+div.update-timer{
+    color:#ddd;
+}
+div.update-timer .glyphicon{
+    font-size:82px;
+    float:left;
+    margin-right:3px;
+}
+div.update-timer .time-left{
+    font-size:42px;
+    margin-bottom:0px;
+}
+div.update-timer .description{
+}
+.search-loading{
+    background-image:url(../img/ajax_loader_28.gif);
+    background-position:center;
+    background-repeat: no-repeat;
+}
+ul.results, .search-loading{
+    list-style:none;
+    padding-left:0;
+    border-width:0 1px 1px 1px;
+    border-color:#ddd;
+    border-style:solid;
+}
+ul.results > li, .search-loading{
+    background-color: #f6f6f6;
+}
+ul.results > li > a, ul.results > li > span, .search-loading{
+    width: 100%;
+    display: block;
+    padding: 10px 0 10px 18px; 
+    text-transform:capitalize;
+}
+ul.results > li > a:hover{
+    background-color:#eee;
+}
+.error{
+    padding: 80px 0;
+    border: 3px dashed #eee;
+}
+
+
+div.hero{
+    display:inline-block;
+    border:1px solid #eee;
+}
+div.hero img{
+    width: 96px;
+    height: 54px;
+}
+
+.section{
+/*    border-color: #eee;
+    border-style: solid;
+    border-width: 1px 8px;
+    margin-bottom:10px;
+    background-color:#fff;
+    box-shadow: 0px 3px 3px #CACACA;
+    padding:0 14px;*/
+}
+.section2{
+    width:50%;
+}
+.section:first-of-type{
+    border-top-width:8px;
+}
+.section:last-of-type{
+    border-bottom-width:8px;
+}
+.section-label{
+    color: #C5C5C5;
+    padding-left: 14px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+#hero-title img{
+    border-radius: 0 0 9px 9px;
+    border: 1px solid #000;
+    width: 200px;
+}
+
+#hero-img{
+    width: 186px;
+    border: 3px solid #000;
+    margin-top: 30px;
+}
+li.hero{
+    width: 20%;
+    display: inline-block;
+    margin-bottom: 4px;
+    border:1px solid #eee;
+}
+
+li.hero img{
+    width: 42px;
+    height: 24px;
+    margin-right: 7px;
+    border:1px solid #000;
+}
+li.hero a{
+    display:block;
+    height:100%;
+    color:#333;
+}
+li.hero a:hover{
+    background:#eee;
+    color:#555;
+}
+li.hero p{
+    margin:0;
+}
+
+.shallowUpdate{
+    color:#b82020;
+}
+.main-item-img{
+    border: 3px solid #333;
+}
+
+.user-container{
+    font-size:32px;
+}
+.user-container img{
+    margin:10px;
+}
+.search-user-result{
+    width: 660px;
+    margin: 0 auto;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 2px dashed #ddd;
+}
+.visHidden{
+    visibility:hidden;
+}
+#front-social{
+    margin-top:40px;
+}
+#front-social img{
+    margin:0 30px;
+    width:52px;
 }

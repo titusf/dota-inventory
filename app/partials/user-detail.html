@@ -1,0 +1,40 @@
+<div class="loading text-center" ng-show="loading">
+    <img src="img/ajax_loader_256.gif" />
+    <h1>Loading User Profile</h1>
+    <p>Please wait. Loading may take <strong>a long time</strong> for each new user. You may reload the page but data will still be loading. </p>
+</div>
+
+<div class="user-profile" ng-hide="loading || userApiFail">
+
+    <p class="temporary">Profile view for: {{steamId}}</p>
+
+    <div user-title user="user" class='section'></div>
+
+    <div ng-hide="user.isprivate" class='section'>
+        
+        <div id="user-items-list" class="item-list-container"  ng-hide="itemsApiFail">
+            <div ng-show="itemsLoading" class="alert alert-info text-center">Fetching user items.</div>
+            <h3>User's Inventory</h3>
+            <div item-list items="items"></div>
+        </div>
+
+        <div class="error text-center" ng-show="itemsApiFail">  
+            <p><span style="font-size:96px;" class="glyphicon glyphicon-warning-sign"></span><p>
+            <h3>{{errorMessage}}</h3>
+            <p>Please change your user settings or ask this user to do so.</p>
+        </div>
+    </div>
+
+    <div class="error text-center" ng-show="user.isprivate">
+        <p><span style="font-size:96px;" class="glyphicon glyphicon-lock"></span></p>
+        <h3>This Profile is Private. </h3>
+        <p>If you are the owner of this account you must change your privacy settings to use this site.</p>
+    </div>
+
+</div>
+
+<div class="error text-center" ng-show="userApiFail">  
+    <p><span style="font-size:96px;" class="glyphicon glyphicon-warning-sign"></span><p>
+    <h3>{{errorMessage}}</h3>
+    <p>If you believe this profile should exist, <a href="http://steamcommunity.com/profiles/{{steamId}}" target="_blank">click here</a> to check on Steam before reporting this as an error.</p>
+</div>
