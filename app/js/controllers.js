@@ -249,7 +249,6 @@ angular.module('myApp.controllers', ['ngCookies']).
                     $scope.items = itemList.getItemList();
                     $scope.owners = itemList.getOwners();
                     $scope.item_count = 0;
-                    //
 
                     $scope.friendsPrivate = 0;
                     
