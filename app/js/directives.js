@@ -70,4 +70,17 @@ angular.module('myApp.directives', []).
 
                 }
             };
-        });
+        }).
+        directive('myAdSense', function() {
+            return {
+                templateUrl: 'partials/adsense.html',
+                restrict: 'A',
+                transclude: true,
+                replace: true,
+                controller: function(){
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                },
+                link: function($scope, element, attrs) {
+                }
+            }
+        })
