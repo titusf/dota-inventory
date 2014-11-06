@@ -9,7 +9,7 @@ angular.module('myApp.directives', []).
                     elm.text(version);
                 };
             }]).
-        directive('itemList', ['api', function(api) {
+        directive('itemList', ['$timeout', 'api', function($timeout, api) {
                 return {
                     scope: {
                         items: '=',
@@ -22,6 +22,19 @@ angular.module('myApp.directives', []).
                         });
                         scope.maxDisplayed = 120;
                         scope.displayGrid = true;
+
+                        scope.filterText = '';
+
+                        var tempFilterText = '', filterTextTimeout;
+                        scope.$watch('searchQuery', function(val){
+                            if(filterTextTimeout) $timeout.cancel(filterTextTimeout);
+                            
+                            tempFilterText = val;
+                            filterTextTimeout = $timeout(function(){
+                                scope.filterText = tempFilterText;
+                            }, 600); //Delay 700ms for user search.
+                        });
+
                         scope.showMore = function() {
                             scope.maxDisplayed += 60;
                         };
@@ -34,10 +47,10 @@ angular.module('myApp.directives', []).
                         });
                         scope.viewAsGrid = function() {
                             scope.displayGrid = true;
-                        }
+                        };
                         scope.viewAsList = function() {
                             scope.displayGrid = false;
-                        }
+                        };
 
                         var mapping = {
                             'common': 0,
@@ -56,6 +69,7 @@ angular.module('myApp.directives', []).
                                 return [item[scope.orderProp], mapping[item.item_rarity], item.item_class];
                             }
                         };
+
                     }
                 };
             }]).
@@ -77,7 +91,7 @@ angular.module('myApp.directives', []).
                 restrict: 'A',
                 transclude: true,
                 replace: true,
-                controller: function(){
+                controller: function() {
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 },
                 link: function($scope, element, attrs) {

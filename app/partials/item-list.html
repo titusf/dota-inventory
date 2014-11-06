@@ -9,7 +9,7 @@
         <div class="col-md-10 item-list-filters"> 
             <form name="item-filters" class="form-inline text-center">
                 <div class="form-group">
-                    <input ng-model="searchQuery" name="searchQuery" type="text" class="form-control" id="item-search" placeholder="Search by name">
+                    <input ng-model="searchQuery" ng-model-options="{debounce: 2000}" name="searchQuery" type="text" class="form-control" id="item-search" placeholder="Search by name">
                 </div>
                 <div class="form-group">
                     <select class="form-control" id="select-rarity" ng-model="rarity">
@@ -167,7 +167,7 @@
         <div class="alert alert-warning text-center" ng-if="filteredItems.length > maxDisplayed">
             Displaying {{maxDisplayed}} out of {{filteredItems.length}} items. Refine your results with filters or scroll down to show more.
         </div>
-        <div class="dota-item" ng-repeat="item in filteredItems = (items| filter:{name:searchQuery, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitTo:maxDisplayed | orderBy:sortItems">
+        <div class="dota-item" ng-repeat="item in filteredItems = (items| filter:{name:filterText, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitTo:maxDisplayed | orderBy:sortItems">
             <div class="item-box {{item.item_rarity}} clearfix">
                 <a href='#/items/id/{{item.defindex}}'>
                     <img ng-src="{{item.image_url}}" />
