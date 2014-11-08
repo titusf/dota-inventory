@@ -147,7 +147,7 @@
                 <select class="form-control" id="select-sorting" ng-model="orderProp">
                     <option value="">No Sorting</option>
                     <option value="used_by_heroes">Hero</option>
-                    <option value="rarity">Rarity</option>
+                    <option value="rarity">Rarity &#9660;</option>
                 </select>
             </form>
         </div>
@@ -167,7 +167,7 @@
         <div class="alert alert-warning text-center" ng-if="filteredItems.length > maxDisplayed">
             Displaying {{maxDisplayed}} out of {{filteredItems.length}} items. Refine your results with filters or scroll down to show more.
         </div>
-        <div class="dota-item" ng-repeat="item in filteredItems = (items| filter:{name:filterText, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitTo:maxDisplayed | orderBy:sortItems">
+        <div class="dota-item" ng-repeat="item in filteredItems = (items| filter:{name:filterText, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitTo:maxDisplayed | orderBy:sortItems:true">
             <div class="item-box {{item.item_rarity}} clearfix">
                 <a href='#/items/id/{{item.defindex}}'>
                     <img ng-src="{{item.image_url}}" />
