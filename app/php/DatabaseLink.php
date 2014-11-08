@@ -12,7 +12,8 @@ class DatabaseLink {
         $dbname = $this->config["db_name"];
         $user = $this->config["username"];
         $pass = $this->config["password"];
-        $this->DBH = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+        $this->DBH = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass, 
+                array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
     }
 
     function __destruct() {
@@ -161,7 +162,7 @@ class DatabaseLink {
         try {
             $stmt_arr = array(
                 ':steamid' => isset($playerSummary['steamid']) ? $playerSummary['steamid'] : "",
-                ':personaname' => isset($playerSummary['personaname']) ? utf8_encode($playerSummary['personaname']) : "",
+                ':personaname' => isset($playerSummary['personaname']) ? $playerSummary['personaname'] : "",
                 ':community_vis_state' => isset($playerSummary['communityvisibilitystate']) ? $playerSummary['communityvisibilitystate'] : "",
                 ':profile_state' => isset($playerSummary['profilestate']) ? $playerSummary['profilestate'] : "NULL",
                 ':profile_url' => isset($playerSummary['profileurl']) ? $playerSummary['profileurl'] : "",
