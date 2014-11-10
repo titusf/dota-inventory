@@ -12,9 +12,11 @@ h1{
     right:0;
     left:0;
     background-color:#222;
+    background: linear-gradient(#333, #222);
     z-index:1000;
-    border-bottom: 2px solid #555;
-    border-top:3px solid #b82020;
+    border-bottom: 2px solid #7E0000;
+    border-top: 3px solid #b82020;
+    box-shadow: 0 3px 3px #3F3F3F;
 }
 
 #main-menu-container{
@@ -436,13 +438,13 @@ div.hero img{
 }
 
 .section{
-/*    border-color: #eee;
-    border-style: solid;
-    border-width: 1px 8px;
-    margin-bottom:10px;
-    background-color:#fff;
-    box-shadow: 0px 3px 3px #CACACA;
-    padding:0 14px;*/
+    /*    border-color: #eee;
+        border-style: solid;
+        border-width: 1px 8px;
+        margin-bottom:10px;
+        background-color:#fff;
+        box-shadow: 0px 3px 3px #CACACA;
+        padding:0 14px;*/
 }
 .section2{
     width:50%;
@@ -524,4 +526,42 @@ li.hero p{
 #front-social img{
     margin:0 30px;
     width:52px;
+}
+
+.item-trades img{
+    width:32px;
+    display:inline;
+    vertical-align:middle;
+}
+.trades .row{
+    padding:3px 0;
+}
+.item-stat{
+    display:inline-block;
+    margin:3px 5px;
+}
+.small-user-list-container{
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    text-align:center;
+}
+.small-user-list .user{
+    padding:2px;
+}
+.small-user-list .user.even{
+    background-color:#eee;
+}
+.item-active-trades{
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    text-align:center;
+}
+.trade-item{
+    padding:2px;
+}
+.trade-item.even{
+    background-color:#eee;
+}
+.item-active-trades .pagination{
+    margin: 9px 0 3px;
 }

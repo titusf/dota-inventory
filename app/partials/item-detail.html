@@ -7,15 +7,42 @@
     <div class="row">
         <div class="col-md-3">
             <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
-            <a class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}">View On Market</a>
+            <a style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}">View On Market</a>
+            <div class="item-friend-owners small-user-list-container">
+                <h4>Friends Who Own This</h4>
+                <div ng-hide="loggedIn" class="text-muted">
+                    <p style="font-size:44px; margin-top:20px;"><span class="glyphicon glyphicon-eye-close"></span></p>
+                    <p>You are not logged in.</p>
+                </div>
+                <div ng-show="loggedIn" class='small-user-list'>
+                    <p>{{friendsOwning.length}} friends own this item</p>
+                    <div ng-repeat="friend in friendsOwning| limitTo:10" ng-class-even="'even'" class='user text-right'>
+                        <a href="#/users/{{friend.steamid}}"> {{friend.personaname}} <img ng-src='{{friend.avatar_url}}'</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6" id="item-details">
+        <div class="col-md-6">
             <div class="row" id="item-hero" ng-hide="noHero">
                 <div class="col-md-3">
                     <img class="img-responsive pull-left" ng-src="img/heroes/{{item.hero_db}}_full.png">
-                    
                 </div>
-                <div class="col-md-9"><h3><a href='#/items/hero/{{item.hero_db}}'>{{item.hero_name}}</a></h3></div>
+                <div class="col-md-5"><h3><a href='#/items/hero/{{item.hero_db}}'>{{item.hero_name}}</a></h3></div>
+                <div class="col-md-4 text-center">
+                    <div class="item-stat">
+                        <p>OWN</p> 
+                        <span ng-if='ownsItem' class="glyphicon glyphicon-ok"></span>
+                        <span ng-if='!ownsItem' class='glyphicon glyphicon-remove'></span>
+                    </div>
+                    <div class="item-stat">
+                        <p>FAV</p>
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    </div>
+                    <div class="item-stat">
+                        <p>RNK</p>
+                        <span class="">?</span>
+                    </div>
+                </div>
             </div>
             <div class="row text-center" id="item-classes">
                 <div class="col-md-4 rarity {{item.item_rarity}}">
@@ -24,27 +51,50 @@
                 <div class="col-md-4">{{item.item_type_name}}</div>
                 <div class="col-md-4">{{item.item_set}}</div>
             </div>
-            <p id="item-description">{{item.item_description}}</p>
-        </div>
-        <div class="col-md-3 text-center text-muted">
-            <div ng-hide="loggedIn">
-                <p>You are not logged in.</p>
-
-                <p>Sign in to see which of your friends own this item.</p>
+            <div class="row" style="min-height: 110px;
+                 border: 1px solid #eee;">
+                <div class="col-md-12">
+                    <p id="item-description">{{item.item_description}}</p>
+                </div>
             </div>
-            <div ng-show="loggedIn">
-                <p>You are logged in!</p><p>{{friendsOwning.length}} friends own this item</p>
-                
-                <div ng-repeat="friend in friendsOwning">
-                    <a href="#/users/{{friend.steamid}}">{{friend.personaname}}</a>
+            <div class="row" style='margin-top:14px;'>
+                <div class="col-md-10 col-md-offset-1 text-center">
+                    <!-- if not logged in -->
+                    <div ng-if='!loggedIn'>
+                        <h4>If you own this and would like to trade it, please sign in.</h4>
+                    </div>
+                    <!-- if logged in but does not own item -->
+                    <div ng-if='loggedIn && !ownsItem'>
+                        <h4><strong>You do not own this</strong>. You cannot ask to trade.</h4>
+                    </div>
+                    <!-- if logged in and owns item -->
+                    <div ng-if='loggedIn && ownsItem'>
+                        <h4><strong>You own this</strong>. What do you want for it?</h4>
+                        <div class="input-group">
+                            <span class="input-group-addon">I want:</span>
+                            <input class="form-control" type="text" size="20" maxlength="20" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary">Propose</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="item-active-trades">
+                <h4 class="text-center">Looking to Trade</h4>
+                <p>Asking prices are displayed below:</p>
+                <div class="trade-items">
+                    <div class="trade-item text-left" ng-repeat="trader in traders| limitTo:10" ng-class-even="'even'">
+                        <img style="width:22px;" ng-src="{{trader.avatarurl}}" />
+                        <span>20 chars max</span>
+                        <button class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></button>
+                        <button class="btn btn-default btn-xs pull-right" popover="Make Offer" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></button>
+                    </div>
+                    <pagination boundary-links="false" total-items="traders.length" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="section text-center text-muted">
-    <h3>Item Owners</h3>
-    <p>Coming Soon...</p>
-</div>
-
 
