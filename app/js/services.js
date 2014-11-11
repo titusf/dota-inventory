@@ -8,20 +8,29 @@
 angular.module('myApp.services', []).
         value('version', '0.1').
         factory('user', ['$cookies', '$http', function($cookies, $http) {
+                
                 var user = {
                     loggedIn: false,
                     steamid: "",
+                    inventory: "",
+                    inventoryPromise: ""
                 };
+                
                 if (typeof $cookies.steamid !== 'undefined' && $cookies.steamid !== "") {
                     user.loggedIn = true;
                     user.steamid = $cookies.steamid;
                 }
+                if (user.loggedIn === true) {
+                    user.inventoryPromise = $http.get("action.php?action=getinventory&steamid=" + user.steamid).success(function(result){
+                        user.inventory = result.data;
+                    });
+                }
                 user.logout = function() {
                     $cookies.steamid = "";
                 };
-                user.toString = function() {
-                    console.log("hello");
-                };
+
+
+
                 user.getProfile = function(callback) {
                     if (user.loggedIn === true) {
                         $http.get('action.php?action=getuser&steamid=' + user.steamid).success(function(data) {
