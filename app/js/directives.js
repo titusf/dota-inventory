@@ -9,6 +9,9 @@ angular.module('myApp.directives', []).
                     elm.text(version);
                 };
             }]).
+        directive('itemSearch', ['api', function(api){
+                
+            }]).
         directive('itemList', ['$timeout', 'api', function($timeout, api) {
                 return {
                     scope: {
