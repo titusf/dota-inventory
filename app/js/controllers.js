@@ -145,16 +145,16 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.communityUrlSuccess = false;
                 $scope.profileReached = false;
                 $scope.profileSuccess = false;
-                
+
                 $scope.searchUsers = function(vanityUrl) {
                     $scope.invalid = false;
                     $scope.searching = true;
                     $scope.profileSuccess = false;
-                    $http.get('action.php?action=getsteamid&vanityurl=' + vanityUrl).success(function(data) { 
+                    $http.get('action.php?action=getsteamid&vanityurl=' + vanityUrl).success(function(data) {
                         $scope.communityUrlReached = true;
-                        if(data.success === true){
-                            api.getUserDetails(data.data, function(response){
-                                if(response.success === true){
+                        if (data.success === true) {
+                            api.getUserDetails(data.data, function(response) {
+                                if (response.success === true) {
                                     $scope.profileSuccess = true;
                                     $scope.searching = false;
                                     $scope.user = response.data;
@@ -251,11 +251,11 @@ angular.module('myApp.controllers', ['ngCookies']).
                     $scope.item_count = 0;
 
                     $scope.friendsPrivate = 0;
-                    
-                    function toPercent(value, total){
-                        return Math.floor((value/total)*100);
+
+                    function toPercent(value, total) {
+                        return Math.floor((value / total) * 100);
                     }
-                    
+
                     function loadInUserInventory(friend) {
                         friend.loading = true;
                         if (friend.community_visibility_state === '3') {
@@ -264,7 +264,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                 $scope.friendsLoaded++;
                                 $scope.percentComplete = toPercent($scope.friendsLoaded, $scope.friendCount);
                                 if (data.success === true) {
-                                    
+
                                     friend.inventory_private = false;
                                     var friendItems = data.data;
                                     itemList.addUserItems(friendItems, friend);
@@ -333,7 +333,33 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                     $scope.item.hero_db = npc_hero_name.substring(14, npc_hero_name.length);
                 });
+                $http.get('friendslist.json').success(function(data) {
+                    $scope.traders = data.data;
+                });
                 $scope.loggedIn = user.loggedIn;
+                $scope.ownsItem = false;
+               
+                
+                if (user.loggedIn) {
+                    var inventoryPromise = user.inventoryPromise;
+                    inventoryPromise.then(function() {
+                        var inventory = user.inventory;
+                        angular.forEach(inventory, function(item, n) {
+                            if (item.defindex === defindex){
+                                $scope.ownsItem = true;
+                            }
+                        });
+                    });
+                }
+                $scope.submitTrade = function(tradeText, steamid, defindex) {
+                    console.log("Trade");
+                }
+                $scope.currentPage = 1;
+                $scope.limiter = 10;
+                $scope.$watch('currentPage', function() {
+                    $scope.limiter = ($scope.currentPage * 10);
+                });
+                $scope.limiter = ($scope.currentPage * 10);
                 if (user.loggedIn === true) {
                     api.getFriendsOwning(user.steamid, defindex, function(data) {
                         $scope.friendsOwning = data.data;
