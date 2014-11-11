@@ -10,7 +10,9 @@ angular.module('myApp.directives', []).
                 };
             }]).
         directive('itemSearch', ['api', function(api){
-                
+               return{
+                   template: ""
+               } 
             }]).
         directive('itemList', ['$timeout', 'api', function($timeout, api) {
                 return {
