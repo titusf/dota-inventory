@@ -49,17 +49,18 @@
 <hr/>
 
 <div class="section text-center text-muted ng-scope">
-    <h3>Recently Viewed</h3>
-    <p>Coming Soon...</p>
+
 </div>
 
 <div class="section">
-    <h3>Recently Updated Users</h3>
-    <div class="list-group">
-        <a ng-repeat="friend in friends" href="#/users/{{friend.steamid}}" class="list-group-item clearfix">
-            <img class="pull-left" ng-src="{{friend.avatar_medium_url}}">
-            <h4 class="media-heading">{{friend.personaname}}</h4>
-        </a>
+    <div class="row">
+        <div class="col-md-6">
+            <user-list users="friends" heading="'Recently Updated Users'"></user-list>
+        </div>
+        <div class="col-md-6 text-muted text-center">
+            <h3>Recently Viewed</h3>
+            <p>Coming Soon...</p>
+        </div>
     </div>
 </div>
 
