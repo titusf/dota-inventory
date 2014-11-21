@@ -1,6 +1,6 @@
 
 <div class="text-center section">
-    <h1>{{item.item_name}} <small>Dota 2 Item</small></h1>
+    <h1>{{item.item_name}} <small>Dota 2 Item {{item_price}}</small></h1>
 </div>
 
 <div class="section">
@@ -9,17 +9,7 @@
             <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
             <a style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}">View On Market</a>
             <div class="item-friend-owners small-user-list-container">
-                <h4>Friends Who Own This</h4>
-                <div ng-hide="loggedIn" class="text-muted">
-                    <p style="font-size:44px; margin-top:20px;"><span class="glyphicon glyphicon-eye-close"></span></p>
-                    <p>You are not logged in.</p>
-                </div>
-                <div ng-show="loggedIn" class='small-user-list'>
-                    <p>{{friendsOwning.length}} friends own this item</p>
-                    <div ng-repeat="friend in friendsOwning| limitTo:10" ng-class-even="'even'" class='user text-right'>
-                        <a href="#/users/{{friend.steamid}}"> {{friend.personaname}} <img ng-src='{{friend.avatar_url}}'</a>
-                    </div>
-                </div>
+                <user-list users="friendsOwning" heading="'Friends Who Own This'" subheading="friendsOwning.length + ' friends own this item'"></user-list>
             </div>
         </div>
         <div class="col-md-6">
@@ -72,11 +62,12 @@
                         <h4><strong>You own this</strong>. What do you want for it?</h4>
                         <div class="input-group">
                             <span class="input-group-addon">I want:</span>
-                            <input class="form-control" type="text" size="20" maxlength="20" />
+                            <input ng-model="tradeText" class="form-control" type="text" size="20" maxlength="20" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary">Propose</button>
+                                <button ng-click="submitTrade(tradeText)" class="btn btn-primary">Propose</button>
                             </span>
                         </div>
+                        <span class="help-block">Listings will expire after 48 hours.</span>
                     </div>
                 </div>
             </div>
@@ -86,10 +77,10 @@
                 <h4 class="text-center">Looking to Trade</h4>
                 <p>Asking prices are displayed below:</p>
                 <div class="trade-items">
-                    <div class="trade-item text-left" ng-repeat="trader in traders| limitTo:10" ng-class-even="'even'">
-                        <img style="width:22px;" ng-src="{{trader.avatarurl}}" />
+                    <div class="trade-item text-left" ng-repeat="trader in traders| limitTo:limiter | limitTo:-10" ng-class-even="'even'">
+                        <img popover="{{trader.personaname}}" popover-trigger="mouseenter" style="width:22px;" ng-src="{{trader.avatarurl}}" />
                         <span>20 chars max</span>
-                        <button class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></button>
+                        <a href="#/users/{{trader.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
                         <button class="btn btn-default btn-xs pull-right" popover="Make Offer" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></button>
                     </div>
                     <pagination boundary-links="false" total-items="traders.length" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>

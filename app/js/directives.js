@@ -9,17 +9,26 @@ angular.module('myApp.directives', []).
                     elm.text(version);
                 };
             }]).
-        directive('itemSearch', ['api', function(api){
-               return{
-                   template: ""
-               } 
+        directive('itemSearch', ['api', function(api) {
+                return{
+                    template: ""
+                };
             }]).
-        directive('userList', [function(){
+        directive('userList', [function() {
                 return {
                     restrict: 'E',
                     templateUrl: 'partials/user-list.html',
                     scope: {
-                        users: '='
+                        users: '=',
+                        heading: '=',
+                        subheading: '='
+                    },
+                    link: function(scope, elem, attrs) {
+                        scope.currentPage = 1;
+                        scope.limiter = 10;
+                        scope.$watch('currentPage', function() {
+                            scope.limiter = (scope.currentPage * 10);
+                        });
                     }
                 };
             }]).
@@ -40,11 +49,12 @@ angular.module('myApp.directives', []).
                         scope.filterText = '';
 
                         var tempFilterText = '', filterTextTimeout;
-                        scope.$watch('searchQuery', function(val){
-                            if(filterTextTimeout) $timeout.cancel(filterTextTimeout);
-                            
+                        scope.$watch('searchQuery', function(val) {
+                            if (filterTextTimeout)
+                                $timeout.cancel(filterTextTimeout);
+
                             tempFilterText = val;
-                            filterTextTimeout = $timeout(function(){
+                            filterTextTimeout = $timeout(function() {
                                 scope.filterText = tempFilterText;
                             }, 600); //Delay 600ms for user search.
                         });

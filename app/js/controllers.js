@@ -20,6 +20,9 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.title = title;
             }])
         .controller('FrontPageCtrl', ['$scope', '$http', function($scope, $http) {
+                $http.get('friendslist.json').success(function(result){
+                    $scope.users = result.data;
+                });
                 $scope.rarities = ["common", "uncommon", "rare", "mythical",
                     "legendary", "ancient", "immortal", "arcana"];
                 $scope.heroes = [];
@@ -332,13 +335,6 @@ angular.module('myApp.controllers', ['ngCookies']).
                         item.item_description = 'No description available.';
                     }
                     $scope.item.hero_db = npc_hero_name.substring(14, npc_hero_name.length);
-                    //Get current market price of this item.
-                    $http.jsonp('http://steamcommunity.com/market/priceoverview/?country=US&currency=2&appid=570&market_hash_name=' + item.item_name + "&callback=JSON_CALLBACK").success(function(result){
-                        console.log("url reached");
-                        if(result.success === true){
-                            $scope.item_price = result.median_price;
-                        }
-                    });
                 });
                 $http.get('friendslist.json').success(function(data) {
                     $scope.traders = data.data;
@@ -346,9 +342,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;
                 
-                
-               
-                
+                             
                 if (user.loggedIn) {
                     var inventoryPromise = user.inventoryPromise;
                     inventoryPromise.then(function() {

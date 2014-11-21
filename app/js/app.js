@@ -12,7 +12,7 @@ angular.module('myApp', [
 ], function() {}).
         config(['$routeProvider', function($routeProvider) {
                 //User routes.
-                $routeProvider.when('/users', {templateUrl: 'partials/user-list.html', controller: 'UserListCtrl'});
+                $routeProvider.when('/users', {templateUrl: 'partials/user-front.html', controller: 'UserFrontCtrl'});
                 $routeProvider.when('/users/:steamId', {templateUrl: 'partials/user-detail.html', controller: 'UserDetailCtrl'});
                 $routeProvider.when('/users/:steamId/friendslist', {templateUrl: 'partials/user-friendslist.html', controller: 'FriendsListCtrl'});
                 //Item Routes.
