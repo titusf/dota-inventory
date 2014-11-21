@@ -14,6 +14,15 @@ angular.module('myApp.directives', []).
                    template: ""
                } 
             }]).
+        directive('userList', [function(){
+                return {
+                    restrict: 'E',
+                    templateUrl: 'partials/user-list.html',
+                    scope: {
+                        users: '='
+                    }
+                };
+            }]).
         directive('itemList', ['$timeout', 'api', function($timeout, api) {
                 return {
                     scope: {
@@ -37,7 +46,7 @@ angular.module('myApp.directives', []).
                             tempFilterText = val;
                             filterTextTimeout = $timeout(function(){
                                 scope.filterText = tempFilterText;
-                            }, 600); //Delay 700ms for user search.
+                            }, 600); //Delay 600ms for user search.
                         });
 
                         scope.showMore = function() {

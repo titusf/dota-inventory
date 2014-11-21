@@ -135,7 +135,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 });
             }])
-        .controller('UserListCtrl', ['$scope', '$http', 'api', function($scope, $http, api) {
+        .controller('UserFrontCtrl', ['$scope', '$http', 'api', function($scope, $http, api) {
                 //Get Recent Users
                 $http.get('action.php?action=getrecentusers').success(function(data) {
                     $scope.friends = data.data;
@@ -332,12 +332,21 @@ angular.module('myApp.controllers', ['ngCookies']).
                         item.item_description = 'No description available.';
                     }
                     $scope.item.hero_db = npc_hero_name.substring(14, npc_hero_name.length);
+                    //Get current market price of this item.
+                    $http.jsonp('http://steamcommunity.com/market/priceoverview/?country=US&currency=2&appid=570&market_hash_name=' + item.item_name + "&callback=JSON_CALLBACK").success(function(result){
+                        console.log("url reached");
+                        if(result.success === true){
+                            $scope.item_price = result.median_price;
+                        }
+                    });
                 });
                 $http.get('friendslist.json').success(function(data) {
                     $scope.traders = data.data;
                 });
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;
+                
+                
                
                 
                 if (user.loggedIn) {
@@ -352,8 +361,8 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 }
                 $scope.submitTrade = function(tradeText, steamid, defindex) {
-                    console.log("Trade");
-                }
+                    //$http.post();
+                };
                 $scope.currentPage = 1;
                 $scope.limiter = 10;
                 $scope.$watch('currentPage', function() {
