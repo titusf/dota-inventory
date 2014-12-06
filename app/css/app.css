@@ -1,4 +1,5 @@
 /* app css stylesheet */
+
 /**General Level Styles**/
 body{
     background-color:#f3f3f3; 
@@ -58,15 +59,13 @@ p.temporary{
     padding-top: 84px;
     padding-bottom: 13px;
     background-color:#fff;
-    border-style:solid;
-    border-width:0 1px 0 1px;
-    border-color:#eee;
 }
 #footer p{
     margin:10px 0;
 }
 #footer a{
     margin: 0 10px;
+    color:#E48A8A;
 }
 /**Item List Styles**/
 div.dota-item{
@@ -291,7 +290,7 @@ div.items{
 /* Front page styles
 -------------------------------------------------- */
 #front-container{
-    padding-top:60px;
+    padding-top:40px;
 }
 #front-large{
     margin:0 auto;
@@ -318,10 +317,11 @@ body {
 /* Set the fixed height of the footer here */
 #footer {
     height: 90px;
-    background-color: #eee;
+    background-color: #b82020;
     text-align: center;
-    border-top:1px solid #ddd;
+    border-top:2px solid #E48A8A;
     padding:10px 0 20px 0;
+    
 }
 #logged-in-user{
     color:#fff;
@@ -355,7 +355,7 @@ body {
     padding:20px 30px;
 }
 .page-title img{
-    width:96px;
+    width:112px;
     margin-right:16px;
 }
 .page-title h1{
@@ -472,29 +472,35 @@ div.hero img{
     margin-top: 30px;
 }
 li.hero{
-    width: 20%;
     display: inline-block;
-    margin-bottom: 4px;
-    border:1px solid #eee;
+    position: relative;
 }
 
 li.hero img{
-    width: 42px;
-    height: 24px;
-    margin-right: 7px;
+    width: 92px;
+    height:53px;
     border:1px solid #000;
 }
 li.hero a{
     display:block;
     height:100%;
-    color:#333;
+    text-shadow: 1px 1px #000;
+    color: #fff;
 }
 li.hero a:hover{
-    background:#eee;
-    color:#555;
+    color:#E7C6A1;
+    
 }
 li.hero p{
-    margin:0;
+    margin: 0;
+    position: absolute;
+    
+    font-size: 11px;
+    bottom: 3px;
+    right: 3px;
+    text-align: right;
+    line-height: 1.1em;
+    font-weight: bold;
 }
 
 .shallowUpdate{
@@ -502,6 +508,8 @@ li.hero p{
 }
 .main-item-img{
     border: 3px solid #333;
+    width:262px;
+    height:170px;
 }
 
 .user-container{
@@ -564,4 +572,20 @@ li.hero p{
 }
 .item-active-trades .pagination{
     margin: 9px 0 3px;
+}
+
+/*  Element Directives  */
+.user-list{
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    padding:2px;
+}
+.user-list-users{
+
+}
+.user-list-user{
+    padding:2px;
+}
+.user-list-user.even{
+    background-color: #eee;
 }

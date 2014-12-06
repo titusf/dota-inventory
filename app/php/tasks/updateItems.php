@@ -1,7 +1,7 @@
 <?php
 
 ini_set('max_execution_time', 300);
-ini_set('memory_limit','32M');
+ini_set('memory_limit','128M');
 
 /**
  * This file is run to refresh the database's list of all Dota items.
@@ -18,6 +18,7 @@ $schema_json = json_decode($schema_file, true);
 
 //Attempts to get items game url from schema. 
 $items_game_url = $schema_json["result"]["items_game_url"];
+echo $items_game_url;
 
 function toJson($vdf_url) {
     //load json either from API call or fetching from file/url
@@ -103,36 +104,35 @@ foreach ($schema_items as $item) {
 
 
 $items_game_json = json_decode(toJson($items_game_url), true);
-echo $items_game_json;
 
-/**
- * Iterate over each item in items_game and insert into database.
- * Specifically: item_rarity, item_set and used_by_heroes.
- * */
-$items_game_items = $items_game_json["items_game"]["items"];
-while ($item = current($items_game_items)) {
-    $defindex = key($items_game_items);
-    $item_rarity = isset($item["item_rarity"]) ? $item["item_rarity"] : "common";
-    $item_set = isset($item["item_set"]) ? $item["item_set"] : "";
-    $used_by_heroes = "";
-    if (isset($item["used_by_heroes"])) {
-        $used_by_heroes = is_string($item["used_by_heroes"]) ? "" : key($item["used_by_heroes"]);
-    }
-
-    $sqlInsertString = "UPDATE `item` 
-		SET `item_rarity` = :item_rarity,
-		`item_set` = :item_set,
-		`used_by_heroes` = :used_by_heroes
-		WHERE `defindex` = :defindex ;";
-
-    $stmt = $DBH->prepare($sqlInsertString);
-    $stmt->bindParam(':item_rarity', $item_rarity);
-    $stmt->bindParam(':item_set', $item_set);
-    $stmt->bindParam(':used_by_heroes', $used_by_heroes);
-    $stmt->bindParam(':defindex', $defindex);
-    $stmt->execute();
-    
-    next($items_game_items);
-}
+///**
+// * Iterate over each item in items_game and insert into database.
+// * Specifically: item_rarity, item_set and used_by_heroes.
+// * */
+//$items_game_items = $items_game_json["items_game"]["items"];
+//while ($item = current($items_game_items)) {
+//    $defindex = key($items_game_items);
+//    $item_rarity = isset($item["item_rarity"]) ? $item["item_rarity"] : "common";
+//    $item_set = isset($item["item_set"]) ? $item["item_set"] : "";
+//    $used_by_heroes = "";
+//    if (isset($item["used_by_heroes"])) {
+//        $used_by_heroes = is_string($item["used_by_heroes"]) ? "" : key($item["used_by_heroes"]);
+//    }
+//
+//    $sqlInsertString = "UPDATE `item` 
+//		SET `item_rarity` = :item_rarity,
+//		`item_set` = :item_set,
+//		`used_by_heroes` = :used_by_heroes
+//		WHERE `defindex` = :defindex ;";
+//
+//    $stmt = $DBH->prepare($sqlInsertString);
+//    $stmt->bindParam(':item_rarity', $item_rarity);
+//    $stmt->bindParam(':item_set', $item_set);
+//    $stmt->bindParam(':used_by_heroes', $used_by_heroes);
+//    $stmt->bindParam(':defindex', $defindex);
+//    $stmt->execute();
+//    
+//    next($items_game_items);
+//}
 
 ?>

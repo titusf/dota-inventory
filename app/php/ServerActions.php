@@ -162,6 +162,25 @@ class ServerActions {
         //Return json.
     }
 
+    public function getItemsByType($item_type_name) {
+        try {
+            $result = "";
+            if ($item_type_name === 'courier') {
+                // do courier request.
+                $result = $this->databaseLink->selectAllCourierItems();
+            } else if ($item_type_name === 'mount') {
+                // do mount request.
+                $result = $this->databaseLink->selectAllMountItems();
+            } else {
+                // Search on the exact item type given.
+                $result = $this->databaseLink->selectItemsByType($item_type_name);
+            }
+            return $this->makeResponseJson(true, $result);
+        } catch (Exception $ex) {
+            return $this->makeResponseJson(false, $ex->getMessage());
+        }
+    }
+
     public function getInventory($steamid) {
         try {
             //Get last updated inventory.
@@ -191,7 +210,6 @@ class ServerActions {
             return $this->makeResponseJson(false, $ex->getMessage());
         }
     }
-
 
     public function getFriendList($steamid) {
         try {
@@ -283,10 +301,48 @@ class ServerActions {
         );
         return $this->makeResponseJson(true, $result);
     }
-    
-    public function getRecentlyUpdatedUsers(){
+
+    public function getRecentlyUpdatedUsers() {
         $users = $this->databaseLink->selectRecentlyUpdatedUsers();
         return $this->makeResponseJson(true, $users);
+    }
+
+    public function addTrade($defindex, $steamid, $message) {
+        // Should not return more than one row, if it does - user has circumvented trade expiry policy.
+        $currentUserTrade = $this->databaseLink->selectActiveItemTradeByUser($defindex, $steamid);
+        if (count($currentUserTrade) === 1) {
+            // User must wait until trade listing has expired.
+            return $this->makeResponseJson(false, 'Trade already exists. Wait to expire.');
+        } else if (count($currentUserTrade) > 1) {
+            // Some logic went wrong, user was allowed to post more than 1 trade.
+            return $this->makeResponseJson(false, 'You managed to create more than 1 trade, well done.');
+        } else {
+            // Add the trade.
+            try {
+                $this->databaseLink->insertTrade($defindex, $steamid, $message);
+                return $this->makeResponseJson(true, 'Trade added successfully.');
+            } catch (Exception $ex) {
+                return $this->makeResponseJson(false, $ex->getMessage());
+            }
+        }
+    }
+
+    public function getLatestTrades() {
+        try {
+            $result = $this->databaseLink->selectLatestTrades();
+            return $this->makeResponseJson(true, $result);
+        } catch (Exception $ex) {
+            
+        }
+    }
+
+    public function getItemTrades($defindex) {
+        try {
+            $result = $this->databaseLink->selectItemTrades($defindex);
+            return $this->makeResponseJson(true, $result);
+        } catch (Exception $ex) {
+            return $this->makeResponseJson(false, $ex->getMessage());
+        }
     }
 
 }

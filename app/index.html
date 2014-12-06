@@ -2,6 +2,7 @@
 <html lang="en" ng-app="myApp">
     <head>
         <meta charset="utf-8">
+        <meta name="description" content="Dota Inventory is THE central resource for Dota 2 cosmetic items. Collect items, browse items, trade items and merge friends items.">
         <title ng-controller="TitleCtrl" ng-bind="title.getTitle()">Dota 2 Item Database</title>
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,25 +44,33 @@
                         </div>
                         <div class="col-md-7" id="main-menu-container">
                             <ul class="nav">
-                                <li class="active"><a href="#/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                                <li><a href="#/items"><span class="glyphicon glyphicon-search"></span> Cosmetic Item Browser</a></li>           
-                                <li><a href="#/users"><span class="glyphicon glyphicon-user"></span> User Inventories</a></li>
+                                <li ng-class="{active: isActive('/')}"><a href="#/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                                <li ng-class="{active: isActive('/items')}"><a href="#/items"><span class="glyphicon glyphicon-search"></span> Cosmetic Items</a></li>           
+                                <li ng-class="{active: isActive('/users')}"><a href="#/users"><span class="glyphicon glyphicon-user"></span> User Inventories</a></li>
+                                <li ng-class="{active: isActive('/trades')}"><a href="#/trades"><span class="glyphicon glyphicon-transfer"></span> Trades</a></li>
                             </ul>
                         </div>
                         <div class="col-md-2 text-center">
                             <div>
                                 <a ng-hide="loggedIn" href="action.php?action=login"><img id="login-steam" src="img/sits_large_noborder.png"></a>
 
-                                <div ng-show="loggedIn" id="logged-in-user">
+                                <div ng-show="loggedIn" id="logged-in-user" ng-cloak>
                                     <div class="dropdown">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                                            {{user.personaname}}
+                                            <span ng-if="loadingProfile || loadingInventory"><img src="img/ajax_loader_28_2.gif" /></span>
+                                            <span ng-if="!loadingProfile"> {{user.personaname}}</span>
                                             <span class="caret"></span>
                                         </button>
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#/users/{{steamid}}/friendslist">View My Friends Items</a></li>
-                                            <li><a href="#/users/{{steamid}}">My profile</a></li>
-                                            <li><a href="#" ng-click="logout()">Logout</a></li>
+                                        <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu1">
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" href="#/users/{{steamid}}/friendslist"><span class="glyphicon glyphicon-resize-small"></span> Merge Friends Items</a>
+                                            </li>
+                                            <li>
+                                                <img ng-if="loadingProfile" src="img/ajax_loader_28_2.gif" /><a href="#/users/{{steamid}}"><span ng-if="!loadingInventory" class="glyphicon glyphicon-ok"></span><img ng-if="loadingInventory" src="img/ajax_loader_28_2.gif" /> My Inventory</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -76,7 +85,7 @@
                 <div ng-view></div>
             </div>
         </div>
-        <div id="footer">
+        <div id="footer" class="container">
             <div class="container">
                 <p style="margin-top:6px; margin-bottom:0;">
                     <a href='http://steamcommunity.com/groups/dotainventory'>steam/dotainventory</a>
@@ -86,6 +95,7 @@
                 <p class="text-muted">&copy; DotaInventory.com 2013-2014. <a href="#/stats"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
                     <a href="#/faq"><span class="glyphicon glyphicon-info-sign"></span> FAQ</a>
                     <span class="glyphicon glyphicon-flag" style="color:red"></span><a href="bugs.html"> Bugs</a>
+                    <a href="http://old.dotainventory.com"><span class="glyphicon glyphicon-fast-backward"></span> Legacy Site</a>
                 </p>
             </div>
         </div>

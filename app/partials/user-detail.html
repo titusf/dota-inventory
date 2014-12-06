@@ -8,13 +8,13 @@
 
     <p class="temporary">Profile view for: {{steamId}}</p>
 
-    <div user-title user="user" class='section'></div>
+    <div user-title active-page="1" user="user" class='section'></div>
 
     <div ng-hide="user.isprivate" class='section'>
         
         <div id="user-items-list" class="item-list-container"  ng-hide="itemsApiFail">
             <div ng-show="itemsLoading" class="alert alert-info text-center">Fetching user items.</div>
-            <h3>User's Inventory</h3>
+            <h3><span ng-hide="loggedInUserProfile">User's</span><strong ng-show="loggedInUserProfile">Your</strong> Inventory</h3>
             <div item-list items="items"></div>
         </div>
 

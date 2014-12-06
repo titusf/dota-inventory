@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-3">
             <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
-            <a style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}">View On Market</a>
+            <a target="_blank" style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}"><span class="glyphicon glyphicon-new-window"></span> View On Market</a>
             <div class="item-friend-owners small-user-list-container">
                 <user-list users="friendsOwning" heading="'Friends Who Own This'" subheading="friendsOwning.length + ' friends own this item'"></user-list>
             </div>
@@ -60,6 +60,10 @@
                     <!-- if logged in and owns item -->
                     <div ng-if='loggedIn && ownsItem'>
                         <h4><strong>You own this</strong>. What do you want for it?</h4>
+                        <!-- if trade submit fails -->
+                        <div ng-if="submitTradeFail" class="alert-warning">
+                            <p>{{submitTradeFailReason}}</p>
+                        </div>
                         <div class="input-group">
                             <span class="input-group-addon">I want:</span>
                             <input ng-model="tradeText" class="form-control" type="text" size="20" maxlength="20" />
@@ -69,19 +73,23 @@
                         </div>
                         <span class="help-block">Listings will expire after 48 hours.</span>
                     </div>
+
                 </div>
             </div>
         </div>
         <div class="col-md-3 text-center">
-            <div class="item-active-trades">
+            <div class="item-active-trades" style="padding: 0 5px;">
                 <h4 class="text-center">Looking to Trade</h4>
                 <p>Asking prices are displayed below:</p>
                 <div class="trade-items">
-                    <div class="trade-item text-left" ng-repeat="trader in traders| limitTo:limiter | limitTo:-10" ng-class-even="'even'">
-                        <img popover="{{trader.personaname}}" popover-trigger="mouseenter" style="width:22px;" ng-src="{{trader.avatarurl}}" />
-                        <span>20 chars max</span>
-                        <a href="#/users/{{trader.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
-                        <button class="btn btn-default btn-xs pull-right" popover="Make Offer" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></button>
+                    <div ng-if="itemTrades.length === 0" style="margin:44px 0;">
+                        <strong>No active trades.</strong>
+                    </div>
+                    <div class="trade-item text-left" ng-repeat="trade in itemTrades| limitTo:limiter | limitTo:-10" ng-class-even="'even'">
+                        <span style="font-weight:bold;">Want: </span>
+                        <span>{{trade.message}}</span>
+                        <a href="#/users/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
+                        <a href="http://steamcommunity.com/profiles/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Steam" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></a>
                     </div>
                     <pagination boundary-links="false" total-items="traders.length" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>

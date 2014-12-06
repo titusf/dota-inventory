@@ -12,8 +12,7 @@ class DatabaseLink {
         $dbname = $this->config["db_name"];
         $user = $this->config["username"];
         $pass = $this->config["password"];
-        $this->DBH = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass, 
-                array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        $this->DBH = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
     }
 
     function __destruct() {
@@ -32,6 +31,129 @@ class DatabaseLink {
         return $result;
     }
 
+    public function insertTrade($defindex, $steamid, $message) {
+        try {
+            $query = "INSERT INTO `trades`(`defindex`, `steamid`, `message`, `date_submitted`)
+                VALUES (:defindex, :steamid, :message, NOW())";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->bindParam(':defindex', $defindex);
+            $stmt->bindParam(':steamid', $steamid);
+            $stmt->bindParam(':message', $message);
+            $stmt->execute();
+        } catch (Exception $ex) {
+            throw new Exception("Database:addTrade error: " . $ex->getMessage());
+        }
+    }
+    
+    /**
+     * Retrieves the active trade listing for this item that belongs to this
+     * user IF the trade exists and is NEWER than the trade-life timer. 
+     * @param type $defindex
+     * @param type $steamid
+     */
+    public function selectActiveItemTradeByUser($defindex, $steamid){
+        try{
+            $hrsOld = 48;
+            $query = "SELECT * FROM `trades`
+                    WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= :hrsOld 
+                    AND `defindex` = :defindex AND `steamid` = :steamid";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->bindParam(':hrsOld', $hrsOld);
+            $stmt->bindParam(':defindex', $defindex);
+            $stmt->bindParam(':steamid', $steamid);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+            throw new Exception("Database:selectActiveItemTradeByUser error: " . $ex->getMessage());
+        }
+    }
+    
+    public function selectLatestTrades(){
+        try{
+            $query = "SELECT * FROM `trades`
+                    WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= 48 
+                    ORDER BY `date_submitted` DESC
+                    LIMIT 100";
+            $stmt = $this->DBH->prepare($query);
+            //$stmt->bindParam(':hrsOld', '48');
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+
+        }
+    }
+
+    public function selectItemTrades($defindex) {
+        try {
+            $hrsOld = 48; // Only select trades less than 48 hours old.
+            $query = "SELECT * FROM `trades` 
+                    WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= :hrsOld AND `defindex` = :defindex
+                    ORDER BY `date_submitted` DESC
+                    LIMIT 100";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->bindParam(':hrsOld', $hrsOld);
+            $stmt->bindParam(':defindex', $defindex);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+            throw new Exception("Database:getItemTrades error: " . $ex->getMessage());
+        }
+    }
+
+    public function getUserTrades($steamid) {
+        //Later
+    }
+
+    public function selectAllMountItems(){
+        try{
+            $query = "SELECT * FROM `item` 
+                        WHERE `item_type_name` 
+                        IN ('warhorse', 'horse', 'my demonic warhorse', 'bat', 'riding cat', 'beast', 'noble beast' 'lizard')
+                        OR `item_type_name` LIKE '%mount'";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+
+        }
+    }
+    public function selectAllCourierItems(){
+        try{
+            $query = "SELECT * FROM `item` 
+                        WHERE `item_type_name` 
+                        LIKE '%courier'";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+
+        }
+    }
+    /**
+     * Most interesting values for item_type_name except mount and courier are:
+     * Taunt: 'taunt'
+     * Loading Screen: 'Loading Screen'
+     * @param type $item_type_name
+     */
+    public function selectItemsByType($item_type_name){
+        try{
+            $query = "SELECT * FROM `item` 
+                        WHERE `item_type_name` = :item_type_name";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->bindParam(':item_type_name', $item_type_name);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+
+        }
+    }
+    
     public function getItem($defindex) {
         try {
             $string = 'SELECT item.item_name, item.item_class, item.item_rarity, item.item_type_name,'
@@ -96,28 +218,28 @@ class DatabaseLink {
 //        }
 //        $this->setInventoryUpdatedNow($steamid);
 //    }
-    
-    public function insertInventory($items_assoc, $steamid){   
+
+    public function insertInventory($items_assoc, $steamid) {
         $this->deleteInventory($steamid);
         $stmt = $this->DBH->prepare(
                 "INSERT INTO `user_inventory`(`itemid`, `defindex`, `steamid`)
                     VALUES (:itemid, :defindex, :steamid)"
-                );
+        );
         $stmt->bindParam(':itemid', $itemid);
         $stmt->bindParam(':defindex', $defindex);
         $stmt->bindParam(':steamid', $steamid);
-        foreach($items_assoc as $item){
+        foreach ($items_assoc as $item) {
             $itemid = $item['id'];
             $defindex = $item['defindex'];
             $stmt->execute();
         }
         $this->setInventoryUpdatedNow($steamid);
     }
-    
-    public function deleteInventory($steamid){
+
+    public function deleteInventory($steamid) {
         $stmt = $this->DBH->prepare(
                 "DELETE FROM `user_inventory` WHERE `steamid` = :steamid"
-                );
+        );
         $stmt->bindParam(':steamid', $steamid);
         $stmt->execute();
     }

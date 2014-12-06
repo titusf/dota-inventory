@@ -36,7 +36,9 @@ angular.module('myApp.directives', []).
                 return {
                     scope: {
                         items: '=',
-                        owners: '='
+                        owners: '=',
+                        rarityDisabled: '=',
+                        heroDisabled: '='
                     },
                     templateUrl: 'partials/item-list.html',
                     link: function(scope, elem, attrs) {
@@ -109,6 +111,26 @@ angular.module('myApp.directives', []).
                 }
             };
         }).
+        directive('loaderScreen', ['$interval', function($interval){
+            return{
+                restrict: 'E',
+                scope: {
+                    title: '=',
+                    message: '='
+                },
+                templateUrl: 'partials/loading.html',
+                link: function(scope, elem, attrs){
+                    scope.loadingTime = 0;
+                    scope.loadingTimeMessage = "Seconds Elapsed";
+                    $interval(function(){
+                        scope.loadingTime++;
+                        if(scope.loadingTime > 20){
+                            scope.loadingTimeMessage = "Seconds Elapsed... This seems to be taking a while.";
+                        }
+                    }, 1000);
+                }
+            };
+        }]).
         directive('myAdSense', function() {
             return {
                 templateUrl: 'partials/adsense.html',

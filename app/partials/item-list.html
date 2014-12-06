@@ -1,18 +1,20 @@
-<div class="loading text-center" ng-show="loadingItems">
-    <img src="img/ajax_loader_256.gif" />
-    <h1>Loading Items</h1>
-    <p>Please wait. Loading may take some time for each new user.</p>
-</div>
+
+<loader-screen ng-show='loadingItems' title="'Loading Items'" message="'Please wait. Loading may take some time for each new user.'"></loader-screen>
 <div class="item-list" ng-hide="loadingItems">
-    <p class="temporary">Generic Item-List partial view</p>
     <div class="row">
         <div class="col-md-10 item-list-filters"> 
-            <form name="item-filters" class="form-inline text-center">
+            <form name="item-filters" class="form-inline text-left">
+                <div class="form-group">
+                    <span style="font-size: 24px;
+                          color: #fff;
+                          margin-right: 34px;
+                          margin-left: 24px;" class="glyphicon glyphicon-filter"></span>
+                </div>
                 <div class="form-group">
                     <input ng-model="searchQuery" ng-model-options="{debounce: 2000}" name="searchQuery" type="text" class="form-control" id="item-search" placeholder="Search by name">
                 </div>
                 <div class="form-group">
-                    <select class="form-control" id="select-rarity" ng-model="rarity">
+                    <select class="form-control" id="select-rarity" ng-model="rarity" ng-disabled="rarityDisabled">
                         <option value="">Any Rarity</option>
                         <option value="common">Common</option>
                         <option value="uncommon">Uncommon</option>
@@ -25,7 +27,7 @@
                     </select>
                 </div>
                 <div class="form-group">   
-                    <select class="form-control" name="hero" id="select-hero" ng-model="hero">
+                    <select class="form-control" name="hero" id="select-hero" ng-model="hero" ng-disabled="heroDisabled">
                         <option value="">Any Hero</option>
                         <option value="npc_dota_hero_abaddon">Abaddon</option>
                         <option value="npc_dota_hero_alchemist">Alchemist</option>

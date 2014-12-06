@@ -6,26 +6,32 @@
 <div class="section clearfix" style='margin-top:30px;'>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <div class="input-group input-group-lg">
-                <input ng-model='communityUrl' type="text" class="form-control" id="community-url" placeholder="Enter a user's Community URL or display name*." />
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" ng-click='searchUsers(communityUrl)'>Search</button>
-                </span>
-            </div>
-            <p class='text-muted text-left'>*<em>Display name search only works if the user has been viewed on this site before.</em></p>
+            <form ng-submit="searchUsers(communityUrl)">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <span popover="" ng-if="!searching" class="glyphicon glyphicon-question-sign"></span>
+                        <span ng-if="searching"><img src='img/ajax_loader_28_2.gif' /></span>
+                    </span>
+                    <input ng-disabled="searching" ng-model='communityUrl' type="text" class="form-control" id="community-url" placeholder="Enter a user's Community URL or Steamid." />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" ng-click='searchUsers(communityUrl)'>Search</button>
+                    </span>
+                </div>
+                <p class='text-muted text-left'>Help: <a href="#/faq">What is a Community URL / Steamid?</a></p>
+            </form>
         </div>
     </div>
 
-
-
-    <div class="text-center" ng-if="searching">
-        <p ng-if="searching"><img src='img/ajax_loader_28.gif' /></p>
-        <p ng-if='invalid' class="text-center">No matches found.</p>
-        <p class='text-center' ng-if='searching'> Querying Steam - Please Wait</p>
-    </div>
-
-
     <div class="search-user-result" >
+        <div ng-if='invalid' class='text-center alert-warning'>
+            {{invalidReason}}
+        </div>
+        <div ng-if="searching" class="alert-info text-center">
+             Querying Server - Please Wait
+        </div>
+        <div ng-if="profileSuccess" class="alert-success text-center">
+            Profile loaded successfully!
+        </div>
         <div ng-class="{visHidden: profileSuccess == false || searching == true }">
             <div class="row">
                 <div class="col-md-12">
@@ -43,12 +49,8 @@
                 </div>
             </div>
         </div>
+
     </div>
-
-</div>
-<hr/>
-
-<div class="section text-center text-muted ng-scope">
 
 </div>
 

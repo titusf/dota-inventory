@@ -1,37 +1,58 @@
 <div id="front-container">
-    <img id="front-large" class="img-responsive" src="img/large_front.png" />
-    <div class="row">
+    <div class="row text-center">
         <div class="col-md-8 col-md-offset-2">
-            <input ng-model="query" type="text" class="form-control input-lg" id="community-url" placeholder="Enter a hero, rarity, item type, name or Steam Community URL.">
+            <img src="img/dota_inventory_logo.png" />
+            <h3 style="margin-top:0; margin-bottom:24px; color:#666;">DotA 2 Cosmetic Items Hub</h3>
+            <!-- Site search to be implemented. -->
+            <div style="display:none;">
+                <div class="input-group">
+                    <span class="input-group-addon">Site Search:</span>
+                    <input ng-model="query" type="text" class="form-control input-lg" id="community-url" placeholder="Enter a hero, rarity, item type, name or Steam Community URL.">
+
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-lg">Go</button>
+                    </span>
+                </div>
+                <div>
+                    <p class="search-loading" ng-if="loadingQuery && query.length > 2">Searching...</p>
+                    <p class="search-loading" ng-if="loadingQuery && query.length < 3 && query.length > 0">Keep Typing...</p>
+                    <ul class="results" ng-hide="loadingQuery">
+                        <li ng-if="results.length == 0 && query.length > 2"><span>No results found.</span></li>
+                        <li ng-if="query.length < 3 && query.length != 0"><span>Keep typing...</span></li>
+                        <li ng-repeat="result in results"><a href="{{result.link}}">{{result.title}}</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-md-offset-2">
-            <p class="search-loading" ng-if="loadingQuery && query.length > 2">Searching...</p>
-            <p class="search-loading" ng-if="loadingQuery && query.length < 3 && query.length > 0">Keep Typing...</p>
-            <ul class="results" ng-hide="loadingQuery">
-                <li ng-if="results.length == 0 && query.length > 2"><span>No results found.</span></li>
-                <li ng-if="query.length < 3 && query.length != 0"><span>Keep typing...</span></li>
-                <li ng-repeat="result in results"><a href="{{result.link}}">{{result.title}}</a></li>
-            </ul>
+        <div class="col-md-4 text-justify">
+            <h1 class='text-center'>Browse</h1>
+            <p class=""><strong>DotA 2</strong> has a large and constantly growing collection of cosmetic items. Dota Inventory makes it easy to find cool new items and browse the existing library.</p>
+            <p>Is <a href="#/items/hero/meepo">Meepo</a> your favourite hero? Or maybe you want to know which <a class="rarity-text immortal" href="#/items/rarity/immortal">Immortal</a> items are out there? There's plenty of items out there so start browsing now!</p>
+            <a href="#/items" class="btn btn-default btn-block">Start Browsing</a>
+        </div>
+        <div class="col-md-4">
+            <h1 class="text-center">Trade</h1>
+            <p><strong>Steam Trading</strong> is huge thanks to Steam's real-money marketplace and Dota 2's wide range of cosmetic items.</p>
+            <p>Dota Inventory provides basic trading support. Do you want that <a href="#/items/id/4007">Dragonclaw Hook</a>? Visit the item's page and see if anyone's looking to trade it. Alternatively post your own items up for trade.</p>
+            <a href="#/trades" class="btn btn-default btn-block">Start Trading</a>
+        </div>
+        <div class="col-md-4">
+            <h1 class="text-center">Merge</h1>
+            <p><strong>Dota Inventory</strong> started out as a <a href="http://old.dotainventory.com">basic friendslist item browser</a> which let you combine every item owned by one of your Steam friends into a simple list.</p>
+            <p>Expanding on that, Dota Inventory is now a place to view any player's inventory as well as a combined friendslist inventory.</p>
+            <a href="#/users" class="btn btn-default btn-block">Start Merging</a>
         </div>
     </div>
-    <hr />
-    <div class="text-center">
-        <p>Welcome to the <strong>new</strong> <a href="http://dotainventory.com">DotaInventory.com</a>! 
-            If you would prefer to use the old site, <a href="http://old.dotainventory.com">click here</a>.</p>
-        <p>This is an early version of the site meaning <strong>it will definitely contain bugs</strong> and may be slow. 
-            If possible, please <a href="bugs.html">report your experience here</a>. Thanks!</p>
-    </div>
-    <hr />
     <div id='front-social' class="text-center">
         <p>
             <a href="http://steamcommunity.com/groups/dotainventory"><img src="img/steam_social.png" /></a>
             <a href="http://twitter.com/dotainventory"><img src="img/twitter_social.png" /></a>
             <a href="http://facebook.com/dotainventory"><img src="img/facebook_social.png" /></a>
         </p>
-        <p><a href="http://steamcommunity.com/id/mchairmaster/" >Add me on Steam directly</a></p>
+        <p><a href="http://steamcommunity.com/id/mchairmaster/" >Add me on Steam directly (Looking to collaborate with Streamers/YouTubers)</a></p>
     </div>
-    
+
 
 </div>

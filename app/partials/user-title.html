@@ -4,14 +4,14 @@
             <img ng-src="{{user.avatar_full_url}}" class="pull-left img-rounded" />
             <h1>{{user.personaname}} <small>Steam User</small></h1>
             <ul class="nav nav-pills"> 
-                <li><a href="#/users/{{user.steamid}}/">Inventory</a></li>
-                <li><a href="#/users/{{user.steamid}}/friendslist/">Friends List</a></li>
-                <li><a href="{{user.profile_url}}inventory/#570" target="_blank"><span class="glyphicon glyphicon-new-window"></span> Make Trade Offer</a></li>
+                <li ng-class="{active: activePage===1}"><a href="#/users/{{user.steamid}}/">Inventory</a></li>
+                <li ng-class="{active: activePage===2}"><a href="#/users/{{user.steamid}}/friendslist/">Friends List</a></li>
+                <li><a href="{{user.profile_url}}inventory/#570" target="_blank"><span class="glyphicon glyphicon-new-window"></span> Steam Profile</a></li>
             </ul>
         </div>
         <div class="col-md-2 update-timer">
             <p class="time-left text-right" ng-class="{shallowUpdate: user.shallow_update == 1}">{{user.last_updated}}H</p>
-            <p class="description text-right">Since last update.</p>
+            <p class="description text-right">Since last update</p>
         </div>
     </div>
 </div>

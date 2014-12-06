@@ -1,0 +1,24 @@
+<div class="section">
+    <div class="alert-info text-center">
+        <p>Please be aware that the trading functionality is currently <strong>very</strong> crude, and open for feedback and suggestions.</p> 
+        <p>I just wanted to push a new version of the site as it's been a while.</p>
+        <p>If it works well and people request it, trading <strong>will be</strong> implemented more thoroughly.</p>
+    </div>
+    <h1 class="text-center">Trade Items</h1>
+    <p class="text-center" style='font-size:16px;'>Trade your Dota 2 items with other users</p>
+</div>
+<div class="section">
+    <h2 class='text-center'>Latest Trades</h2>
+    <p class='text-center' style='color:red;'>This section is probably pretty useless <em>for now</em>. Use the individual item pages to view/post trades.</p>
+    <div class="row text-center" ng-repeat="trade in latestTrades" style="font-size:18px;">
+        <div class="col-md-4">
+            <a href="#/items/id/{{trade.defindex}}">Item Link</a>
+        </div>
+        <div class="col-md-4">
+            Request: {{trade.message}}
+        </div>
+        <div class="col-md-4">
+            <a href="#/users/{{trade.steamid}}">User Link</a>
+        </div>
+    </div>
+</div>

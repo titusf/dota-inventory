@@ -1,22 +1,25 @@
 <div id="item-categories">
     <div class="section">
         <h1 class="text-center">Browse Items</h1>
-        <p class="text-center muted">Find Dota 2 items by using the options below.</p>
+        <p style="font-size:16px;" class="text-center muted">Find Dota 2 items by using the options below.</p>
     </div>
     <div class="section">
-        <h3>Item Name</h3>
-        <form class="form-inline" role="form" action='#/items/name/{{itemName}}'>
-            <div class='form-group'>
-                <input type="text" class="form-control input-md" id="community-url" placeholder="Search by item name." ng-model='itemName'>
+        <div class="row ">
+            <div class="col-md-6 col-md-offset-3">
+                <form ng-submit="goToSearchResults(itemName)">
+                    <div class="input-group input-group-lg">
+                        <input ng-model="itemName" type="text" class="form-control" id="community-url" placeholder="Search for an item by name." />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary">Search</button>
+                        </span>
+                    </div>
+                </form>
             </div>
-            <div class='form-group'>
-                <a ng-href='#/items/name/{{itemName}}'><button type="button" class="btn btn-default btn-group-sm">Search</button></a>
-            </div>
-        </form>
+        </div>
     </div>
-    <div class="section">
-        <h3>Rarity</h3>
-        <p>Select to view all items of that rarity.</p>
+    <div class="section text-center">
+        <h3>Items by Rarity</h3>
+        <p>Select a rarity to view all items belonging to it.</p>
         <div class="text-center">
             <div class="rarity common"><a href="#/items/rarity/common">COMMON</a><div class="counter">x123</div></div>
             <div class="rarity uncommon"><a href="#/items/rarity/uncommon" >UNCOMMON</a><div class="counter">x123</div></div>
@@ -27,17 +30,21 @@
             <div class="rarity immortal"><a href="#/items/rarity/immortal" >IMMORTAL</a><div class="counter">x123</div></div>
             <div class="rarity arcana"><a href="#/items/rarity/arcana" >ARCANA</a><div class="counter">x123</div></div>
         </div>
-        <div style="" class="text-center">
-
-        </div>
     </div>
-    <div class="section">
-        <h3>Hero</h3>
-        <p>Select to view all items of that hero.</p>
-        <div class="text-left">
-            <ul>
+    <div class='section text-center'>
+        <h3>Popular Item Categories</h3>
+        <a href="#/items/type/courier">View All Couriers</a> |
+        <a href="#/items/type/mount">View All Mounts</a> |
+        <a href="#/items/type/loading%20screen">View All Loading Screens</a> |  
+        <a href="#/items/type/taunt">View All Taunts</a>
+    </div>
+    <div class="section text-center">
+        <h3>Items by Hero</h3>
+        <p>Select a hero to view his/her/its available items.</p>
+        <div>
+            <ul style="padding:0; line-height:10px;">
                 <li ng-repeat='hero in heroes' class='hero'>
-                    <a href='#/items/hero/{{hero.dbName}}'><img class="pull-left" ng-src='img/heroes/{{hero.dbName}}_full.png'/><p>{{hero.name}}</p></a>
+                    <a href='#/items/hero/{{hero.dbName}}'><img ng-src='img/heroes/{{hero.dbName}}_full.png'/><p>{{hero.name}}</p></a>
                 </li>
             </ul>
         </div>

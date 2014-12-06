@@ -22,6 +22,9 @@ angular.module('myApp', [
                 $routeProvider.when('/items/hero/:heroName', {templateUrl: 'partials/item-list-hero.html', controller: 'ItemListHeroCtrl'});
                 $routeProvider.when('/items/set/:setName', {templateUrl: 'partials/item-list-set.html', controller: 'ItemListSetCtrl'});
                 $routeProvider.when('/items/name/:searchTerm', {templateUrl: 'partials/item-search.html', controller: 'ItemSearchCtrl'});
+                $routeProvider.when('/items/type/:typeName', {templateUrl: 'partials/item-list-type.html', controller: 'ItemListTypeCtrl'});
+                //Trade routes (lol)
+                $routeProvider.when('/trades', {templateUrl: 'partials/trade-front.html', controller: 'TradeCtrl'});
                
                 //Stats page.
                 $routeProvider.when('/stats', {templateUrl: 'partials/stats.html', controller: 'StatsCtrl'});
