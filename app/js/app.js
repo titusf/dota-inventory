@@ -8,7 +8,9 @@ angular.module('myApp', [
     'myApp.services',
     'myApp.directives',
     'myApp.controllers',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'angulartics', 
+    'angulartics.google.analytics'
 ], function() {}).
         config(['$routeProvider', function($routeProvider) {
                 //User routes.
@@ -25,7 +27,7 @@ angular.module('myApp', [
                 $routeProvider.when('/items/type/:typeName', {templateUrl: 'partials/item-list-type.html', controller: 'ItemListTypeCtrl'});
                 //Trade routes (lol)
                 $routeProvider.when('/trades', {templateUrl: 'partials/trade-front.html', controller: 'TradeCtrl'});
-               
+                $routeProvider.when('/trades/id/:tradeId', {templateUrl: 'partials/trade-detail.html', controller: 'TradeDetailCtrl'});
                 //Stats page.
                 $routeProvider.when('/stats', {templateUrl: 'partials/stats.html', controller: 'StatsCtrl'});
                 //FAQ Page.
