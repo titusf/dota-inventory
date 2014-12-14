@@ -161,6 +161,11 @@ class ServerActions {
         return $this->makeResponseJson(true, $item);
         //Return json.
     }
+    
+    public function getItemPrice($defindex){
+        $prices = $this->databaseLink->getItemValue($defindex);
+        return $this->makeResponseJson(true, $prices);
+    }
 
     public function getItemsByType($item_type_name) {
         try {

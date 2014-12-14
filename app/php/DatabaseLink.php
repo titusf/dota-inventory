@@ -44,15 +44,15 @@ class DatabaseLink {
             throw new Exception("Database:addTrade error: " . $ex->getMessage());
         }
     }
-    
+
     /**
      * Retrieves the active trade listing for this item that belongs to this
      * user IF the trade exists and is NEWER than the trade-life timer. 
      * @param type $defindex
      * @param type $steamid
      */
-    public function selectActiveItemTradeByUser($defindex, $steamid){
-        try{
+    public function selectActiveItemTradeByUser($defindex, $steamid) {
+        try {
             $hrsOld = 48;
             $query = "SELECT * FROM `trades`
                     WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= :hrsOld 
@@ -68,9 +68,9 @@ class DatabaseLink {
             throw new Exception("Database:selectActiveItemTradeByUser error: " . $ex->getMessage());
         }
     }
-    
-    public function selectLatestTrades(){
-        try{
+
+    public function selectLatestTrades() {
+        try {
             $query = "SELECT * FROM `trades`
                     WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= 48 
                     ORDER BY `date_submitted` DESC
@@ -81,7 +81,7 @@ class DatabaseLink {
             $result = $stmt->fetchAll();
             return $result;
         } catch (Exception $ex) {
-
+            
         }
     }
 
@@ -107,8 +107,8 @@ class DatabaseLink {
         //Later
     }
 
-    public function selectAllMountItems(){
-        try{
+    public function selectAllMountItems() {
+        try {
             $query = "SELECT * FROM `item` 
                         WHERE `item_type_name` 
                         IN ('warhorse', 'horse', 'my demonic warhorse', 'bat', 'riding cat', 'beast', 'noble beast' 'lizard')
@@ -118,11 +118,12 @@ class DatabaseLink {
             $result = $stmt->fetchAll();
             return $result;
         } catch (Exception $ex) {
-
+            
         }
     }
-    public function selectAllCourierItems(){
-        try{
+
+    public function selectAllCourierItems() {
+        try {
             $query = "SELECT * FROM `item` 
                         WHERE `item_type_name` 
                         LIKE '%courier'";
@@ -131,17 +132,18 @@ class DatabaseLink {
             $result = $stmt->fetchAll();
             return $result;
         } catch (Exception $ex) {
-
+            
         }
     }
+
     /**
      * Most interesting values for item_type_name except mount and courier are:
      * Taunt: 'taunt'
      * Loading Screen: 'Loading Screen'
      * @param type $item_type_name
      */
-    public function selectItemsByType($item_type_name){
-        try{
+    public function selectItemsByType($item_type_name) {
+        try {
             $query = "SELECT * FROM `item` 
                         WHERE `item_type_name` = :item_type_name";
             $stmt = $this->DBH->prepare($query);
@@ -150,10 +152,10 @@ class DatabaseLink {
             $result = $stmt->fetchAll();
             return $result;
         } catch (Exception $ex) {
-
+            
         }
     }
-    
+
     public function getItem($defindex) {
         try {
             $string = 'SELECT item.item_name, item.item_class, item.item_rarity, item.item_type_name,'
@@ -167,6 +169,21 @@ class DatabaseLink {
             return $result;
         } catch (Exception $e) {
             throw new Exception("Database:getItem error: " . $e->getMessage());
+        }
+    }
+
+    //Value is in USD
+    public function getItemValue($defindex) {
+        try {
+            $string = "SELECT `lowest_price`, `median_price`, `date_fetched`
+                    FROM `item_prices` WHERE `defindex` = :defindex";
+            $stmt = $this->DBH->prepare($string);
+            $stmt->bindParam(':defindex', $defindex);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+            throw new Exception("Database:getItemValue error: " . $e->getMessage());
         }
     }
 
@@ -610,7 +627,7 @@ class DatabaseLink {
      * @param type $defindex
      */
     public function selectFriendsWhoOwn($steamid, $defindex) {
-        $string = 'SELECT `user`.* FROM `user`
+        $string = 'SELECT DISTINCT `user`.* FROM `user`
                     INNER JOIN `user_friends`
                     ON `user`.`steamid` = `user_friends`.`friend_steamid`
                     INNER JOIN `user_inventory`

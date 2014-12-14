@@ -60,6 +60,12 @@ if (isset($_GET['action'])) {
                 echo json_encode($response->toArray());
             }
             break;
+        case "getitemprice":
+            if (isset($_GET['defindex'])) {
+                $defindex = $_GET['defindex'];
+                echo $serverApi->getItemPrice($defindex);
+            }
+            break;
         case "getinventory":
             if (isset($_GET['steamid'])) {
                 $steamid = $_GET['steamid'];
