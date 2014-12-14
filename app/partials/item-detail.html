@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-3">
             <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
-            <a target="_blank" style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}"><span class="glyphicon glyphicon-new-window"></span> View On Market</a>
+            
             <div class="item-friend-owners small-user-list-container">
                 <user-list users="friendsOwning" heading="'Friends Who Own This'" subheading="friendsOwning.length + ' friends own this item'"></user-list>
             </div>
@@ -78,6 +78,13 @@
             </div>
         </div>
         <div class="col-md-3 text-center">
+            <div>
+                <h3>Market Data</h3>
+                <p><em>01/01/2001</em></p>
+                <p>Median: </p>
+                <p>Lowest: </p>
+                <a target="_blank" style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}"><span class="glyphicon glyphicon-new-window"></span> Go To Market</a>
+            </div>
             <div class="item-active-trades" style="padding: 0 5px;">
                 <h4 class="text-center">Looking to Trade</h4>
                 <p>Asking prices are displayed below:</p>
@@ -96,4 +103,8 @@
             </div>
         </div>
     </div>
+</div>
+<div class="text-center advert section"style="margin-top:24px;">
+    <div data-my-ad-sense></div>
+</div>
 
