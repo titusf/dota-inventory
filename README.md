@@ -1,3 +1,7 @@
+# DotaInventory.com - Let's build it!
+
+This is the place where we work together and build DotaInventory into something cool for people to use! Will add more info here later.
+
 # angular-seed — the seed for AngularJS apps
 
 This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
