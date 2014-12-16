@@ -7,10 +7,8 @@
     <div class="row">
         <div class="col-md-3">
             <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
-            
-            <div class="item-friend-owners small-user-list-container">
-                <user-list users="friendsOwning" heading="'Friends Who Own This'" subheading="friendsOwning.length + ' friends own this item'"></user-list>
-            </div>
+
+
         </div>
         <div class="col-md-6">
             <div class="row" id="item-hero" ng-hide="noHero">
@@ -44,8 +42,10 @@
             <div class="row" style="min-height: 110px;
                  border: 1px solid #eee;">
                 <div class="col-md-12">
-                    <p id="item-description">{{item.item_description}}</p>
+                    <p id="item-description" style="min-height:56px;">{{item.item_description}}</p>
                 </div>
+                <div class="col-md-12 text-right" style="margin-bottom:9px;">
+                    <button class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-star"></span> Add to Want List</button></div>
             </div>
             <div class="row" style='margin-top:14px;'>
                 <div class="col-md-10 col-md-offset-1 text-center">
@@ -78,13 +78,44 @@
             </div>
         </div>
         <div class="col-md-3 text-center">
-            <div>
+            <div id="item-detail-market" class="simple-grey-box">
                 <h3>Market Data</h3>
-                <p><em>01/01/2001</em></p>
-                <p>Median: </p>
-                <p>Lowest: </p>
+                <div ng-if="marketResultCount === 0">
+                    <p style="font-weight:bold; margin:44px 0;">No Data.</p>
+                </div>
+                <div ng-if="marketResultCount > 0">
+                    <p><em>{{marketData.date_fetched}} (GMT)</em></p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Median</p>
+                            <p>$<span class="bignum">{{marketData.median_price}}</span> <span class="glyphicon glyphicon-chevron-up"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Lowest</p>
+                            <p><p>$<span class="bignum">{{marketData.lowest_price}}</span></p>
+                        </div>
+                    </div>
+                </div>
                 <a target="_blank" style="margin-top:4px;" class="btn btn-default btn-block" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}"><span class="glyphicon glyphicon-new-window"></span> Go To Market</a>
             </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div class="section">
+    <h2 class="text-center">Trading and Item Owners</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="item-friend-owners small-user-list-container">
+                <user-list users="friendsOwning" heading="'Friends Who Own This'" subheading="friendsOwning.length + ' friends own this item'"></user-list>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="simple-grey-box text-center">
+                <h4>Users who want this</h4>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="item-active-trades" style="padding: 0 5px;">
                 <h4 class="text-center">Looking to Trade</h4>
                 <p>Asking prices are displayed below:</p>
@@ -104,6 +135,7 @@
         </div>
     </div>
 </div>
+
 <div class="text-center advert section"style="margin-top:24px;">
     <div data-my-ad-sense></div>
 </div>

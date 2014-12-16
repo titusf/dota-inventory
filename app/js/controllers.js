@@ -214,7 +214,7 @@ angular.module('myApp.controllers', ['ngCookies']).
 
                 // Mark the page as loading.
                 $scope.loading = true;
-                
+
                 // Set the default number of items to display.
                 $scope.totalDisplayed = 120;
 
@@ -224,16 +224,16 @@ angular.module('myApp.controllers', ['ngCookies']).
                     if (user.steamid === steamid) {
                         $scope.loading = false;
                         $scope.loggedInUserProfile = true;
-                        user.profilePromise.then(function(result){
+                        user.profilePromise.then(function(result) {
                             $scope.user = result.data;
                         });
-                        user.inventoryPromise.then(function(){
+                        user.inventoryPromise.then(function() {
                             $scope.items = user.inventory;
                         });
                     }
-                // Otherwise, this is not a logged in user's page. (Or user is not logged in.)
+                    // Otherwise, this is not a logged in user's page. (Or user is not logged in.)
                 } else {
-                    
+
                     api.getUserDetails($scope.steamId, function(data) {
                         if (data.success == true) {
                             $scope.userApiFail = false;
@@ -374,14 +374,14 @@ angular.module('myApp.controllers', ['ngCookies']).
                     $scope.items = data.data;
                 });
             }])
-        .controller('ItemListTypeCtrl', ['$scope', '$routeParams', 'api',  function($scope, $routeParams, api){
+        .controller('ItemListTypeCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
                 var typeName = $routeParams.typeName;
                 $scope.typeName = typeName;
-                api.getItemsByType(typeName).then(function(successData){
-                    if(successData.success===true){
+                api.getItemsByType(typeName).then(function(successData) {
+                    if (successData.success === true) {
                         $scope.items = successData.data;
                     } else {
-                        
+
                     }
                 });
             }])
@@ -413,16 +413,28 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;
 
+                api.getItemPrice(defindex).then(function(resultData){
+                    $scope.marketResultCount = resultData.data.data.length;
+                    var firstResult = resultData.data.data[0];
+                    var lowest_price = (firstResult.lowest_price/100).toFixed(2);
+                    var median_price = (firstResult.median_price/100).toFixed(2);
+                    var date_fetched = firstResult.date_fetched;
+                    $scope.marketData = {
+                        lowest_price: lowest_price,
+                        median_price: median_price,
+                        date_fetched: date_fetched
+                    };
+                });
 
-                api.getActiveTrades(defindex).then(function(resultData){
-                    if(resultData.success === true){
+                api.getActiveTrades(defindex).then(function(resultData) {
+                    if (resultData.success === true) {
                         $scope.itemTrades = resultData.data;
-                        
+
                     } else {
                         console.log(resultData.data);
                     }
-                }, function(failResponse){
-                    
+                }, function(failResponse) {
+
                 });
 
                 if (user.loggedIn) {
@@ -437,9 +449,9 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 }
                 $scope.submitTrade = function(tradeText) {
-                    api.addTrade(defindex, user.steamid, tradeText).then(function(successResponse){
-                        if(successResponse.success === true){
-                            
+                    api.addTrade(defindex, user.steamid, tradeText).then(function(successResponse) {
+                        if (successResponse.success === true) {
+
                         } else {
                             var tradeError = successResponse.data;
                             $scope.submitTradeFail = true;
@@ -459,10 +471,13 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 }
             }])
-        .controller('TradeCtrl', ['$scope', 'api', function($scope, api){
-                api.getLatestTrades().then(function(successData){
+        .controller('TradeCtrl', ['$scope', 'api', function($scope, api) {
+                api.getLatestTrades().then(function(successData) {
                     $scope.latestTrades = successData.data.data;
                 });
+            }])
+        .controller('TradeDetailCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
+                $scope.tradeId = $routeParams.tradeId;
             }])
         .controller('StatsCtrl', ['$scope', 'api', function($scope, api) {
                 api.getStats(function(data) {
