@@ -95,13 +95,13 @@ angular.module('myApp.services', []).
                 };
             }])
         .factory('ItemSearch', ['$http', function($http) {
-                var doSearch = function(query){
-                    
+                var doSearch = function(query) {
+
                 };
             }])
         .factory('SiteSearch', ['SearchUser', function(SearchUser) {
-                var doSearch = function(query){
-                    
+                var doSearch = function(query) {
+
                 };
             }])
         .factory('Trade', ['$http', function($http) {
@@ -131,6 +131,15 @@ angular.module('myApp.services', []).
                         }, function(failData) {
 
                         });
+                    },
+                    getTrade: function(tradeId) {
+
+                    },
+                    getItemPrice: function(defindex) {
+                        return $http.get('action.php?action=getitemprice&defindex=' + defindex)
+                                .then(function(successData) {
+                                    return successData;
+                                });
                     },
                     getLatestTrades: function() {
                         return $http.get('action.php?action=getlatesttrades')
@@ -189,11 +198,11 @@ angular.module('myApp.services', []).
                             callback(data);
                         });
                     },
-                    getItemsByType: function(itemTypeName){
-                        return $http.get('action.php?action=getitemsbytype&type=' + itemTypeName).then(function(success){
+                    getItemsByType: function(itemTypeName) {
+                        return $http.get('action.php?action=getitemsbytype&type=' + itemTypeName).then(function(success) {
                             return success.data;
-                        }, function(fail){
-                            
+                        }, function(fail) {
+
                         });
                     }
                 };
