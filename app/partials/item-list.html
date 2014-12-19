@@ -176,7 +176,7 @@
                 </a>
                 <div class="item-details">
                     <h4>{{item.name}}</h4>
-                    <p class="rarity-text {{item.item_rarity}}">{{heroes[item.used_by_heroes]}}'s {{item.item_rarity}} {{item.item_type_name}}</p>
+                    <p class="rarity-text {{item.item_rarity}}"><span ng-if="item.used_by_heroes">{{heroes[item.used_by_heroes]}}'s</span> {{item.item_rarity}} {{item.item_type_name}}</p>
                     <p class="description">{{item.item_description}}</p>
                     <div class="ownership">
                         <p ng-if="owners[item.defindex].length < 11">{{owners[item.defindex].length}} of this user's friends own this item:</p>
