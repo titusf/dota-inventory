@@ -1,3 +1,15 @@
+# DotaInventory.com - Let's build it!
+
+This is the place where we work together and build DotaInventory into something cool for people to use! 
+
+Guide to contributing:
+1. Fork this repo! This creates your own personal copy of the files on Bitbucket.
+2. Clone **your fork** of the repo onto your local machine.
+3. Make your changes on your machine! (If you're unfamiliar with Git, it would be helpful to read up on it and best uses.)
+4. Keep both your Fork and Cloned repo up to date with the remote master.
+5. Push your changes to your remote repo/fork.
+6. Finally, create a pull request through Bitbucket!
+
 # angular-seed — the seed for AngularJS apps
 
 This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
