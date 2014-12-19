@@ -2,7 +2,7 @@
 
 /**General Level Styles**/
 body{
-    background-color:#f3f3f3; 
+    background-color:#fff; 
 }
 h1{
     font-size:52px;
@@ -317,11 +317,14 @@ body {
 /* Set the fixed height of the footer here */
 #footer {
     height: 90px;
-    background-color: #b82020;
+    background-color: #1A1A1A;
     text-align: center;
     border-top:2px solid #E48A8A;
     padding:10px 0 20px 0;
-
+    width: 100%;
+}
+#copy{
+    color:#FF4848;
 }
 #logged-in-user{
     color:#fff;
