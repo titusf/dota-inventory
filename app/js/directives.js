@@ -115,7 +115,7 @@ angular.module('myApp.directives', []).
                 }
             };
         }).
-        directive('dotaItemBlock', function(){
+        directive('dotaItemBlock', ['Heroes', function(Heroes){
             return{
                 restrict: 'E',
                 scope: {
@@ -125,10 +125,12 @@ angular.module('myApp.directives', []).
                 },
                 templateUrl: 'templates/dota-item-block.html',
                 link: function(scope, elem, attrs){
-                    
+                    scope.constructHeroIconUrl = function(db_hero_name){
+                        return "img/heroes/icons/" + Heroes.stripNpcPrefix(db_hero_name) + "_icon.png";
+                    };
                 }
             };
-        }).
+        }]).
         directive('loaderScreen', ['$interval', function($interval){
             return{
                 restrict: 'E',

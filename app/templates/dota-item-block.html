@@ -1,6 +1,5 @@
-
 <div class="item-box {{item.item_rarity}} clearfix">
-    <img ng-if="item.used_by_heroes" class="hero-icon" src="img/heroes/icons/{{heroes[item.used_by_heroes]}}_icon.png" />
+    <img ng-if="item.used_by_heroes" class="hero-icon" ng-src="{{constructHeroIconUrl(item.used_by_heroes)}}" />
     <a href='#/items/id/{{item.defindex}}'>
         <img class="item-image" ng-src="{{item.image_url}}" />
     </a>
