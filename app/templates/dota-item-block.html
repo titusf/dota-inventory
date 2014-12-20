@@ -1,0 +1,19 @@
+
+<div class="item-box {{item.item_rarity}} clearfix">
+    <img ng-if="item.used_by_heroes" class="hero-icon" src="img/heroes/icons/{{heroes[item.used_by_heroes]}}_icon.png" />
+    <a href='#/items/id/{{item.defindex}}'>
+        <img class="item-image" ng-src="{{item.image_url}}" />
+    </a>
+    <div class="item-details">
+        <h4>{{item.name}}</h4>
+        <p class="rarity-text {{item.item_rarity}}"><span ng-if="item.used_by_heroes">{{heroes[item.used_by_heroes]}}'s</span> {{item.item_rarity}} {{item.item_type_name}}</p>
+        <p class="description">{{item.item_description}}</p>
+        <div class="ownership">
+            <p ng-if="owners.length < 11">{{owners[item.defindex].length}} of this user's friends own this item:</p>
+            <p ng-if="owners.length > 10">More than 10 of this user's friends own this item - user names will not be displayed.</p>
+            <div ng-if="owners.length < 11" ng-repeat="owner in owners">
+                <a href="#/users/{{owner.details.steamid}}/">{{owner.details.personaname}}</a>
+            </div>
+        </div>
+    </div>      
+</div>

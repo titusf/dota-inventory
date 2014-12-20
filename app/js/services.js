@@ -120,6 +120,13 @@ angular.module('myApp.services', []).
                 };
 
             }])
+        .factory('Heroes', ['api', function(api) {
+                return{
+                    stripNpcPrefix: function(db_hero_name){
+                        return db_hero_name.substring(14);
+                    }
+                };
+            }])
         .factory('api', ['$http', function($http) {
 
                 return {

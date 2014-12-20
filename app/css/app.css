@@ -75,12 +75,6 @@ div.dota-item{
     position: relative;
     color:#FFF;
 }
-.dota-item img{
-    float:left;
-    margin-right:14px;
-    width: 176px;
-}
-
 .items.list{
 
 }
@@ -93,11 +87,17 @@ div.dota-item{
     background-image: url(../img/unknown_item.jpg);
     background-size: cover;
 }
-.items.grid .dota-item img{
+.items.grid .dota-item img.item-image{
     width: 79px;
     height:52px;
     float:none;
     margin-right:0px;
+}.items.grid .dota-item img.hero-icon{
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 6px;
+    top: 6px;
 }
 .items.grid .dota-item .item-details{
     position:absolute;
@@ -606,5 +606,5 @@ span.bignum{
     font-weight:bold;
 }
 #item-detail-market{
-    
+
 }

@@ -149,11 +149,11 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('ItemCategoriesCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
+        .controller('ItemCategoriesCtrl', ['$scope', '$http', '$location', 'Heroes', function($scope, $http, $location, Heroes) {
                 $scope.heroes = [];
                 $http.get('action.php?action=getheroes').success(function(data) {
                     angular.forEach(data.data, function(value, key) {
-                        var dbName = key.substring(14, key.length);
+                        var dbName = Heroes.stripNpcPrefix(key);
                         $scope.heroes.push({
                             name: value,
                             dbName: dbName

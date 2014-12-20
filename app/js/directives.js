@@ -111,6 +111,20 @@ angular.module('myApp.directives', []).
                 }
             };
         }).
+        directive('dotaItemBlock', function(){
+            return{
+                restrict: 'E',
+                scope: {
+                    item: '=',
+                    owners: '=',
+                    heroes: '='
+                },
+                templateUrl: 'templates/dota-item-block.html',
+                link: function(scope, elem, attrs){
+                    console.log(scope.heroes);
+                }
+            };
+        }).
         directive('loaderScreen', ['$interval', function($interval){
             return{
                 restrict: 'E',
