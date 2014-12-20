@@ -170,23 +170,24 @@
             Displaying {{maxDisplayed}} out of {{filteredItems.length}} items. Refine your results with filters or scroll down to show more.
         </div>
         <div class="dota-item" ng-repeat="item in filteredItems = (items| filter:{name:filterText, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitTo:maxDisplayed | orderBy:sortItems:true">
-            <div class="item-box {{item.item_rarity}} clearfix">
-                <a href='#/items/id/{{item.defindex}}'>
-                    <img ng-src="{{item.image_url}}" />
-                </a>
-                <div class="item-details">
-                    <h4>{{item.name}}</h4>
-                    <p class="rarity-text {{item.item_rarity}}"><span ng-if="item.used_by_heroes">{{heroes[item.used_by_heroes]}}'s</span> {{item.item_rarity}} {{item.item_type_name}}</p>
-                    <p class="description">{{item.item_description}}</p>
-                    <div class="ownership">
-                        <p ng-if="owners[item.defindex].length < 11">{{owners[item.defindex].length}} of this user's friends own this item:</p>
-                        <p ng-if="owners[item.defindex].length > 10">More than 10 of this user's friends own this item - user names will not be displayed.</p>
-                        <div ng-if="owners[item.defindex].length < 11" ng-repeat="owner in owners[item.defindex]">
-                            <a href="#/users/{{owner.details.steamid}}/">{{owner.details.personaname}}</a>
-                        </div>
-                    </div>
-                </div>      
-            </div>
+            <!--            <div class="item-box {{item.item_rarity}} clearfix">
+                            <a href='#/items/id/{{item.defindex}}'>
+                                <img ng-src="{{item.image_url}}" />
+                            </a>
+                            <div class="item-details">
+                                <h4>{{item.name}}</h4>
+                                <p class="rarity-text {{item.item_rarity}}"><span ng-if="item.used_by_heroes">{{heroes[item.used_by_heroes]}}'s</span> {{item.item_rarity}} {{item.item_type_name}}</p>
+                                <p class="description">{{item.item_description}}</p>
+                                <div class="ownership">
+                                    <p ng-if="owners[item.defindex].length < 11">{{owners[item.defindex].length}} of this user's friends own this item:</p>
+                                    <p ng-if="owners[item.defindex].length > 10">More than 10 of this user's friends own this item - user names will not be displayed.</p>
+                                    <div ng-if="owners[item.defindex].length < 11" ng-repeat="owner in owners[item.defindex]">
+                                        <a href="#/users/{{owner.details.steamid}}/">{{owner.details.personaname}}</a>
+                                    </div>
+                                </div>
+                            </div>      
+                        </div>-->
+            <dota-item-block item="item" owners="owners" heroes="heroes"></dota-item-block>
         </div> 
         <p class="text-center" ng-click="showMore()" ng-if="filteredItems.length > maxDisplayed"><button type="button" class="btn btn-primary btn-xs">Show more</button></p>
     </div>
