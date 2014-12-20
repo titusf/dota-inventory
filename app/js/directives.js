@@ -32,7 +32,7 @@ angular.module('myApp.directives', []).
                     }
                 };
             }]).
-        directive('itemList', ['$timeout', 'api', function($timeout, api) {
+        directive('itemList', ['$timeout', 'api', '$filter', function($timeout, api, $filter) {
                 return {
                     scope: {
                         items: '=',
@@ -42,10 +42,13 @@ angular.module('myApp.directives', []).
                     },
                     templateUrl: 'partials/item-list.html',
                     link: function(scope, elem, attrs) {
+                        
+                        // Pagination
+                        scope.currentPage = 1;
+                        
                         api.getHeroes(function(data) {
                             scope.heroes = data.data;
                         });
-                        scope.maxDisplayed = 120;
                         scope.displayGrid = true;
 
                         scope.filterText = '';
@@ -60,13 +63,11 @@ angular.module('myApp.directives', []).
                                 scope.filterText = tempFilterText;
                             }, 600); //Delay 600ms for user search.
                         });
-
-                        scope.showMore = function() {
-                            scope.maxDisplayed += 60;
-                        };
+                        
                         scope.$watch('items', function(n, o) {
                             if (typeof scope.items !== 'undefined') {
                                 scope.loadingItems = false;
+                                scope.sortedItems = scope.items;
                             } else {
                                 scope.loadingItems = true;
                             }
@@ -88,7 +89,10 @@ angular.module('myApp.directives', []).
                             'immortal': 6,
                             'arcana': 7
                         };
-                        scope.sortItems = function(item) {
+                        scope.orderItems = function(sortBy){
+                            scope.sortedItems = $filter('orderBy')(scope.items, sortItems, true);
+                        };
+                        var sortItems = function(item) {
                             if (scope.orderProp === 'rarity') {
                                 return [mapping[item.item_rarity], item.used_by_heroes, item.item_class];
                             } else {
@@ -121,7 +125,7 @@ angular.module('myApp.directives', []).
                 },
                 templateUrl: 'templates/dota-item-block.html',
                 link: function(scope, elem, attrs){
-                    console.log(scope.heroes);
+                    
                 }
             };
         }).
