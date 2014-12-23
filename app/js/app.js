@@ -12,7 +12,10 @@ angular.module('myApp', [
     'angulartics', 
     'angulartics.google.analytics'
 ], function() {}).
-        config(['$routeProvider', function($routeProvider) {
+        config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+                //Setup HTML5Mode
+                $locationProvider.html5Mode(true);
+                
                 //User routes.
                 $routeProvider.when('/users', {templateUrl: 'partials/user-front.html', controller: 'UserFrontCtrl'});
                 $routeProvider.when('/users/:steamId', {templateUrl: 'partials/user-detail.html', controller: 'UserDetailCtrl'});
