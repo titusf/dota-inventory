@@ -12,13 +12,13 @@
     <p class='text-center' style='color:red;'>This section is probably pretty useless <em>for now</em>. Use the individual item pages to view/post trades.</p>
     <div class="row text-center" ng-repeat="trade in latestTrades" style="font-size:18px;">
         <div class="col-md-4">
-            <a href="#/items/id/{{trade.defindex}}">Item Link</a>
+            <a href="items/id/{{trade.defindex}}">Item Link</a>
         </div>
         <div class="col-md-4">
-            Request: {{trade.message}} - <a href="#/trades/id/{{trade.id}}">#{{trade.id}}</a>
+            Request: {{trade.message}} - <a href="trades/id/{{trade.id}}">#{{trade.id}}</a>
         </div>
         <div class="col-md-4">
-            <a href="#/users/{{trade.steamid}}">User Link</a>
+            <a href="users/{{trade.steamid}}">User Link</a>
         </div>
     </div>
 </div>

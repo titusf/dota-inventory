@@ -15,7 +15,7 @@
                 <div class="col-md-3">
                     <img class="img-responsive pull-left" ng-src="img/heroes/{{item.hero_db}}_full.png">
                 </div>
-                <div class="col-md-5"><h3><a href='#/items/hero/{{item.hero_db}}'>{{item.hero_name}}</a></h3></div>
+                <div class="col-md-5"><h3><a href='items/hero/{{item.hero_db}}'>{{item.hero_name}}</a></h3></div>
                 <div class="col-md-4 text-center">
                     <div class="item-stat">
                         <p>OWN</p> 
@@ -34,7 +34,7 @@
             </div>
             <div class="row text-center" id="item-classes">
                 <div class="col-md-4 rarity {{item.item_rarity}}">
-                    <a href="#/items/rarity/{{item.item_rarity}}">{{item.item_rarity}}</a>
+                    <a href="items/rarity/{{item.item_rarity}}">{{item.item_rarity}}</a>
                 </div>
                 <div class="col-md-4">{{item.item_type_name}}</div>
                 <div class="col-md-4">{{item.item_set}}</div>
@@ -126,7 +126,7 @@
                     <div class="trade-item text-left" ng-repeat="trade in itemTrades| limitTo:limiter | limitTo:-10" ng-class-even="'even'">
                         <span style="font-weight:bold;">Want: </span>
                         <span>{{trade.message}}</span>
-                        <a href="#/users/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
+                        <a href="users/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
                         <a href="http://steamcommunity.com/profiles/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Steam" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></a>
                     </div>
                     <pagination boundary-links="false" total-items="traders.length" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>

@@ -21,22 +21,22 @@
         <h3>Items by Rarity</h3>
         <p>Select a rarity to view all items belonging to it.</p>
         <div class="text-center">
-            <div class="rarity common"><a href="#/items/rarity/common">COMMON</a><div class="counter">x123</div></div>
-            <div class="rarity uncommon"><a href="#/items/rarity/uncommon" >UNCOMMON</a><div class="counter">x123</div></div>
-            <div class="rarity rare"><a href="#/items/rarity/rare" >RARE</a><div class="counter">x123</div></div>
-            <div class="rarity mythical"><a href="#/items/rarity/mythical" >MYTHICAL</a><div class="counter">x123</div></div>
-            <div class="rarity legendary"><a href="#/items/rarity/legendary" >LEGENDARY</a><div class="counter">x123</div></div>
-            <div class="rarity ancient"><a href="#/items/rarity/ancient" >ANCIENT</a><div class="counter">x123</div></div>
-            <div class="rarity immortal"><a href="#/items/rarity/immortal" >IMMORTAL</a><div class="counter">x123</div></div>
-            <div class="rarity arcana"><a href="#/items/rarity/arcana" >ARCANA</a><div class="counter">x123</div></div>
+            <div class="rarity common"><a href="items/rarity/common">COMMON</a><div class="counter">x123</div></div>
+            <div class="rarity uncommon"><a href="items/rarity/uncommon" >UNCOMMON</a><div class="counter">x123</div></div>
+            <div class="rarity rare"><a href="items/rarity/rare" >RARE</a><div class="counter">x123</div></div>
+            <div class="rarity mythical"><a href="items/rarity/mythical" >MYTHICAL</a><div class="counter">x123</div></div>
+            <div class="rarity legendary"><a href="items/rarity/legendary" >LEGENDARY</a><div class="counter">x123</div></div>
+            <div class="rarity ancient"><a href="items/rarity/ancient" >ANCIENT</a><div class="counter">x123</div></div>
+            <div class="rarity immortal"><a href="items/rarity/immortal" >IMMORTAL</a><div class="counter">x123</div></div>
+            <div class="rarity arcana"><a href="items/rarity/arcana" >ARCANA</a><div class="counter">x123</div></div>
         </div>
     </div>
     <div class='section text-center'>
         <h3>Popular Item Categories</h3>
-        <a href="#/items/type/courier">View All Couriers</a> |
-        <a href="#/items/type/mount">View All Mounts</a> |
-        <a href="#/items/type/loading%20screen">View All Loading Screens</a> |  
-        <a href="#/items/type/taunt">View All Taunts</a>
+        <a href="items/type/courier">View All Couriers</a> |
+        <a href="items/type/mount">View All Mounts</a> |
+        <a href="items/type/loading%20screen">View All Loading Screens</a> |  
+        <a href="items/type/taunt">View All Taunts</a>
     </div>
     <div class="section text-center">
         <h3>Items by Hero</h3>
@@ -44,7 +44,7 @@
         <div>
             <ul style="padding:0; line-height:10px;">
                 <li ng-repeat='hero in heroes' class='hero'>
-                    <a href='#/items/hero/{{hero.dbName}}'><img ng-src='img/heroes/{{hero.dbName}}_full.png'/><p>{{hero.name}}</p></a>
+                    <a href='items/hero/{{hero.dbName}}'><img ng-src='img/heroes/{{hero.dbName}}_full.png'/><p>{{hero.name}}</p></a>
                 </li>
             </ul>
         </div>

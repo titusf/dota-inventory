@@ -18,7 +18,7 @@
         <p class="text-center text-primary" ng-show="friendsPrivate > 0">!! {{friendsPrivate}} friends have their inventories set to private. Tell them to change this !!</p>
         <div class="friend-users">
             <div class="steam-user" popover="{{friend.personaname}}" popover-trigger="mouseenter" ng-repeat="friend in friendslist" >
-                <a href="#/users/{{friend.steamid}}/">
+                <a href="users/{{friend.steamid}}/">
                     <img ng-class="{faded: friend.loading}" ng-src="{{friend.avatar_url}}">
                     <span class="glyphicon glyphicon-lock steam-user-warning warning-yellow" ng-if="friend.inventory_private" ></span>
                     <span class="glyphicon glyphicon-lock steam-user-warning warning-black" ng-if="friend.community_visibility_state !== '3'" ></span>

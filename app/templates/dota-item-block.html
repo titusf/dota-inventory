@@ -1,6 +1,6 @@
 <div class="item-box {{item.item_rarity}} clearfix">
     <img ng-if="item.used_by_heroes" class="hero-icon" ng-src="{{constructHeroIconUrl(item.used_by_heroes)}}" />
-    <a href='#/items/id/{{item.defindex}}'>
+    <a href='items/id/{{item.defindex}}'>
         <img class="item-image" ng-src="{{item.image_url}}" />
     </a>
     <div class="item-details">
@@ -11,7 +11,7 @@
             <p ng-if="owners.length < 11">{{owners[item.defindex].length}} of this user's friends own this item:</p>
             <p ng-if="owners.length > 10">More than 10 of this user's friends own this item - user names will not be displayed.</p>
             <div ng-if="owners.length < 11" ng-repeat="owner in owners">
-                <a href="#/users/{{owner.details.steamid}}/">{{owner.details.personaname}}</a>
+                <a href="users/{{owner.details.steamid}}/">{{owner.details.personaname}}</a>
             </div>
         </div>
     </div>      

@@ -6,7 +6,7 @@
             <img popover="{{user.personaname}}" popover-trigger="mouseenter" style="width:22px;" ng-src="{{user.avatar_url}}" src="img/user_default.jpg" />
             <span>{{user.personaname}}</span>
             <a ng-href="{{user.profile_url}}" target="_blank" class="btn btn-default btn-xs pull-right" popover="Steam Profile" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></a>
-            <a href="#/users/{{user.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
+            <a href="users/{{user.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
 
         </div>
         <pagination ng-if="users.length > 10" boundary-links="false" total-items="users.length" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>

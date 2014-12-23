@@ -70,10 +70,10 @@ angular.module('myApp.controllers', ['ngCookies']).
                             if (query.substring(0, 35) === "http://steamcommunity.com/profiles/") {
                                 var steamid = query.substring(35, query.length);
                                 $scope.results.push({
-                                    link: "#/users/" + steamid,
+                                    link: "users/" + steamid,
                                     title: "View User Profile"
                                 }, {
-                                    link: "#/users/" + steamid + "/friendslist/",
+                                    link: "users/" + steamid + "/friendslist/",
                                     title: "View User Friendslist"
                                 });
                                 $scope.loadingQuery = false;
@@ -83,16 +83,16 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     if (data.success === true) {
                                         var steamid = data.data;
                                         $scope.results.push({
-                                            link: "#/users/" + steamid,
+                                            link: "users/" + steamid,
                                             title: "View User Profile"
                                         }, {
-                                            link: "#/users/" + steamid + "/friendslist/",
+                                            link: "users/" + steamid + "/friendslist/",
                                             title: "View User Friendslist"
                                         });
                                         $scope.loadingQuery = false;
                                     } else {
                                         $scope.results.push({
-                                            link: "#",
+                                            link: "#/",
                                             title: "User does not exist"
                                         });
                                         $scope.loadingQuery = false;
@@ -110,7 +110,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                 angular.forEach($scope.rarities, function(rarity, index) {
                                     if (rarity.substring(0, query.length) === query) {
                                         $scope.results.push({
-                                            link: "#/items/rarity/" + rarity,
+                                            link: "items/rarity/" + rarity,
                                             title: "View All " + rarity + " Items"
                                         });
                                     }
@@ -120,7 +120,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     hero.name = hero.name.toLowerCase();
                                     if (hero.name.indexOf(query) !== -1) {
                                         $scope.results.push({
-                                            link: "#/items/hero/" + hero.dbName,
+                                            link: "items/hero/" + hero.dbName,
                                             title: "View All " + hero.name + " Items"
                                         });
                                     }
@@ -131,13 +131,13 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     if (matchCount == 1) {
                                         $http.get('action.php?action=getitem&name=' + query).success(function(data) {
                                             $scope.results.push({
-                                                link: "#/items/id/" + data.data[0].defindex,
+                                                link: "items/id/" + data.data[0].defindex,
                                                 title: data.data[0].name
                                             });
                                         });
                                     } else {
                                         $scope.results.push({
-                                            link: "#/items/name/" + query,
+                                            link: "items/name/" + query,
                                             title: matchCount + " Items Contain '" + query + "'"
                                         });
                                     }
