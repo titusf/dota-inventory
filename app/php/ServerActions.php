@@ -20,7 +20,13 @@ class ServerActions {
     private function makeResponseJson($success, $data) {
         require_once("AjaxResponse.php");
         $response = new AjaxResponse($success, $data);
-        return json_encode($response->toArray());
+        //
+        $json_encoded = json_encode($response->toArray());
+        $json_decoded = utf8_decode($json_encoded);
+        $json_decoded = strip_tags($json_decoded);
+        return utf8_encode($json_decoded);
+        
+        //return json_encode($response->toArray());
     }
 
     /**
