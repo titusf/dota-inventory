@@ -356,7 +356,7 @@ class DatabaseLink {
                     "INSERT INTO `user_updates`(`steamid`, `friendslist_last_updated`)
                      VALUES (:steamid, NOW())
                      ON DUPLICATE KEY UPDATE `steamid` = VALUES(`steamid`),
-                     `profile_last_updated` = VALUES(`profile_last_updated`)"
+                     `friendslist_last_updated` = VALUES(`friendslist_last_updated`)"
             );
             $stmt->bindParam(':steamid', $steamid);
             $stmt->execute();
@@ -372,7 +372,7 @@ class DatabaseLink {
                     "INSERT INTO `user_updates`(`steamid`, `inventory_last_updated`)
                      VALUES (:steamid, NOW())
                      ON DUPLICATE KEY UPDATE `steamid` = VALUES(`steamid`),
-                     `profile_last_updated` = VALUES(`profile_last_updated`)"
+                     `inventory_last_updated` = VALUES(`inventory_last_updated`)"
             );
             $stmt->bindParam(':steamid', $steamid);
             $stmt->execute();
