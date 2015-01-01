@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="description" content="Dota Inventory is THE central resource for Dota 2 cosmetic items. Collect items, browse items, trade items and merge friends items.">
-        <base href="/dotainventory2/app/">
+        <base href="/DotaInventory2/app/">
         <title ng-controller="TitleCtrl" ng-bind="title.getTitle()">Dota 2 Item Database</title>
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,7 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
           <![endif]-->
         <link rel="stylesheet" href="css/app.css"/>
+        <link href="css/dark-theme.css" rel="stylesheet">
         <link rel="icon" href="favicon.ico" />
         <script>
             (function(i, s, o, g, r, a, m) {
@@ -43,10 +44,23 @@
                         </div>
                         <div class="col-md-7" id="main-menu-container">
                             <ul class="nav">
-                                <li ng-class="{active: isActive('/')}"><a href="#/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                                <li ng-class="{active: isActive('/items')}"><a href="items/"><span class="glyphicon glyphicon-search"></span> Cosmetic Items</a></li>           
-                                <li ng-class="{active: isActive('/users')}"><a href="users/"><span class="glyphicon glyphicon-user"></span> User Inventories</a></li>
-                                <li ng-class="{active: isActive('/trades')}"><a href="trades/"><span class="glyphicon glyphicon-transfer"></span> Trades</a></li>
+                                <li ng-class="{active: isActive('/')}"><a href="#/">
+                                        <div class="menu-icon"><span class="glyphicon glyphicon-home"></span></div>
+                                        <div>Home</div>
+                                    </a></li>
+                                <li ng-class="{active: isActive('/items')}"><a href="items/">
+                                        <div class="menu-icon"><span class="glyphicon glyphicon-search"></span></div>
+                                        <div>Cosmetic Items</div>
+                                    </a></li>           
+                                <li ng-class="{active: isActive('/users')}"><a href="users/">
+                                        
+                                        <div class="menu-icon"><span class="glyphicon glyphicon-user"></span></div>
+                                        <div>User Inventories</div>
+                                    </a></li>
+                                <li ng-class="{active: isActive('/trades')}"><a href="trades/">
+                                        <div class="menu-icon"><span class="glyphicon glyphicon-transfer"></span></div>
+                                        <div>Trades</div>
+                                    </a></li>
                             </ul>
                         </div>
                         <div class="col-md-2 text-center">
@@ -91,7 +105,7 @@
                     <a href='http://twitter.com/dotainventory'>@DotaInventory</a>
                     <a href='http://facebook.com/dotainventory'>fb.com/dotainventory</a>
                 </p>
-                <p class="text-muted"><span id="copy">&copy; DotaInventory.com 2013-2014.</span> <a href="stats/"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
+                <p class="text-muted"><span id="copy">&copy; DotaInventory.com 2013-2015.</span> <a href="stats/"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
                     <a href="faq/"><span class="glyphicon glyphicon-info-sign"></span> FAQ</a>
                     <span class="glyphicon glyphicon-flag" style="color:red"></span><a href="bugs.html"> Bugs</a>
                     <a href="http://old.dotainventory.com"><span class="glyphicon glyphicon-fast-backward"></span> Legacy Site</a>

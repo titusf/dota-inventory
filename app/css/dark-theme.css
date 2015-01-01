@@ -1,0 +1,65 @@
+/*
+-- DOTAINVENTORY.COM -- 
+The CSS file for the newer dark theme. This file is to be SASSified later.
+Notes:
+    Background color: #21171a
+    Lighter Box Color: #281e21
+    Text color: #fff
+    Logo Color: #d9517a
+    Standard button color: #4d3e42
+*/
+body{
+    background-color: #21171A;
+    color:#fff;
+}
+
+.lighter-box{
+    background-color: #281e21;
+    border-radius:4px;
+    padding: 10px;
+}
+.lighter-box h1{
+    margin: 12px 0 18px 0;
+}
+
+.btn-default{
+    background-color:#4d3e42;
+    color:#fff;
+    border-top-color:#9a7c84;
+    border-right-color:#322528;
+    border-left-color:#201719;
+    border-bottom-color:#2d2225;
+}
+
+/* Nav */
+
+#navbar{
+    background:#1a1a1a;
+    background-color:#1A1A1A;
+    box-shadow:none;
+}
+
+.menu-icon{
+    font-size:20px;
+}
+
+#main-menu-container ul.nav > li{
+    text-align:center;
+    margin-right:24px;
+}
+#main-menu-container ul.nav > li > a {
+    padding:3px;
+    margin:8px 0;
+}
+
+#main-menu-container ul.nav > li > a:hover{
+    background:none;
+    color:#eee;
+    text-shadow:3px 3px #000;
+}
+
+#main-menu-container ul.nav > li.active > a {
+    background:none;
+    color:#b82020;
+    text-shadow:none;
+}
