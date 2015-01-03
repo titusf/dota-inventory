@@ -44,6 +44,19 @@ class DatabaseLink {
             throw new Exception("Database:addTrade error: " . $ex->getMessage());
         }
     }
+    
+    public function insertWishListItem($defindex, $steamid){
+        try{
+            $query = "INSERT INTO `user_wantlist`(`steamid`, `defindex`)
+                VALUES (:steamid, :defindex)";
+            $stmt = $this->DBH->prepare($query);
+            $stmt->bindParam(':defindex', $defindex);
+            $stmt->bindParam(':steamid', $steamid);
+            $stmt->execute();
+        } catch (Exception $ex) {
+            throw new Exception("Database:insertWishListItem error: " . $ex->getMessage());
+        }
+    }
 
     /**
      * Retrieves the active trade listing for this item that belongs to this

@@ -186,18 +186,28 @@ if (isset($request->action)) {
             break;
         // -- METHODS THAT REQUIRE AUTHENTICATION -- 
         case "addToWishlist":
-            if (isset($request->defindex) && isset($request->steamid)) {
-                if (validateUser($request->steamid)) {
-                    $response = new AjaxResponse(true, "You are authorized!");
-                    echo json_encode($response->toArray());
+            if (isset($request->defindex)) {
+                $defindex = $request->defindex;
+                $steamid = getLoggedInSteamid();
+                if ($steamid !== null && $steamid !== "") {
+                    echo $serverApi->addToWishList($steamid, $defindex);
                 } else {
                     // User is not logged in as the requested user.
                     header("HTTP/1.1 401 Unauthorized");
-                    $response = new AjaxResponse(false, "You are not logged in as this user.");
+                    $response = new AjaxResponse(false, "You are not logged in.");
                     echo json_encode($response->toArray());
                 }
             }
     }
+}
+
+function getLoggedInSteamid(){
+    session_start();
+    if (isset($_SESSION['steamid'])) {
+        // If the steamid matches the session steamid - user is authenticated.
+        return $_SESSION['steamid'];
+    }
+    return null;
 }
 
 function validateUser($steamid) {

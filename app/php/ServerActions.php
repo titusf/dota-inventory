@@ -25,8 +25,17 @@ class ServerActions {
         $json_decoded = utf8_decode($json_encoded);
         $json_decoded = strip_tags($json_decoded);
         return utf8_encode($json_decoded);
-        
+
         //return json_encode($response->toArray());
+    }
+
+    public function addToWishList($steamid, $defindex) {
+        try {
+            $this->databaseLink->insertWishListItem($defindex, $steamid);
+            return $this->makeResponseJson(true, "Wishlist item added successfully.");
+        } catch (Exception $ex) {
+            return $this->makeResponseJson(false, $ex->getMessage);
+        }
     }
 
     /**
@@ -167,8 +176,8 @@ class ServerActions {
         return $this->makeResponseJson(true, $item);
         //Return json.
     }
-    
-    public function getItemPrice($defindex){
+
+    public function getItemPrice($defindex) {
         $prices = $this->databaseLink->getItemValue($defindex);
         return $this->makeResponseJson(true, $prices);
     }
