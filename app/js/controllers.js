@@ -347,7 +347,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
+        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', 'user', function($scope, $routeParams, api, user) {
                 var steamid = $routeParams.steamId;
                 $scope.steamid = steamid;
                 api.getUserDetails(steamid, function(data) {
@@ -359,12 +359,17 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.deleteWishList = function() {
                     var result = confirm("Really delete ALL items?");
                     if (result === true) {
-                        api.deleteWishList().then(function(){
+                        api.deleteWishList().then(function() {
                             window.location.reload();
                         });
                     }
-                    
+
                 };
+                if (user.loggedIn && user.steamid === steamid) {
+                    if (user.steamid === steamid) {
+                        $scope.loggedInUserProfile = true;
+                    }
+                }
             }])
         .controller('UserItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 $scope.steamId = $routeParams.steamId;
