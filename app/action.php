@@ -14,6 +14,35 @@ if (isset($_GET['action'])) {
             $steamAuth = new SteamAuth();
             $val = $steamAuth->login();
             break;
+        case "logout":
+            // Initialize the session.
+            session_start();
+            // Unset all of the session variables.
+            $_SESSION = array();
+            // If it's desired to kill the session, also delete the session cookie.
+            // Note: This will destroy the session, and not just the session data!
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
+                );
+            }
+            // Finally, destroy the session.
+            session_destroy();
+            $response = new AjaxResponse(true, "Logged out successfully.");
+            echo json_encode($response->toArray());
+            break;
+        case "getLoggedInUser":
+            session_start();
+            if (isset($_SESSION['steamid'])) {
+                // Then user appears to be logged in.
+                $response = new AjaxResponse(true, $_SESSION['steamid']);
+                echo json_encode($response->toArray());
+            } else {
+                // Then user appears to be logged out.
+                $response = new AjaxResponse(true, "");
+                echo json_encode($response->toArray());
+            }
+            break;
         case "getuser":
             if (isset($_GET['steamid'])) {
                 $steamid = $_GET['steamid'];
@@ -126,7 +155,7 @@ if (isset($_GET['action'])) {
             }
             break;
         case "getitemsbytype":
-            if(isset($_GET['type'])){
+            if (isset($_GET['type'])) {
                 $type = $_GET['type'];
                 echo $serverApi->getItemsByType($type);
             }
@@ -155,6 +184,30 @@ if (isset($request->action)) {
                 echo $serverApi->addTrade($request->defindex, $request->steamid, $request->message);
             }
             break;
+        // -- METHODS THAT REQUIRE AUTHENTICATION -- 
+        case "addToWishlist":
+            if (isset($request->defindex) && isset($request->steamid)) {
+                if (validateUser($request->steamid)) {
+                    $response = new AjaxResponse(true, "You are authorized!");
+                    echo json_encode($response->toArray());
+                } else {
+                    // User is not logged in as the requested user.
+                    header("HTTP/1.1 401 Unauthorized");
+                    $response = new AjaxResponse(false, "You are not logged in as this user.");
+                    echo json_encode($response->toArray());
+                }
+            }
     }
 }
+
+function validateUser($steamid) {
+    session_start();
+    if (isset($_SESSION['steamid'])) {
+        // If the steamid matches the session steamid - user is authenticated.
+        return $steamid === $_SESSION['steamid'];
+    }
+    // Will be reached if steamid session var is not set. (Not logged in).
+    return false;
+}
+
 ?>

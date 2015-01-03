@@ -4,29 +4,30 @@
 
 angular.module('myApp.controllers', ['ngCookies']).
         controller('NavCtrl', ['$scope', '$location', 'user', function($scope, $location, user) {
-                $scope.loggedIn = user.loggedIn;
-                $scope.steamid = user.steamid;
                 $scope.logout = function() {
                     user.logout();
                     window.location.reload();
                 };
-
-                // Load user profile and inventory.
-                $scope.loadingProfile = false;
-                $scope.loadingInventory = false;
-                if (user.loggedIn) {
-                    $scope.loadingProfile = true;
-                    user.profilePromise.then(function(result) {
-                        $scope.user = result.data;
-                        $scope.loadingProfile = false;
-                        //Now load inventory.
-                        $scope.loadingInventory = true;
-                        user.inventoryPromise.then(function(result) {
-                            $scope.loadingInventory = false;
+                // Loading whether user is logged in.
+                user.steamidPromise.then(function(result) {
+                    $scope.loggedIn = user.loggedIn;
+                    $scope.steamid = user.steamid;
+                    // Load user profile and inventory.
+                    $scope.loadingProfile = false;
+                    $scope.loadingInventory = false;
+                    if (user.loggedIn) {
+                        $scope.loadingProfile = true;
+                        user.profilePromise.then(function(result) {
+                            $scope.user = result.data;
+                            $scope.loadingProfile = false;
+                            //Now load inventory.
+                            $scope.loadingInventory = true;
+                            user.inventoryPromise.then(function(result) {
+                                $scope.loadingInventory = false;
+                            });
                         });
-                    });
-                }
-
+                    }
+                });
 
                 $scope.isActive = function(viewLocation) {
                     if (viewLocation === $location.path()) {
@@ -413,11 +414,11 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;
 
-                api.getItemPrice(defindex).then(function(resultData){
+                api.getItemPrice(defindex).then(function(resultData) {
                     $scope.marketResultCount = resultData.data.data.length;
                     var firstResult = resultData.data.data[0];
-                    var lowest_price = (firstResult.lowest_price/100).toFixed(2);
-                    var median_price = (firstResult.median_price/100).toFixed(2);
+                    var lowest_price = (firstResult.lowest_price / 100).toFixed(2);
+                    var median_price = (firstResult.median_price / 100).toFixed(2);
                     var date_fetched = firstResult.date_fetched;
                     $scope.marketData = {
                         lowest_price: lowest_price,

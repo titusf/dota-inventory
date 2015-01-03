@@ -19,7 +19,9 @@ class SteamAuth {
             } else {
                 if ($openid->validate()) {
                     $steamid = str_replace("http://steamcommunity.com/openid/id/", "", $openid->identity);
-                    setcookie("steamid", $steamid);
+                    // Inialize session
+                    session_start();
+                    $_SESSION['steamid'] = $steamid;
                     header('Location: ' . 'http://localhost/DotaInventory2/app/');
                 } else {
                     //failed.

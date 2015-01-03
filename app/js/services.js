@@ -7,37 +7,46 @@
 // In this case it is a simple value service.
 angular.module('myApp.services', []).
         value('version', '0.1').
-        factory('user', ['$cookies', '$http', function($cookies, $http) {
-
+        factory('user', ['$cookies', 'api', '$http', function($cookies, api, $http) {
+                // REMOVE $HTTP LATER.
                 var user = {
                     loggedIn: false,
                     steamid: "",
                     inventory: "",
                     inventoryPromise: "",
-                    profilePromise: ""
+                    profilePromise: "",
+                    steamidPromise: ""
                 };
 
-                if (typeof $cookies.steamid !== 'undefined' && $cookies.steamid !== "") {
-                    user.loggedIn = true;
-                    user.steamid = $cookies.steamid;
-                }
-                if (user.loggedIn === true) {
-                    user.inventoryPromise = $http.get("action.php?action=getinventory&steamid=" + user.steamid).success(function(result) {
-                        setInventory(result.data);
+                // Get logged in user from API.
+                // If blank/error - then user not logged in.
+                // Otherwise save the steamid as logged in user.
+                function setLoggedInUser() {
+                    user.steamidPromise = api.getLoggedInUser().then(function(response) {
+                        var steamid = response.data.data;
+                        if (steamid !== "") {
+                            user.loggedIn = true;
+                            user.steamid = steamid;
+                            // Since user is logged in - populate properties.
+                            user.inventoryPromise = $http.get("action.php?action=getinventory&steamid=" + user.steamid).success(function(result) {
+                                setInventory(result.data);
+                            });
+                            user.profilePromise = $http.get("action.php?action=getuser&steamid=" + user.steamid).then(function(result) {
+                                return result.data;
+                            });
+                        }
                     });
-                    user.profilePromise = $http.get("action.php?action=getuser&steamid=" + user.steamid).then(function(result) {
-                        return result.data;
-                    });
+
                 }
+                setLoggedInUser();
+
                 user.logout = function() {
-                    $cookies.steamid = "";
+                    api.logout();
                 };
 
                 var setInventory = function(inventoryData) {
                     user.inventory = inventoryData;
                 };
-
-
 
                 user.getProfile = function(callback) {
                     if (user.loggedIn === true) {
@@ -122,7 +131,7 @@ angular.module('myApp.services', []).
             }])
         .factory('Heroes', ['api', function(api) {
                 return{
-                    stripNpcPrefix: function(db_hero_name){
+                    stripNpcPrefix: function(db_hero_name) {
                         return db_hero_name.substring(14);
                     }
                 };
@@ -130,6 +139,18 @@ angular.module('myApp.services', []).
         .factory('api', ['$http', function($http) {
 
                 return {
+                    getLoggedInUser: function() {
+                        return $http.get('action.php?action=getLoggedInUser')
+                                .then(function(response) {
+                                    return response;
+                                });
+                    },
+                    logout: function(){
+                        return $http.get('action.php?action=logout')
+                                .then(function(response){
+                                    console.log(response.data.success);
+                                });
+                    },
                     addTrade: function(defindex, steamid, message) {
                         return $http.post('action.php',
                                 {action: 'addTrade', defindex: defindex, steamid: steamid, message: message}
