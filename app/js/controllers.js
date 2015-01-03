@@ -448,6 +448,9 @@ angular.module('myApp.controllers', ['ngCookies']).
                             }
                         });
                     });
+                    $scope.addToWishList = function(defindex){
+                        user.addToWishList(defindex);
+                    };
                 }
                 $scope.submitTrade = function(tradeText) {
                     api.addTrade(defindex, user.steamid, tradeText).then(function(successResponse) {

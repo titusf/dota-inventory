@@ -57,6 +57,13 @@ angular.module('myApp.services', []).
                         console.log("Error getting profile: user not logged in.");
                     }
                 };
+                user.addToWishList = function(defindex){
+                    api.addToWishList(defindex).then(function(result){
+                        console.log(result);
+                    }, function(fail){
+                        console.log(fail);
+                    });
+                };
                 return user;
             }])
         .factory('SearchUser', ['$q', 'api', function($q, api) {
@@ -150,6 +157,12 @@ angular.module('myApp.services', []).
                                 .then(function(response){
                                     console.log(response.data.success);
                                 });
+                    },
+                    addToWishList: function(defindex){
+                        return $http.post('action.php',
+                        {action: 'addToWishlist', defindex: defindex}).then(function(response){
+                            return response.data;
+                        });
                     },
                     addTrade: function(defindex, steamid, message) {
                         return $http.post('action.php',
