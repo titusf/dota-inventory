@@ -71,6 +71,19 @@ angular.module('myApp.services', []).
                         console.log(fail);
                     });
                 };
+                user.removeFromWishList = function(defindex) {
+                    api.removeFromWishList(defindex).then(function(result) {
+                        console.log(result);
+                    }, function(fail) {
+                        console.log(fail);
+                    });
+                };
+                
+                user.deleteWishList = function(){
+                    api.deleteWishList().then(function(result){
+                        console.log(result);
+                    });
+                }
                 return user;
             }])
         .factory('SearchUser', ['$q', 'api', function($q, api) {
@@ -167,7 +180,19 @@ angular.module('myApp.services', []).
                     },
                     addToWishList: function(defindex) {
                         return $http.post('action.php',
-                                {action: 'addToWishlist', defindex: defindex}).then(function(response) {
+                                {action: 'addToWishList', defindex: defindex}).then(function(response) {
+                            return response.data;
+                        });
+                    },
+                    removeFromWishList: function(defindex) {
+                        return $http.post('action.php',
+                                {action: 'removeFromWishList', defindex: defindex}).then(function(response) {
+                            return response.data;
+                        });
+                    },
+                    deleteWishList: function() {
+                        return $http.post('action.php',
+                                {action: 'deleteWishList'}).then(function(response) {
                             return response.data;
                         });
                     },

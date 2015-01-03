@@ -191,7 +191,7 @@ if (isset($request->action)) {
             }
             break;
         // -- METHODS THAT REQUIRE AUTHENTICATION -- 
-        case "addToWishlist":
+        case "addToWishList":
             if (isset($request->defindex)) {
                 $defindex = $request->defindex;
                 $steamid = getLoggedInSteamid();
@@ -204,10 +204,37 @@ if (isset($request->action)) {
                     echo json_encode($response->toArray());
                 }
             }
+            break;
+        case "removeFromWishList":
+            if (isset($request->defindex)) {
+                $defindex = $request->defindex;
+                $steamid = getLoggedInSteamid();
+                if ($steamid !== null && $steamid !== "") {
+                    echo $serverApi->removeFromWishList($steamid, $defindex);
+                } else {
+                    // User is not logged in as the requested user.
+                    header("HTTP/1.1 401 Unauthorized");
+                    $response = new AjaxResponse(false, "You are not logged in.");
+                    echo json_encode($response->toArray());
+                }
+            }
+            break;
+        case "deleteWishList":
+            $steamid = getLoggedInSteamid();
+            if ($steamid !== null && $steamid !== "") {
+                echo $serverApi->deleteWishList($steamid);
+            } else {
+                // User is not logged in as the requested user.
+                header("HTTP/1.1 401 Unauthorized");
+                $response = new AjaxResponse(false, "You are not logged in.");
+                echo json_encode($response->toArray());
+            }
+
+            break;
     }
 }
 
-function getLoggedInSteamid(){
+function getLoggedInSteamid() {
     session_start();
     if (isset($_SESSION['steamid'])) {
         // If the steamid matches the session steamid - user is authenticated.

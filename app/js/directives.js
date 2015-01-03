@@ -134,6 +134,7 @@ angular.module('myApp.directives', []).
                             scope.inWishList = true;
                         };
                         scope.removeFromWishList = function(){
+                            user.removeFromWishList(defindex);
                             scope.inWishList = false;
                         };
                         user.wishlistPromise.then(function(result) {

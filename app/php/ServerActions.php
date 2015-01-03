@@ -38,6 +38,24 @@ class ServerActions {
         }
     }
     
+    public function removeFromWishList($steamid, $defindex){
+        try {
+            $this->databaseLink->deleteWishListItem($steamid, $defindex);
+            return $this->makeResponseJson(true, "Wishlist item removed successfully.");
+        } catch (Exception $ex) {
+            return $this->makeResponseJson(false, $ex->getMessage);
+        }
+    }
+    
+    public function deleteWishList($steamid){
+        try {
+            $this->databaseLink->deleteWishList($steamid);
+            return $this->makeResponseJson(true, "Wishlist emptied entirely.");
+        } catch (Exception $ex) {
+            return $this->makeResponseJson(false, $ex->getMessage);
+        }
+    }
+    
     public function getWishList($steamid){
         try{
             $data = $this->databaseLink->selectWishListItems($steamid);

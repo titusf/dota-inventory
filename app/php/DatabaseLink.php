@@ -63,7 +63,7 @@ class DatabaseLink {
             $query = "SELECT i.* FROM `user_wantlist` want
                 INNER JOIN `item` i ON want.defindex = i.defindex
                 WHERE `steamid` = :steamid";
-            $stmt=$this->DBH->prepare($query);
+            $stmt = $this->DBH->prepare($query);
             $stmt->bindParam(':steamid', $steamid);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -71,6 +71,21 @@ class DatabaseLink {
         } catch (Exception $ex) {
             
         }
+    }
+
+    public function deleteWishListItem($steamid, $defindex) {
+        $query = "DELETE FROM `user_wantlist` WHERE `steamid` = :steamid AND `defindex` = :defindex";
+        $stmt = $this->DBH->prepare($query);
+        $stmt->bindParam(':steamid', $steamid);
+        $stmt->bindParam(':defindex', $defindex);
+        $stmt->execute();
+    }
+
+    public function deleteWishList($steamid) {
+        $query = "DELETE FROM `user_wantlist` WHERE `steamid` = :steamid";
+        $stmt = $this->DBH->prepare($query);
+        $stmt->bindParam(':steamid', $steamid);
+        $stmt->execute();
     }
 
     /**

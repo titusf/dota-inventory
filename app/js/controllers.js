@@ -350,12 +350,21 @@ angular.module('myApp.controllers', ['ngCookies']).
         .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
                 var steamid = $routeParams.steamId;
                 $scope.steamid = steamid;
-                api.getUserDetails(steamid, function(data){
+                api.getUserDetails(steamid, function(data) {
                     $scope.user = data.data;
                 });
-                api.getWishList(steamid).then(function(response){
+                api.getWishList(steamid).then(function(response) {
                     $scope.items = response.data;
                 });
+                $scope.deleteWishList = function() {
+                    var result = confirm("Really delete ALL items?");
+                    if (result === true) {
+                        api.deleteWishList().then(function(){
+                            window.location.reload();
+                        });
+                    }
+                    
+                };
             }])
         .controller('UserItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 $scope.steamId = $routeParams.steamId;
