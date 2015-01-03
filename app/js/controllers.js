@@ -347,6 +347,16 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
+        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
+                var steamid = $routeParams.steamId;
+                $scope.steamid = steamid;
+                api.getUserDetails(steamid, function(data){
+                    $scope.user = data.data;
+                });
+                api.getWishList(steamid).then(function(response){
+                    $scope.items = response.data;
+                });
+            }])
         .controller('UserItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 $scope.steamId = $routeParams.steamId;
                 $scope.itemsLoading = true;
@@ -448,7 +458,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                             }
                         });
                     });
-                    $scope.addToWishList = function(defindex){
+                    $scope.addToWishList = function(defindex) {
                         user.addToWishList(defindex);
                     };
                 }

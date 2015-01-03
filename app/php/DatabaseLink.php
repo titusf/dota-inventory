@@ -66,7 +66,7 @@ class DatabaseLink {
             $stmt=$this->DBH->prepare($query);
             $stmt->bindParam(':steamid', $steamid);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             
@@ -90,7 +90,7 @@ class DatabaseLink {
             $stmt->bindParam(':defindex', $defindex);
             $stmt->bindParam(':steamid', $steamid);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             throw new Exception("Database:selectActiveItemTradeByUser error: " . $ex->getMessage());
@@ -106,7 +106,7 @@ class DatabaseLink {
             $stmt = $this->DBH->prepare($query);
             //$stmt->bindParam(':hrsOld', '48');
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             
@@ -124,7 +124,7 @@ class DatabaseLink {
             $stmt->bindParam(':hrsOld', $hrsOld);
             $stmt->bindParam(':defindex', $defindex);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             throw new Exception("Database:getItemTrades error: " . $ex->getMessage());
@@ -143,7 +143,7 @@ class DatabaseLink {
                         OR `item_type_name` LIKE '%mount'";
             $stmt = $this->DBH->prepare($query);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             
@@ -157,7 +157,7 @@ class DatabaseLink {
                         LIKE '%courier'";
             $stmt = $this->DBH->prepare($query);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             
@@ -177,7 +177,7 @@ class DatabaseLink {
             $stmt = $this->DBH->prepare($query);
             $stmt->bindParam(':item_type_name', $item_type_name);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             
@@ -193,7 +193,7 @@ class DatabaseLink {
             $stmt = $this->DBH->prepare($string);
             $stmt->bindParam(':defindex', $defindex);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $e) {
             throw new Exception("Database:getItem error: " . $e->getMessage());
@@ -208,7 +208,7 @@ class DatabaseLink {
             $stmt = $this->DBH->prepare($string);
             $stmt->bindParam(':defindex', $defindex);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (Exception $ex) {
             throw new Exception("Database:getItemValue error: " . $e->getMessage());
@@ -531,7 +531,7 @@ class DatabaseLink {
                     LIMIT 10"
             );
             $stmt->execute();
-            return $stmt->fetchAll();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             throw new Exception("Database:selectRecentlyUpdatedUsers error: " . $e->getMessage());
         }
@@ -644,7 +644,7 @@ class DatabaseLink {
         $stmt = $this->DBH->prepare($string);
         $stmt->bindParam(':steamid', $steamid);
         $stmt->execute();
-        $result = $stmt->fetchAll();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 

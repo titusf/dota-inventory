@@ -91,12 +91,28 @@ div.dota-item{
     height:52px;
     float:none;
     margin-right:0px;
-}.items.grid .dota-item img.hero-icon{
-    width: 24px;
-    height: 24px;
-    position: absolute;
+}
+.overlay-icons > *{
+    position:absolute;
+}
+
+.items.grid .dota-item img.hero-icon{
+    width: 18px;
+    height: 18px;
     right: 6px;
     top: 6px;
+}
+.items.grid .dota-item .wishlist-icon{
+    font-size:18px;
+    left:6px;
+    top:6px;
+    color:#666;
+}
+.items.grid .dota-item .wishlist-icon-active{
+    font-size:18px;
+    left:6px;
+    top:6px;
+    color:#FFEE00;
 }
 .items.grid .dota-item .item-details{
     position:absolute;

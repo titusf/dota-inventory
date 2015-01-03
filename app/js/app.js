@@ -20,6 +20,7 @@ angular.module('myApp', [
                 $routeProvider.when('/users', {templateUrl: 'partials/user-front.html', controller: 'UserFrontCtrl'});
                 $routeProvider.when('/users/:steamId', {templateUrl: 'partials/user-detail.html', controller: 'UserDetailCtrl'});
                 $routeProvider.when('/users/:steamId/friendslist', {templateUrl: 'partials/user-friendslist.html', controller: 'FriendsListCtrl'});
+                $routeProvider.when('/users/:steamId/wishlist', {templateUrl: 'partials/user-wishlist.html', controller: 'UserWishListCtrl'});
                 //Item Routes.
                 $routeProvider.when('/items', {templateUrl: 'partials/item-categories.html', controller: 'ItemCategoriesCtrl'});
                 $routeProvider.when('/items/id/:itemId', {templateUrl: 'partials/item-detail.html', controller: 'ItemDetailCtrl'});

@@ -13,9 +13,11 @@ angular.module('myApp.services', []).
                     loggedIn: false,
                     steamid: "",
                     inventory: "",
+                    wishlist: "",
                     inventoryPromise: "",
                     profilePromise: "",
-                    steamidPromise: ""
+                    steamidPromise: "",
+                    wishlistPromise: ""
                 };
 
                 // Get logged in user from API.
@@ -33,6 +35,9 @@ angular.module('myApp.services', []).
                             });
                             user.profilePromise = $http.get("action.php?action=getuser&steamid=" + user.steamid).then(function(result) {
                                 return result.data;
+                            });
+                            user.wishlistPromise = api.getWishList(steamid).then(function(result){
+                                user.wishlist = result.data;
                             });
                         }
                     });
@@ -57,6 +62,8 @@ angular.module('myApp.services', []).
                         console.log("Error getting profile: user not logged in.");
                     }
                 };
+                
+                
                 user.addToWishList = function(defindex) {
                     api.addToWishList(defindex).then(function(result) {
                         console.log(result);

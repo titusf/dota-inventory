@@ -1,5 +1,10 @@
 <div class="item-box {{item.item_rarity}} clearfix">
-    <img ng-if="item.used_by_heroes" class="hero-icon" ng-src="{{constructHeroIconUrl(item.used_by_heroes)}}" />
+    <div class="overlay-icons">
+        <span ng-if="!inWishList" ng-click="addToWishList()" class="glyphicon glyphicon-star-empty wishlist-icon"></span>
+        <span ng-if="inWishList" ng-click="removeFromWishList()" class="glyphicon glyphicon-star wishlist-icon-active"></span>
+        <!--<span class="glyphicon glyphicon-star wishlist-icon-active"></span>-->
+        <img ng-if="item.used_by_heroes" class="hero-icon" ng-src="{{constructHeroIconUrl(item.used_by_heroes)}}" />
+    </div>
     <a href='items/id/{{item.defindex}}'>
         <img class="item-image" ng-src="{{item.image_url}}" />
     </a>

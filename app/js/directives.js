@@ -42,10 +42,10 @@ angular.module('myApp.directives', []).
                     },
                     templateUrl: 'partials/item-list.html',
                     link: function(scope, elem, attrs) {
-                        
+
                         // Pagination
                         scope.currentPage = 1;
-                        
+
                         api.getHeroes(function(data) {
                             scope.heroes = data.data;
                         });
@@ -63,7 +63,7 @@ angular.module('myApp.directives', []).
                                 scope.filterText = tempFilterText;
                             }, 600); //Delay 600ms for user search.
                         });
-                        
+
                         scope.$watch('items', function(n, o) {
                             if (typeof scope.items !== 'undefined') {
                                 scope.loadingItems = false;
@@ -89,7 +89,7 @@ angular.module('myApp.directives', []).
                             'immortal': 6,
                             'arcana': 7
                         };
-                        scope.orderItems = function(sortBy){
+                        scope.orderItems = function(sortBy) {
                             scope.sortedItems = $filter('orderBy')(scope.items, sortItems, true);
                         };
                         var sortItems = function(item) {
@@ -115,42 +115,64 @@ angular.module('myApp.directives', []).
                 }
             };
         }).
-        directive('dotaItemBlock', ['Heroes', function(Heroes){
-            return{
-                restrict: 'E',
-                scope: {
-                    item: '=',
-                    owners: '=',
-                    heroes: '='
-                },
-                templateUrl: 'templates/dota-item-block.html',
-                link: function(scope, elem, attrs){
-                    scope.constructHeroIconUrl = function(db_hero_name){
-                        return "img/heroes/icons/" + Heroes.stripNpcPrefix(db_hero_name) + "_icon.png";
-                    };
-                }
-            };
-        }]).
-        directive('loaderScreen', ['$interval', function($interval){
-            return{
-                restrict: 'E',
-                scope: {
-                    title: '=',
-                    message: '='
-                },
-                templateUrl: 'partials/loading.html',
-                link: function(scope, elem, attrs){
-                    scope.loadingTime = 0;
-                    scope.loadingTimeMessage = "Seconds Elapsed";
-                    $interval(function(){
-                        scope.loadingTime++;
-                        if(scope.loadingTime > 20){
-                            scope.loadingTimeMessage = "Seconds Elapsed... This seems to be taking a while.";
+        directive('dotaItemBlock', ['Heroes', 'user', function(Heroes, user) {
+                return{
+                    restrict: 'E',
+                    scope: {
+                        item: '=',
+                        owners: '=',
+                        heroes: '='
+                    },
+                    templateUrl: 'templates/dota-item-block.html',
+                    link: function(scope, elem, attrs) {
+                        var defindex = scope.item.defindex;
+                        scope.constructHeroIconUrl = function(db_hero_name) {
+                            return "img/heroes/icons/" + Heroes.stripNpcPrefix(db_hero_name) + "_icon.png";
+                        };
+                        scope.addToWishList = function() {
+                            user.addToWishList(defindex);
+                            scope.inWishList = true;
+                        };
+                        scope.removeFromWishList = function(){
+                            scope.inWishList = false;
+                        };
+                        user.wishlistPromise.then(function(result) {
+                            if(isInWishList(user.wishlist) === true){
+                                scope.inWishList = true;
+                            }
+                        });
+                        function isInWishList(wishlist){
+                            for(var i=0; i<wishlist.length; i++){
+                                if(wishlist[i].defindex === defindex){
+                                    return true;
+                                }
+                            }
+                            return false;
                         }
-                    }, 1000);
-                }
-            };
-        }]).
+
+                    }
+                };
+            }]).
+        directive('loaderScreen', ['$interval', function($interval) {
+                return{
+                    restrict: 'E',
+                    scope: {
+                        title: '=',
+                        message: '='
+                    },
+                    templateUrl: 'partials/loading.html',
+                    link: function(scope, elem, attrs) {
+                        scope.loadingTime = 0;
+                        scope.loadingTimeMessage = "Seconds Elapsed";
+                        $interval(function() {
+                            scope.loadingTime++;
+                            if (scope.loadingTime > 20) {
+                                scope.loadingTimeMessage = "Seconds Elapsed... This seems to be taking a while.";
+                            }
+                        }, 1000);
+                    }
+                };
+            }]).
         directive('myAdSense', function() {
             return {
                 templateUrl: 'partials/adsense.html',
