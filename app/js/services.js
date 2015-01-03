@@ -57,10 +57,10 @@ angular.module('myApp.services', []).
                         console.log("Error getting profile: user not logged in.");
                     }
                 };
-                user.addToWishList = function(defindex){
-                    api.addToWishList(defindex).then(function(result){
+                user.addToWishList = function(defindex) {
+                    api.addToWishList(defindex).then(function(result) {
                         console.log(result);
-                    }, function(fail){
+                    }, function(fail) {
                         console.log(fail);
                     });
                 };
@@ -152,17 +152,24 @@ angular.module('myApp.services', []).
                                     return response;
                                 });
                     },
-                    logout: function(){
+                    logout: function() {
                         return $http.get('action.php?action=logout')
-                                .then(function(response){
+                                .then(function(response) {
                                     console.log(response.data.success);
                                 });
                     },
-                    addToWishList: function(defindex){
+                    addToWishList: function(defindex) {
                         return $http.post('action.php',
-                        {action: 'addToWishlist', defindex: defindex}).then(function(response){
+                                {action: 'addToWishlist', defindex: defindex}).then(function(response) {
                             return response.data;
                         });
+                    },
+                    getWishList: function(steamid) {
+                        return $http.get('action.php?action=getWishList&steamid=' + steamid)
+                                .then(function(response) {
+                                    console.log(response.data);
+                                    return response.data;
+                                });
                     },
                     addTrade: function(defindex, steamid, message) {
                         return $http.post('action.php',

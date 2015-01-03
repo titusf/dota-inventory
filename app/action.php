@@ -43,6 +43,12 @@ if (isset($_GET['action'])) {
                 echo json_encode($response->toArray());
             }
             break;
+        case "getWishList":
+            if (isset($_GET['steamid'])) {
+                $steamid = $_GET['steamid'];
+                echo $serverApi->getWishList($steamid);
+            }
+            break;
         case "getuser":
             if (isset($_GET['steamid'])) {
                 $steamid = $_GET['steamid'];

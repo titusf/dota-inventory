@@ -44,9 +44,9 @@ class DatabaseLink {
             throw new Exception("Database:addTrade error: " . $ex->getMessage());
         }
     }
-    
-    public function insertWishListItem($defindex, $steamid){
-        try{
+
+    public function insertWishListItem($defindex, $steamid) {
+        try {
             $query = "INSERT INTO `user_wantlist`(`steamid`, `defindex`)
                 VALUES (:steamid, :defindex)";
             $stmt = $this->DBH->prepare($query);
@@ -55,6 +55,21 @@ class DatabaseLink {
             $stmt->execute();
         } catch (Exception $ex) {
             throw new Exception("Database:insertWishListItem error: " . $ex->getMessage());
+        }
+    }
+
+    public function selectWishListItems($steamid) {
+        try {
+            $query = "SELECT i.* FROM `user_wantlist` want
+                INNER JOIN `item` i ON want.defindex = i.defindex
+                WHERE `steamid` = :steamid";
+            $stmt=$this->DBH->prepare($query);
+            $stmt->bindParam(':steamid', $steamid);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (Exception $ex) {
+            
         }
     }
 

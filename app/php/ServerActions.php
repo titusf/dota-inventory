@@ -37,6 +37,15 @@ class ServerActions {
             return $this->makeResponseJson(false, $ex->getMessage);
         }
     }
+    
+    public function getWishList($steamid){
+        try{
+            $data = $this->databaseLink->selectWishListItems($steamid);
+            return $this->makeResponseJson(true, $data);
+        } catch (Exception $ex) {
+
+        }
+    }
 
     /**
      * Get user profile data. Will fetch/update if data does not exist or is old.
