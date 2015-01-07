@@ -36,7 +36,7 @@ angular.module('myApp.services', []).
                             user.profilePromise = $http.get("action.php?action=getuser&steamid=" + user.steamid).then(function(result) {
                                 return result.data;
                             });
-                            user.wishlistPromise = api.getWishList(steamid).then(function(result){
+                            user.wishlistPromise = api.getWishList(steamid).then(function(result) {
                                 user.wishlist = result.data;
                             });
                         }
@@ -62,8 +62,8 @@ angular.module('myApp.services', []).
                         console.log("Error getting profile: user not logged in.");
                     }
                 };
-                
-                
+
+
                 user.addToWishList = function(defindex) {
                     api.addToWishList(defindex).then(function(result) {
                         console.log(result);
@@ -78,12 +78,21 @@ angular.module('myApp.services', []).
                         console.log(fail);
                     });
                 };
-                
-                user.deleteWishList = function(){
-                    api.deleteWishList().then(function(result){
+
+                user.deleteWishList = function() {
+                    api.deleteWishList().then(function(result) {
                         console.log(result);
                     });
-                }
+                };
+
+                user.isInWishList = function(defindex) {
+                    for (var i = 0; i < user.wishlist.length; i++) {
+                        if (user.wishlist[i].defindex === defindex) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
                 return user;
             }])
         .factory('SearchUser', ['$q', 'api', function($q, api) {
