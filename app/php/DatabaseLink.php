@@ -19,20 +19,6 @@ class DatabaseLink {
         $this->DBH = null;
     }
 
-    public function insertTrade($defindex, $steamid, $message) {
-        try {
-            $query = "INSERT INTO `trades`(`defindex`, `steamid`, `message`, `date_submitted`)
-                VALUES (:defindex, :steamid, :message, NOW())";
-            $stmt = $this->DBH->prepare($query);
-            $stmt->bindParam(':defindex', $defindex);
-            $stmt->bindParam(':steamid', $steamid);
-            $stmt->bindParam(':message', $message);
-            $stmt->execute();
-        } catch (Exception $ex) {
-            throw new Exception("Database:addTrade error: " . $ex->getMessage());
-        }
-    }
-
     public function insertWishListItem($defindex, $steamid) {
         try {
             $query = "INSERT INTO `user_wantlist`(`steamid`, `defindex`)
@@ -74,68 +60,6 @@ class DatabaseLink {
         $stmt = $this->DBH->prepare($query);
         $stmt->bindParam(':steamid', $steamid);
         $stmt->execute();
-    }
-
-    /**
-     * Retrieves the active trade listing for this item that belongs to this
-     * user IF the trade exists and is NEWER than the trade-life timer. 
-     * @param type $defindex
-     * @param type $steamid
-     */
-    public function selectActiveItemTradeByUser($defindex, $steamid) {
-        try {
-            $hrsOld = 48;
-            $query = "SELECT * FROM `trades`
-                    WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= :hrsOld 
-                    AND `defindex` = :defindex AND `steamid` = :steamid";
-            $stmt = $this->DBH->prepare($query);
-            $stmt->bindParam(':hrsOld', $hrsOld);
-            $stmt->bindParam(':defindex', $defindex);
-            $stmt->bindParam(':steamid', $steamid);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-        } catch (Exception $ex) {
-            throw new Exception("Database:selectActiveItemTradeByUser error: " . $ex->getMessage());
-        }
-    }
-
-    public function selectLatestTrades() {
-        try {
-            $query = "SELECT * FROM `trades`
-                    WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= 48 
-                    ORDER BY `date_submitted` DESC
-                    LIMIT 100";
-            $stmt = $this->DBH->prepare($query);
-            //$stmt->bindParam(':hrsOld', '48');
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-        } catch (Exception $ex) {
-            
-        }
-    }
-
-    public function selectItemTrades($defindex) {
-        try {
-            $hrsOld = 48; // Only select trades less than 48 hours old.
-            $query = "SELECT * FROM `trades` 
-                    WHERE TIMESTAMPDIFF(HOUR, `date_submitted`, NOW()) <= :hrsOld AND `defindex` = :defindex
-                    ORDER BY `date_submitted` DESC
-                    LIMIT 100";
-            $stmt = $this->DBH->prepare($query);
-            $stmt->bindParam(':hrsOld', $hrsOld);
-            $stmt->bindParam(':defindex', $defindex);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-        } catch (Exception $ex) {
-            throw new Exception("Database:getItemTrades error: " . $ex->getMessage());
-        }
-    }
-
-    public function getUserTrades($steamid) {
-        //Later
     }
 
     public function selectAllMountItems() {
