@@ -48,6 +48,38 @@ h1{
 .nav-pills>li.active>a{
     background-color:#99D0FF;
 }
+/* Nav */
+
+#navbar{
+    background:#1a1a1a;
+    background-color:#1A1A1A;
+    box-shadow:none;
+}
+
+.menu-icon{
+    font-size:20px;
+}
+
+#main-menu-container ul.nav > li{
+    text-align:center;
+    margin-right:24px;
+}
+#main-menu-container ul.nav > li > a {
+    padding:3px;
+    margin:8px 0;
+}
+
+#main-menu-container ul.nav > li > a:hover{
+    background:none;
+    color:#eee;
+    text-shadow:3px 3px #000;
+}
+
+#main-menu-container ul.nav > li.active > a {
+    background:none;
+    color:#b82020;
+    text-shadow:none;
+}
 p.temporary{
     text-align:center;
     color:#ce8483;
