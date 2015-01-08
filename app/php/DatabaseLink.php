@@ -244,10 +244,6 @@ class DatabaseLink {
         return $heroes;
     }
 
-    public function logUser($steamid) {
-        $this->runQuery("INSERT INTO `log`( steamid ) VALUES ( '$steamid' )");
-    }
-
     public function getLogsForUser($steamid) {
         $result = $this->runQuery("SELECT * FROM `log` WHERE `steamid` = '$steamid'");
         $results = array();
