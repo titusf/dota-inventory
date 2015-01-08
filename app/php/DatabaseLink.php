@@ -229,11 +229,16 @@ class DatabaseLink {
             throw new Exception("Database:getItemValue error: " . $e->getMessage());
         }
     }
-
-    public function getAllHeroes() {
-        $result = $this->runQuery("SELECT * FROM `hero` ORDER BY `localized_name`");
+    
+    public function getAllHeroes(){
+        // Initialize heroes array. (Returned)
         $heroes = array();
-        while ($row = mysqli_fetch_array($result)) {
+        $query = "SELECT * FROM `hero` ORDER BY `localized_name`";
+        $stmt = $this->DBH->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Transform data into key:value pairing.
+        foreach($rows as $row){
             $heroes[$row["name"]] = $row["localized_name"];
         }
         return $heroes;
