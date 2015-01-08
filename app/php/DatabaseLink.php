@@ -19,18 +19,6 @@ class DatabaseLink {
         $this->DBH = null;
     }
 
-    //Returns a resultset.
-    private function runQuery($query) {
-        $mysqli = new mysqli($this->config["db_host"], $this->config["username"], $this->config["password"], $this->config["db_name"]);
-        $query = $mysqli->real_escape_string($query);
-        $result = $mysqli->query($query);
-        if ($result == false) {
-            throw new Exception($mysqli->error . " SQL: " . $query);
-        }
-        $mysqli->close();
-        return $result;
-    }
-
     public function insertTrade($defindex, $steamid, $message) {
         try {
             $query = "INSERT INTO `trades`(`defindex`, `steamid`, `message`, `date_submitted`)
