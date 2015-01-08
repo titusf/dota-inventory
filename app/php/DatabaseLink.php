@@ -234,23 +234,6 @@ class DatabaseLink {
 
     /*     * Ground level SQL statements - for other functions to be built upon. 
      * -------------------------------------------------------------------- * */
-
-//    public function insertInventory($items_assoc, $steamid) {
-//        if (count($items_assoc) > 0) {
-//            $sql_values = array();
-//            $sql_itemids = array();
-//            foreach ($items_assoc as $item) {
-//                $sql_values[] = '(' . $item['id'] . ', ' . $item['defindex'] . ', ' . $steamid . ')';
-//                $sql_itemids[] = $item['id'];
-//            }
-//            $string1 = 'DELETE FROM `user_inventory` WHERE `steamid` =' . $steamid . ' AND `itemid` NOT IN (' . implode(',', $sql_itemids) . ');';
-//            $string2 = ' INSERT INTO `user_inventory`(`itemid`, `defindex`, `steamid`) VALUES ' . implode(',', $sql_values) . ' ON DUPLICATE KEY UPDATE `itemid` = `itemid`;';
-//            $this->runQuery($string1);
-//            $this->runQuery($string2);
-//        }
-//        $this->setInventoryUpdatedNow($steamid);
-//    }
-
     public function insertInventory($items_assoc, $steamid) {
         $this->deleteInventory($steamid);
         $stmt = $this->DBH->prepare(
@@ -275,42 +258,6 @@ class DatabaseLink {
         $stmt->bindParam(':steamid', $steamid);
         $stmt->execute();
     }
-
-//    public function insertUsers($summaries_assoc) {
-//        try {
-//            $sql = array();
-//            foreach ($summaries_assoc as $player_summary) {
-//                $steamid = isset($player_summary['steamid']) ? mysqli_real_escape_string($player_summary['steamid']) : "";
-//                $personaname = isset($player_summary['personaname']) ? mysqli_real_escape_string($player_summary['personaname']) : "";
-//                $communityvisibilitystate = isset($player_summary['communityvisibilitystate']) ? mysqli_real_escape_string($player_summary['communityvisibilitystate']) : "";
-//                $profilestate = isset($player_summary['profilestate']) ? mysqli_real_escape_string($player_summary['profilestate']) : "NULL";
-//                $profileurl = isset($player_summary['profileurl']) ? mysqli_real_escape_string($player_summary['profileurl']) : "";
-//                $avatar = isset($player_summary['avatar']) ? mysqli_real_escape_string($player_summary['avatar']) : "";
-//                $avatarmedium = isset($player_summary['avatarmedium']) ? mysqli_real_escape_string($player_summary['avatarmedium']) : "";
-//                $avatarfull = isset($player_summary['avatarfull']) ? mysqli_real_escape_string($player_summary['avatarfull']) : "";
-//
-//                $sql[] = "(" . $steamid . ", '" . $personaname . "', " . $communityvisibilitystate . ", " . $profilestate . ", '"
-//                        . $profileurl . "', '" . $avatar . "', '" . $avatarmedium . "', '" . $avatarfull . "', NOW())";
-//            }
-//            if (count($sql) == 0) {
-//                die();
-//            }
-//            $string = 'INSERT INTO `user`(`steamid`, `personaname`, `community_visibility_state`, '
-//                    . '`profile_state`, `profile_url`, `avatar_url`, `avatar_medium_url`, `avatar_full_url`, `last_updated`)'
-//                    . ' VALUES ' . implode(', ', $sql)
-//                    . ' ON DUPLICATE KEY UPDATE `personaname` = VALUES(`personaname`),'
-//                    . ' `community_visibility_state` = VALUES(`community_visibility_state`),'
-//                    . ' `profile_state` = VALUES(`profile_state`),'
-//                    . ' `profile_url` = VALUES(`profile_url`),'
-//                    . ' `avatar_url` = VALUES(`avatar_url`),'
-//                    . ' `avatar_medium_url` = VALUES(`avatar_medium_url`),'
-//                    . ' `avatar_full_url` = VALUES(`avatar_full_url`)'
-//                    . ' `last_updated` = NOW()';
-//            $this->runQuery($string);
-//        } catch (Exception $e) {
-//            throw new Exception("Database:insertUsers error: " . $e->getMessage());
-//        }
-//    }
 
     public function insertUser($playerSummary, $isFriend) {
         try {
@@ -458,24 +405,6 @@ class DatabaseLink {
         }
     }
 
-//    public function insertFriendList($user_steamid, $friends_assoc) {
-//        $this->deleteFriendsList($user_steamid);
-//        try {
-//            $sql = array();
-//            foreach ($friends_assoc as $friend) {
-//                $sql[] = '(' . $user_steamid . ',' . $friend['steamid'] . ')';
-//            }
-//            $string = 'INSERT INTO `user_friends` (`user_steamid`, `friend_steamid`) VALUES ' . implode(',', $sql)
-//                    . 'ON DUPLICATE KEY UPDATE `user_steamid` = VALUES(`user_steamid`),'
-//                    . '`friend_steamid` = VALUES(`friend_steamid`)';
-//            $this->runQuery($string);
-//            $this->setFriendslistUpdatedNow($user_steamid);
-//        } catch (Exception $e) {
-//            error_log("Database:insertFriendList error: " . $e->getMessage());
-//            throw new Exception("Database:insertFriendList error: " . $e->getMessage());
-//        }
-//    }
-
     public function insertFriendList($steamid, $friends_assoc) {
         try {
             $this->deleteFriendsList($steamid);
@@ -562,17 +491,6 @@ class DatabaseLink {
         $stmt->execute();
     }
 
-//    public function selectUsers($steamid_assoc) {
-//        $string = 'SELECT * FROM `user` WHERE `steamid` IN (' . implode(',', $steamid_assoc) . ')';
-//        try {
-//            $result = $this->runQuery($string);
-//            $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
-//            return $users;
-//        } catch (Exception $e) {
-//            throw new Exception("Database:selectUsers error: " . $e->getMessage());
-//        }
-//    }
-
     public function selectUsers($steamid_assoc) {
         $place_holders = implode(',', array_fill(0, count($steamid_assoc), '?'));
         $stmt = $this->DBH->prepare("SELECT * FROM `user` WHERE `steamid` IN ($place_holders)");
@@ -580,13 +498,6 @@ class DatabaseLink {
         $fetch_assoc = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $fetch_assoc;
     }
-
-//    public function selectUser($steamid) {
-//        $string = 'SELECT * FROM `user` WHERE `steamid` = ' . $steamid;
-//        $result = $this->runQuery($string);
-//        $user = mysqli_fetch_all($result, MYSQLI_ASSOC);
-//        return $user;
-//    }
 
     public function selectHeroName($npcHeroName) {
         $string = "SELECT `localized_name` FROM `hero` WHERE `name` = :npcHeroName";
