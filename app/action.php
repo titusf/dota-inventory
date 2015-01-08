@@ -166,17 +166,6 @@ if (isset($_GET['action'])) {
                 echo $serverApi->getItemsByType($type);
             }
             break;
-        case "getitemtrades":
-            if (isset($_GET['defindex'])) {
-                $defindex = $_GET['defindex'];
-                echo $serverApi->getItemTrades($defindex);
-            }
-            break;
-        case "getlatesttrades":
-            echo $serverApi->getLatestTrades();
-            break;
-        case "getstats":
-            echo $serverApi->getStats();
     }
 }
 // POST Requests (JSON input).
@@ -185,11 +174,6 @@ $request = json_decode($postdata);
 if (isset($request->action)) {
     $action = $request->action;
     switch ($action) {
-        case "addTrade":
-            if (isset($request->defindex) && isset($request->steamid) && isset($request->message)) {
-                echo $serverApi->addTrade($request->defindex, $request->steamid, $request->message);
-            }
-            break;
         // -- METHODS THAT REQUIRE AUTHENTICATION -- 
         case "addToWishList":
             if (isset($request->defindex)) {
