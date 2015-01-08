@@ -244,15 +244,6 @@ class DatabaseLink {
         return $heroes;
     }
 
-    public function getLogsForUser($steamid) {
-        $result = $this->runQuery("SELECT * FROM `log` WHERE `steamid` = '$steamid'");
-        $results = array();
-        while ($row = mysqli_fetch_array($result)) {
-            $results[$row["id"]] = $row["timestamp"];
-        }
-        return $results;
-    }
-
     /*     * Ground level SQL statements - for other functions to be built upon. 
      * -------------------------------------------------------------------- * */
 
