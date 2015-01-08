@@ -70,9 +70,6 @@ if (isset($_GET['action'])) {
         case "getrecentusers":
             echo $serverApi->getRecentlyUpdatedUsers();
             break;
-        case "getallitems":
-            echo $serverApi->getAllItems();
-            break;
         case "getitems":
             $ajax = new AjaxResponse(false, "Method undefined so far.");
             if (isset($_GET['rarity'])) {
