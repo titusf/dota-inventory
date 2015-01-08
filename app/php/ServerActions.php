@@ -186,13 +186,6 @@ class ServerActions {
         return $this->getUser($steamid, false);
     }
 
-    public function getAllItems() {
-        //Simply get all items from database.
-        $result_assoc = $this->databaseLink->getAllItems();
-        return $this->makeResponseJson(true, $result_assoc);
-        //Return Json.
-    }
-
     public function getItems($filters) {
         //TODO - Custom Search
     }

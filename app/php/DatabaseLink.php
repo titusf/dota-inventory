@@ -230,14 +230,6 @@ class DatabaseLink {
         }
     }
 
-    //DEPRECATED.
-    public function getAllItems() {
-        require_once("ItemModel.php");
-        $result = $this->runQuery("SELECT `defindex`, `name`, `item_class`, `item_name`, `image_url`, `used_by_heroes`, `item_rarity`, `item_set` FROM `item` WHERE `defindex`>=4000 AND `item_class` <>  'bundle' ");
-        $items = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        return $items;
-    }
-
     public function getAllHeroes() {
         $result = $this->runQuery("SELECT * FROM `hero` ORDER BY `localized_name`");
         $heroes = array();
