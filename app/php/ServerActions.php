@@ -194,7 +194,7 @@ class ServerActions {
     }
 
     public function getItems($filters) {
-        //
+        //TODO - Custom Search
     }
 
     public function getItem($defindex) {
@@ -353,45 +353,6 @@ class ServerActions {
         $users = $this->databaseLink->selectRecentlyUpdatedUsers();
         return $this->makeResponseJson(true, $users);
     }
-
-    public function addTrade($defindex, $steamid, $message) {
-        // Should not return more than one row, if it does - user has circumvented trade expiry policy.
-        $currentUserTrade = $this->databaseLink->selectActiveItemTradeByUser($defindex, $steamid);
-        if (count($currentUserTrade) === 1) {
-            // User must wait until trade listing has expired.
-            return $this->makeResponseJson(false, 'Trade already exists. Wait to expire.');
-        } else if (count($currentUserTrade) > 1) {
-            // Some logic went wrong, user was allowed to post more than 1 trade.
-            return $this->makeResponseJson(false, 'You managed to create more than 1 trade, well done.');
-        } else {
-            // Add the trade.
-            try {
-                $this->databaseLink->insertTrade($defindex, $steamid, $message);
-                return $this->makeResponseJson(true, 'Trade added successfully.');
-            } catch (Exception $ex) {
-                return $this->makeResponseJson(false, $ex->getMessage());
-            }
-        }
-    }
-
-    public function getLatestTrades() {
-        try {
-            $result = $this->databaseLink->selectLatestTrades();
-            return $this->makeResponseJson(true, $result);
-        } catch (Exception $ex) {
-            
-        }
-    }
-
-    public function getItemTrades($defindex) {
-        try {
-            $result = $this->databaseLink->selectItemTrades($defindex);
-            return $this->makeResponseJson(true, $result);
-        } catch (Exception $ex) {
-            return $this->makeResponseJson(false, $ex->getMessage());
-        }
-    }
-
 }
 
 ?>
