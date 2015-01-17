@@ -52,35 +52,6 @@
                 </div>
 
             </div>
-            <div class="row" style='margin-top:14px;'>
-                <div class="col-md-10 col-md-offset-1 text-center">
-                    <!-- if not logged in -->
-                    <div ng-if='!loggedIn'>
-                        <h4>If you own this and would like to trade it, please sign in.</h4>
-                    </div>
-                    <!-- if logged in but does not own item -->
-                    <div ng-if='loggedIn && !ownsItem'>
-                        <h4><strong>You do not own this</strong>. You cannot ask to trade.</h4>
-                    </div>
-                    <!-- if logged in and owns item -->
-                    <div ng-if='loggedIn && ownsItem'>
-                        <h4><strong>You own this</strong>. What do you want for it?</h4>
-                        <!-- if trade submit fails -->
-                        <div ng-if="submitTradeFail" class="alert-warning">
-                            <p>{{submitTradeFailReason}}</p>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">I want:</span>
-                            <input ng-model="tradeText" class="form-control" type="text" size="20" maxlength="20" />
-                            <span class="input-group-btn">
-                                <button ng-click="submitTrade(tradeText)" class="btn btn-primary">Propose</button>
-                            </span>
-                        </div>
-                        <span class="help-block">Listings will expire after 48 hours.</span>
-                    </div>
-
-                </div>
-            </div>
         </div>
         <div class="col-md-3 text-center">
             <div id="item-detail-market" class="simple-grey-box">
@@ -108,34 +79,10 @@
 </div>
 <hr/>
 <div class="section">
-    <h2 class="text-center">Trading and Item Owners</h2>
     <div class="row">
         <div class="col-md-4">
             <div class="item-friend-owners small-user-list-container">
                 <user-list users="friendsOwning" heading="'Friends Who Own This'" subheading="friendsOwning.length + ' friends own this item'"></user-list>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="simple-grey-box text-center">
-                <h4>Users who want this</h4>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="item-active-trades" style="padding: 0 5px;">
-                <h4 class="text-center">Looking to Trade</h4>
-                <p>Asking prices are displayed below:</p>
-                <div class="trade-items">
-                    <div ng-if="itemTrades.length === 0" style="margin:44px 0;">
-                        <strong>No active trades.</strong>
-                    </div>
-                    <div class="trade-item text-left" ng-repeat="trade in itemTrades| limitTo:limiter | limitTo:-10" ng-class-even="'even'">
-                        <span style="font-weight:bold;">Want: </span>
-                        <span>{{trade.message}}</span>
-                        <a href="users/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Inventory" popover-trigger="mouseenter"><span class="glyphicon glyphicon-briefcase"></span></a>
-                        <a href="http://steamcommunity.com/profiles/{{trade.steamid}}" class="btn btn-default btn-xs pull-right" popover="Steam" popover-trigger="mouseenter"><span class="glyphicon glyphicon-new-window"></span></a>
-                    </div>
-                    <pagination boundary-links="false" total-items="traders.length" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
-                </div>
             </div>
         </div>
     </div>
