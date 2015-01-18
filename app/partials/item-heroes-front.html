@@ -1,0 +1,11 @@
+<h1 class="text-center">Dota 2 Heroes</h1>
+<div class="section text-center">
+    <h3>Select a hero to view his/her/its available items.</h3>
+    <div>
+        <ul style="padding:0; line-height:10px;">
+            <li ng-repeat='hero in heroes' class='hero'>
+                <a href='items/hero/{{hero.dbName}}'><img ng-src='img/heroes/{{hero.dbName}}_full.png'/><p>{{hero.name}}</p></a>
+            </li>
+        </ul>
+    </div>
+</div>
