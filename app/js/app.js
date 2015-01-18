@@ -38,6 +38,8 @@ angular.module('myApp', [
                 $routeProvider.when('/faq', {templateUrl: 'partials/faq.html', controller: 'FaqCtrl'});
                 //Search Page.
                 $routeProvider.when('/search', {templateUrl: 'partials/search.html', controller: 'SearchCtrl'});
+                //Support Us / Donations page
+                $routeProvider.when('/support-us', {templateUrl: 'partials/support-us.html'})
                 //Redirect to homepage otherwise.
                 $routeProvider.otherwise({templateUrl: 'partials/front-page.html', controller: 'FrontPageCtrl'});
             }]);
