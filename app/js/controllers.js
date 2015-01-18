@@ -3,13 +3,13 @@
 /* Controllers */
 
 angular.module('myApp.controllers', ['ngCookies']).
-        controller('NavCtrl', ['$scope', '$location', 'user', function ($scope, $location, user) {
-                $scope.logout = function () {
+        controller('NavCtrl', ['$scope', '$location', 'user', function($scope, $location, user) {
+                $scope.logout = function() {
                     user.logout();
                     window.location.reload();
                 };
                 // Loading whether user is logged in.
-                user.steamidPromise.then(function (result) {
+                user.steamidPromise.then(function(result) {
                     $scope.loggedIn = user.loggedIn;
                     $scope.steamid = user.steamid;
                     // Load user profile and inventory.
@@ -17,19 +17,19 @@ angular.module('myApp.controllers', ['ngCookies']).
                     $scope.loadingInventory = false;
                     if (user.loggedIn) {
                         $scope.loadingProfile = true;
-                        user.profilePromise.then(function (result) {
+                        user.profilePromise.then(function(result) {
                             $scope.user = result.data;
                             $scope.loadingProfile = false;
                             //Now load inventory.
                             $scope.loadingInventory = true;
-                            user.inventoryPromise.then(function (result) {
+                            user.inventoryPromise.then(function(result) {
                                 $scope.loadingInventory = false;
                             });
                         });
                     }
                 });
 
-                $scope.isActive = function (viewLocation) {
+                $scope.isActive = function(viewLocation) {
                     if (viewLocation === $location.path()) {
                         return true;
                     } else if (($location.path().substring(0, viewLocation.length) === viewLocation) && viewLocation !== '/') {
@@ -40,18 +40,18 @@ angular.module('myApp.controllers', ['ngCookies']).
                     return viewLocation === $location.path();
                 };
             }])
-        .controller('TitleCtrl', ['$scope', 'title', function ($scope, title) {
+        .controller('TitleCtrl', ['$scope', 'title', function($scope, title) {
                 $scope.title = title;
             }])
-        .controller('FrontPageCtrl', ['$scope', '$http', function ($scope, $http) {
-                $http.get('friendslist.json').success(function (result) {
+        .controller('FrontPageCtrl', ['$scope', '$http', function($scope, $http) {
+                $http.get('friendslist.json').success(function(result) {
                     $scope.users = result.data;
                 });
                 $scope.rarities = ["common", "uncommon", "rare", "mythical",
                     "legendary", "ancient", "immortal", "arcana"];
                 $scope.heroes = [];
-                $http.get('action.php?action=getheroes').success(function (data) {
-                    angular.forEach(data.data, function (value, key) {
+                $http.get('action.php?action=getheroes').success(function(data) {
+                    angular.forEach(data.data, function(value, key) {
                         var dbName = key.substring(14, key.length);
                         $scope.heroes.push({
                             name: value,
@@ -60,13 +60,13 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 });
                 var timeoutID;
-                $scope.$watch('query', function (newVal, oldVal) {
+                $scope.$watch('query', function(newVal, oldVal) {
                     var query = $scope.query;
                     $scope.results = [];
                     if (typeof query !== 'undefined') {
                         window.clearTimeout(timeoutID);
                         $scope.loadingQuery = true;
-                        timeoutID = window.setTimeout(function () {
+                        timeoutID = window.setTimeout(function() {
                             //URL Conditionals.
                             if (query.substring(0, 35) === "http://steamcommunity.com/profiles/") {
                                 var steamid = query.substring(35, query.length);
@@ -80,7 +80,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                 $scope.loadingQuery = false;
                             } else if (query.substring(0, 29) === "http://steamcommunity.com/id/") {
                                 var vanity = query.substring(29, query.length);
-                                $http.get('action.php?action=getsteamid&vanityurl=' + vanity).success(function (data) {
+                                $http.get('action.php?action=getsteamid&vanityurl=' + vanity).success(function(data) {
                                     if (data.success === true) {
                                         var steamid = data.data;
                                         $scope.results.push({
@@ -108,7 +108,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                             } else if (query.length > 2) {
                                 query = query.toLowerCase();
                                 //Compare against rarities.
-                                angular.forEach($scope.rarities, function (rarity, index) {
+                                angular.forEach($scope.rarities, function(rarity, index) {
                                     if (rarity.substring(0, query.length) === query) {
                                         $scope.results.push({
                                             link: "items/rarity/" + rarity,
@@ -117,7 +117,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     }
                                 });
                                 //Compare against heroes.
-                                angular.forEach($scope.heroes, function (hero, index) {
+                                angular.forEach($scope.heroes, function(hero, index) {
                                     hero.name = hero.name.toLowerCase();
                                     if (hero.name.indexOf(query) !== -1) {
                                         $scope.results.push({
@@ -127,10 +127,10 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     }
                                 });
                                 //Compare against item names.
-                                $http.get('action.php?action=getmatchingitemcount&query=' + query).success(function (data) {
+                                $http.get('action.php?action=getmatchingitemcount&query=' + query).success(function(data) {
                                     var matchCount = data.data[0].count;
                                     if (matchCount == 1) {
-                                        $http.get('action.php?action=getitem&name=' + query).success(function (data) {
+                                        $http.get('action.php?action=getitem&name=' + query).success(function(data) {
                                             $scope.results.push({
                                                 link: "items/id/" + data.data[0].defindex,
                                                 title: data.data[0].name
@@ -150,10 +150,10 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('ItemCategoriesCtrl', ['$scope', '$http', '$location', 'Heroes', function ($scope, $http, $location, Heroes) {
+        .controller('ItemCategoriesCtrl', ['$scope', '$http', '$location', 'Heroes', function($scope, $http, $location, Heroes) {
                 $scope.heroes = [];
-                $http.get('action.php?action=getheroes').success(function (data) {
-                    angular.forEach(data.data, function (value, key) {
+                $http.get('action.php?action=getheroes').success(function(data) {
+                    angular.forEach(data.data, function(value, key) {
                         var dbName = Heroes.stripNpcPrefix(key);
                         $scope.heroes.push({
                             name: value,
@@ -161,20 +161,20 @@ angular.module('myApp.controllers', ['ngCookies']).
                         });
                     });
                 });
-                $scope.goToSearchResults = function (query) {
+                $scope.goToSearchResults = function(query) {
                     $location.path('items/name/' + query);
                 };
             }])
-        .controller('UserFrontCtrl', ['$scope', '$http', 'api', 'SearchUser', function ($scope, $http, api, SearchUser) {
+        .controller('UserFrontCtrl', ['$scope', '$http', 'api', 'SearchUser', function($scope, $http, api, SearchUser) {
                 //Get Recent Users
-                $http.get('action.php?action=getrecentusers').success(function (data) {
+                $http.get('action.php?action=getrecentusers').success(function(data) {
                     $scope.friends = data.data;
                 });
                 $scope.searching = false;
                 $scope.profileReached = false;
                 $scope.profileSuccess = false;
 
-                $scope.searchUsers = function (userQuery) {
+                $scope.searchUsers = function(userQuery) {
                     $scope.invalid = false;
                     $scope.searching = true;
                     $scope.profileSuccess = false;
@@ -184,9 +184,9 @@ angular.module('myApp.controllers', ['ngCookies']).
                     } else if (SearchUser.isCommunityUrl(userQuery)) {
                         console.log("fetching user");
                         //Attempt to get steamid from community URL.
-                        SearchUser.getSteamidFromUrl(userQuery).then(function (result) {
+                        SearchUser.getSteamidFromUrl(userQuery).then(function(result) {
                             performProfileFetch(result);
-                        }, function (rejectReason) {
+                        }, function(rejectReason) {
                             $scope.invalid = true;
                             $scope.searching = false;
                             $scope.invalidReason = rejectReason;
@@ -199,8 +199,8 @@ angular.module('myApp.controllers', ['ngCookies']).
                         console.log("Error");
                     }
                 };
-                var performProfileFetch = function (steamid) {
-                    api.getUserDetails(steamid, function (response) {
+                var performProfileFetch = function(steamid) {
+                    api.getUserDetails(steamid, function(response) {
                         if (response.success === true) {
                             $scope.profileSuccess = true;
                             $scope.searching = false;
@@ -209,7 +209,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 };
             }])
-        .controller('UserDetailCtrl', ['$scope', '$routeParams', 'api', 'ItemList', 'user', function ($scope, $routeParams, api, itemList, user) {
+        .controller('UserDetailCtrl', ['$scope', '$routeParams', 'api', 'ItemList', 'user', function($scope, $routeParams, api, itemList, user) {
                 var steamid = $routeParams.steamId;
                 $scope.steamId = steamid;
 
@@ -225,17 +225,17 @@ angular.module('myApp.controllers', ['ngCookies']).
                     if (user.steamid === steamid) {
                         $scope.loading = false;
                         $scope.loggedInUserProfile = true;
-                        user.profilePromise.then(function (result) {
+                        user.profilePromise.then(function(result) {
                             $scope.user = result.data;
                         });
-                        user.inventoryPromise.then(function () {
+                        user.inventoryPromise.then(function() {
                             $scope.items = user.inventory;
                         });
                     }
                     // Otherwise, this is not a logged in user's page. (Or user is not logged in.)
                 } else {
 
-                    api.getUserDetails($scope.steamId, function (data) {
+                    api.getUserDetails($scope.steamId, function(data) {
                         if (data.success == true) {
                             $scope.userApiFail = false;
                             $scope.user = data.data;
@@ -243,7 +243,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                             if ($scope.user.community_visibility_state !== '3') {
                                 $scope.user.isprivate = true;
                             }
-                            api.getInventory($scope.steamId, function (data) {
+                            api.getInventory($scope.steamId, function(data) {
                                 $scope.loading = false;
                                 if (data.success == true) {
                                     $scope.items = data.data;
@@ -262,13 +262,13 @@ angular.module('myApp.controllers', ['ngCookies']).
                 }
 
             }])
-        .controller('ItemSearchCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+        .controller('ItemSearchCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 var searchTerm = $routeParams.searchTerm;
-                $http.get('action.php?action=getmatchingitems&name=' + searchTerm).success(function (data) {
+                $http.get('action.php?action=getmatchingitems&name=' + searchTerm).success(function(data) {
                     $scope.items = data.data;
                 });
             }])
-        .controller('FriendsListCtrl', ['$scope', '$routeParams', 'api', 'title', 'ItemList', function ($scope, $routeParams, api, title, itemList) {
+        .controller('FriendsListCtrl', ['$scope', '$routeParams', 'api', 'title', 'ItemList', function($scope, $routeParams, api, title, itemList) {
                 $scope.friendslist = new Array();
                 $scope.friendslistPrivate = new Array();
                 title.setTitle("Loading Friendslist...");
@@ -280,7 +280,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.loadingUser = true;
                 $scope.percentComplete = 0;
                 //Get main user's details.
-                api.getUserDetails(steamId, function (data) {
+                api.getUserDetails(steamId, function(data) {
                     $scope.loadingUser = false;
                     $scope.user = data.data;
                     if ($scope.user.community_visibility_state === '3') {
@@ -291,14 +291,14 @@ angular.module('myApp.controllers', ['ngCookies']).
                 });
                 $scope.loadingFriends = true;
                 //Get friendslist / staemids.
-                api.getFriendsList(steamId, function (data) {
+                api.getFriendsList(steamId, function(data) {
                     var friend_ids = data.data;
                     console.log(friend_ids.length);
                     $scope.friendCount = friend_ids.length;
                     var friendslist = new Array();
                     //Iterate over steamids and load profiles.
-                    angular.forEach(friend_ids, function (friend, n) {
-                        api.getUserDetails(friend['friend_steamid'], function (data) {
+                    angular.forEach(friend_ids, function(friend, n) {
+                        api.getUserDetails(friend['friend_steamid'], function(data) {
                             if (data.success === true) {
                                 var friend = data.data;
                                 friend.loading = false;
@@ -323,7 +323,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                     function loadInUserInventory(friend) {
                         friend.loading = true;
                         if (friend.community_visibility_state === '3') {
-                            api.getInventory(friend.steamid, function (data) {
+                            api.getInventory(friend.steamid, function(data) {
                                 friend.loading = false;
                                 $scope.friendsLoaded++;
                                 $scope.percentComplete = toPercent($scope.friendsLoaded, $scope.friendCount);
@@ -347,19 +347,19 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', 'user', function ($scope, $routeParams, api, user) {
+        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', 'user', function($scope, $routeParams, api, user) {
                 var steamid = $routeParams.steamId;
                 $scope.steamid = steamid;
-                api.getUserDetails(steamid, function (data) {
+                api.getUserDetails(steamid, function(data) {
                     $scope.user = data.data;
                 });
-                api.getWishList(steamid).then(function (response) {
+                api.getWishList(steamid).then(function(response) {
                     $scope.items = response.data;
                 });
-                $scope.deleteWishList = function () {
+                $scope.deleteWishList = function() {
                     var result = confirm("Really delete ALL items?");
                     if (result === true) {
-                        api.deleteWishList().then(function () {
+                        api.deleteWishList().then(function() {
                             window.location.reload();
                         });
                     }
@@ -371,38 +371,50 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 }
             }])
-        .controller('UserItemsCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+        .controller('ItemHeroCtrl', ['$scope', '$http', 'Heroes', function($scope, $http, Heroes) {
+                $scope.heroes = [];
+                $http.get('action.php?action=getheroes').success(function(data) {
+                    angular.forEach(data.data, function(value, key) {
+                        var dbName = Heroes.stripNpcPrefix(key);
+                        $scope.heroes.push({
+                            name: value,
+                            dbName: dbName
+                        });
+                    });
+                });
+            }])
+        .controller('UserItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 $scope.steamId = $routeParams.steamId;
                 $scope.itemsLoading = true;
                 $scope.totalDisplayed = 80;
-                $http.get('action.php?action=getinventory&steamid=' + $scope.steamId).success(function (data) {
+                $http.get('action.php?action=getinventory&steamid=' + $scope.steamId).success(function(data) {
                     $scope.itemsLoading = false;
                     $scope.items = data.data;
                     $scope.loading = false;
                 });
             }])
-        .controller('ItemListRarityCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+        .controller('ItemListRarityCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 var rarity = $routeParams.rarity;
                 $scope.rarity = rarity;
-                $http.get('action.php?action=getmatchingitems&rarity=' + rarity).success(function (data) {
+                $http.get('action.php?action=getmatchingitems&rarity=' + rarity).success(function(data) {
                     $scope.items = data.data;
                 });
             }])
-        .controller('ItemListHeroCtrl', ['$scope', '$routeParams', '$http', 'api', function ($scope, $routeParams, $http, api) {
+        .controller('ItemListHeroCtrl', ['$scope', '$routeParams', '$http', 'api', function($scope, $routeParams, $http, api) {
                 var npcHeroName = 'npc_dota_hero_' + $routeParams.heroName;
                 $scope.npcHeroName = $routeParams.heroName;
                 $scope.heroName = $routeParams.heroName;
-                api.getHeroName(npcHeroName, function (data) {
+                api.getHeroName(npcHeroName, function(data) {
                     $scope.heroName = data.data.localized_name;
                 });
-                $http.get('action.php?action=getmatchingitems&hero=' + npcHeroName).success(function (data) {
+                $http.get('action.php?action=getmatchingitems&hero=' + npcHeroName).success(function(data) {
                     $scope.items = data.data;
                 });
             }])
-        .controller('ItemListTypeCtrl', ['$scope', '$routeParams', 'api', function ($scope, $routeParams, api) {
+        .controller('ItemListTypeCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
                 var typeName = $routeParams.typeName;
                 $scope.typeName = typeName;
-                api.getItemsByType(typeName).then(function (successData) {
+                api.getItemsByType(typeName).then(function(successData) {
                     if (successData.success === true) {
                         $scope.items = successData.data;
                     } else {
@@ -410,14 +422,14 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('FriendsItemsCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+        .controller('FriendsItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
 
 
             }])
-        .controller('ItemDetailCtrl', ['$scope', '$routeParams', '$http', 'api', 'user', function ($scope, $routeParams, $http, api, user) {
+        .controller('ItemDetailCtrl', ['$scope', '$routeParams', '$http', 'api', 'user', function($scope, $routeParams, $http, api, user) {
                 var defindex = $routeParams.itemId;
                 $scope.itemId = defindex;
-                $http.get('action.php?action=getitem&defindex=' + $scope.itemId).success(function (data) {
+                $http.get('action.php?action=getitem&defindex=' + $scope.itemId).success(function(data) {
                     var item = data.data[0];
                     var npc_hero_name = item.npc_hero_name;
                     $scope.item = item;
@@ -432,13 +444,13 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                     $scope.item.hero_db = npc_hero_name.substring(14, npc_hero_name.length);
                 });
-                $http.get('friendslist.json').success(function (data) {
+                $http.get('friendslist.json').success(function(data) {
                     $scope.traders = data.data;
                 });
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;
 
-                api.getItemPrice(defindex).then(function (resultData) {
+                api.getItemPrice(defindex).then(function(resultData) {
                     $scope.marketResultCount = resultData.data.data.length;
                     var firstResult = resultData.data.data[0];
                     var lowest_price = (firstResult.lowest_price / 100).toFixed(2);
@@ -451,43 +463,43 @@ angular.module('myApp.controllers', ['ngCookies']).
                     };
                 });
 
-                api.getActiveTrades(defindex).then(function (resultData) {
+                api.getActiveTrades(defindex).then(function(resultData) {
                     if (resultData.success === true) {
                         $scope.itemTrades = resultData.data;
 
                     } else {
                         console.log(resultData.data);
                     }
-                }, function (failResponse) {
+                }, function(failResponse) {
 
                 });
 
                 if (user.loggedIn) {
                     var inventoryPromise = user.inventoryPromise;
-                    inventoryPromise.then(function () {
+                    inventoryPromise.then(function() {
                         var inventory = user.inventory;
-                        angular.forEach(inventory, function (item, n) {
+                        angular.forEach(inventory, function(item, n) {
                             if (item.defindex === defindex) {
                                 $scope.ownsItem = true;
                             }
                         });
                     });
 
-                    user.wishlistPromise.then(function (success) {
+                    user.wishlistPromise.then(function(success) {
                         // Is this item in the user's wishlist?
                         $scope.inWishList = user.isInWishList(defindex);
-                        $scope.addToWishList = function (defindex) {
+                        $scope.addToWishList = function(defindex) {
                             user.addToWishList(defindex);
                             $scope.inWishList = true;
                         };
-                        $scope.removeFromWishList = function (defindex) {
+                        $scope.removeFromWishList = function(defindex) {
                             user.removeFromWishList(defindex);
                             $scope.inWishList = false;
                         };
                     });
                 }
-                $scope.submitTrade = function (tradeText) {
-                    api.addTrade(defindex, user.steamid, tradeText).then(function (successResponse) {
+                $scope.submitTrade = function(tradeText) {
+                    api.addTrade(defindex, user.steamid, tradeText).then(function(successResponse) {
                         if (successResponse.success === true) {
 
                         } else {
@@ -499,29 +511,29 @@ angular.module('myApp.controllers', ['ngCookies']).
                 };
                 $scope.currentPage = 1;
                 $scope.limiter = 10;
-                $scope.$watch('currentPage', function () {
+                $scope.$watch('currentPage', function() {
                     $scope.limiter = ($scope.currentPage * 10);
                 });
                 $scope.limiter = ($scope.currentPage * 10);
                 if (user.loggedIn === true) {
-                    api.getFriendsOwning(user.steamid, defindex, function (data) {
+                    api.getFriendsOwning(user.steamid, defindex, function(data) {
                         $scope.friendsOwning = data.data;
                     });
                 }
             }])
-        .controller('TradeCtrl', ['$scope', 'api', function ($scope, api) {
-                api.getLatestTrades().then(function (successData) {
+        .controller('TradeCtrl', ['$scope', 'api', function($scope, api) {
+                api.getLatestTrades().then(function(successData) {
                     $scope.latestTrades = successData.data.data;
                 });
             }])
-        .controller('TradeDetailCtrl', ['$scope', '$routeParams', 'api', function ($scope, $routeParams, api) {
+        .controller('TradeDetailCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
                 $scope.tradeId = $routeParams.tradeId;
             }])
-        .controller('StatsCtrl', ['$scope', 'api', function ($scope, api) {
-                api.getStats(function (data) {
+        .controller('StatsCtrl', ['$scope', 'api', function($scope, api) {
+                api.getStats(function(data) {
                     $scope.stats = data.data;
                     $scope.stats.averagePerUser = Math.round($scope.stats.uniqueItemCount / $scope.stats.totalUsers);
                 });
             }])
-        .controller('FaqCtrl', ['$scope', 'api', function ($scope, api) {
+        .controller('FaqCtrl', ['$scope', 'api', function($scope, api) {
             }]);
