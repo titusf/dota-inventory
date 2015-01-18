@@ -107,7 +107,8 @@ angular.module('myApp.services', []).
                 // This function expects a proper community URL.
                 var getSteamidFromUrl = function(communityUrl) {
                     var deferred = $q.defer();
-
+                    // Remove trailing slash
+                    communityUrl = communityUrl.replace(/\/$/, "");
                     if (communityUrl.indexOf("/profiles/") > -1) {
                         //Then this URL contains a steamid.
                         var steamid = communityUrl.substr(-17);
@@ -139,31 +140,35 @@ angular.module('myApp.services', []).
                     isCommunityUrl: isCommunityUrl
                 };
             }])
-        .factory('ItemSearch', ['$http', function($http) {
+        .factory('SearchItem', ['api', function(api) {
+                /**
+                 * Expects an object with item properties set to be searched on.
+                 * e.g. criteria.rarity if set, should be in the form of a rarity 
+                 * string or an array of rarity strings.
+                 * @param {object} criteria
+                 * @returns {array} search results
+                 */
+                var searchItems = function(criteria) {
+                    rarities = (typeof (criteria.rarities) !== 'undefined') ? criteria.rarities : null;
+                    api.searchItems()
+                };
+            }])
+        .factory('SiteSearch', ['api', 'SearchUser', function(api, SearchUser) {
+                var rarities_arr = ["common", "uncommon", "rare", "mythical",
+                    "legendary", "ancient", "immortal", "arcana"];
+                var heroes_arr = [];
+                api.getHeroes(function(data) {
+                    heroes_arr = data.data;
+                });
+                function isRarity(someString) {
+                    return (rarities_arr.indexOf(someString) > -1) ? true : false;
+                }
+                function isHero(someString) {
+                    return (heroes_arr.indexOf(someString) > -1) ? true : false;
+                }
                 var doSearch = function(query) {
 
                 };
-            }])
-        .factory('SiteSearch', ['SearchUser', function(SearchUser) {
-                var doSearch = function(query) {
-
-                };
-            }])
-        .factory('Trade', ['$http', function($http) {
-                var submitTrade = function(defindex, steamid, message) {
-                    //Do POST to server with these params.
-
-                };
-                var getItemTrades = function(defindex) {
-                    //Get (recent) trades submitted for an item.
-                };
-                var getUserTrades = function(steamid) {
-                    //Get all trades that this user has posted.
-                };
-                var getLatestTrades = function() {
-                    //Get some trades that were recently posted (all items/users).
-                };
-
             }])
         .factory('Heroes', ['api', function(api) {
                 return{
@@ -173,8 +178,32 @@ angular.module('myApp.services', []).
                 };
             }])
         .factory('api', ['$http', function($http) {
+                /**
+                 * Handles conversion of parameters into server-accepted
+                 * format and returns search results.
+                 * @param {array} rarities
+                 * @param {array} heroes
+                 * @param {array} types
+                 * @param {string} name
+                 * @returns {$http.get} search results
+                 */
+                var searchItems = function(rarities, heroes, types, name) {
+                    var queryString = 'action.php?action=searchItems';
+                    if (rarities !== null && rarities.length > 0)
+                        queryString += "?rarities=" + rarities.join(',');
+                    if (heroes !== null && heroes.length > 0)
+                        queryString += "?heroes=" + heroes.join(',');
+                    if (types !== null && types.length > 0)
+                        queryString += "?types=" + types.join(',');
+                    if (name !== null && name !== "")
+                        queryString += "?name=" + name;
+                    // Now that queryString has been constructed, call to the API.
+                    // !!! NOT IMPLEMENTED SERVER SIDE - RETURNS DUMMY DATA.
+                    return $http.get("items_result.json");
+                };
 
                 return {
+                    searchItems: searchItems,
                     getLoggedInUser: function() {
                         return $http.get('action.php?action=getLoggedInUser')
                                 .then(function(response) {
