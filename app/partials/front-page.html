@@ -2,16 +2,17 @@
     <div class="row text-center" style="margin-bottom:36px;">
         <div class="col-md-8 col-md-offset-2">
             <img src="img/logo_large.png" />
-            <!--<h3 style="margin-top:0; margin-bottom:24px; color:#666;"><em>DotA 2 Cosmetic Items Hub</em></h3>-->
+            <h3 style="margin-top:0; margin-bottom:24px; color:#666;">DOTA 2 Cosmetic Items Browser</h3>
             <!-- Site search to be implemented. -->
-            <div style="display:none;">
+            <div>
                 <div class="input-group">
                     <span class="input-group-addon">Site Search:</span>
                     <input ng-model="query" type="text" class="form-control input-lg" id="community-url" placeholder="Enter a hero, rarity, item type, name or Steam Community URL.">
-
+                    <!--
                     <span class="input-group-btn">
-                        <button class="btn btn-primary btn-lg">Go</button>
+                        <button class="btn btn-primary btn-lg"><span class="fa fa-plus-circle"></span> Add</button>
                     </span>
+                    -->
                 </div>
                 <div>
                     <p class="search-loading" ng-if="loadingQuery && query.length > 2">Searching...</p>
@@ -25,68 +26,66 @@
             </div>
         </div>
     </div>
-    <div class="row"  style="margin-bottom:24px;">
-        <div class="col-md-4 text-justify">
-            <div class="lighter-box">
-                <h1 class='text-center'>Browse</h1>
-                <p class=""><strong>DotA 2</strong> has a large and constantly growing collection of cosmetic items. Dota Inventory makes it easy to find cool new items and browse the existing library.</p>
-                <p>Is <a href="items/hero/meepo">Meepo</a> your favourite hero? Or maybe you want to know which <a class="rarity-text immortal" href="items/rarity/immortal">Immortal</a> items are out there? There's plenty of items out there so start browsing now!</p>
-                <a href="items" class="btn btn-default btn-block">Start Browsing</a>
+    <div class="row text-left" id="front-rundown">
+        <div class="col-md-7 col-md-offset-1">
+            <div class="feature">
+                <div class="feature-icon"><span class="fa fa-usd"></span></div>
+                <div class="feature-description">
+                    <strong>Item Prices</strong>
+                    <p>View market data pulled fresh from the Steam marketplace.</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><span class="fa fa-suitcase"></span></div>
+                <div class="feature-description">
+                    <strong>Player Inventories</strong>
+                    <p>Access inventories for Steam users and view all friends items at once.</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><span class="fa fa-star"></span></div>
+                <div class="feature-description">
+                    <strong>Personal Wishlist</strong>
+                    <p>Add your favourite items to a wishlist for all to see.</p>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="lighter-box">
-                <h1 class="text-center">Trade</h1>
-                <p><strong>Steam Trading</strong> is huge thanks to Steam's real-money marketplace and Dota 2's wide range of cosmetic items.</p>
-                <p>Dota Inventory provides basic trading support. Do you want that <a href="items/id/4007">Dragonclaw Hook</a>? Visit the item's page and see if anyone's looking to trade it. Alternatively post your own items up for trade.</p>
-                <a href="trades" class="btn btn-default btn-block">Start Trading</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="lighter-box">
-                <h1 class="text-center">Merge</h1>
-                <p><strong>Dota Inventory</strong> started out as a <a href="http://old.dotainventory.com">basic friendslist item browser</a> which let you combine every item owned by one of your Steam friends into a simple list.</p>
-                <p>Expanding on that, Dota Inventory is now a place to view any player's inventory as well as a combined friendslist inventory.</p>
-                <a href="users" class="btn btn-default btn-block">Start Merging</a>
-            </div>
+        <div class="col-md-3 text-center">
+            <strong>Quick Item Finder</strong>
+            <a href="items/hero" class="btn btn-block btn-default">View All Heroes</a>
+            <a href="items/rarity" class="btn btn-block btn-default">View All Rarities</a>
+            <a href="items/" class="btn btn-block btn-default">View All Bundles</a>
+            <a href="items/" class="btn btn-block btn-primary">Access Full Browser</a>
         </div>
     </div>
-    <div id="featured" class="lighter-box">
-        <div class="row text-center">
-            <div class="col-md-6">
-                <h2><img src="img/twitch_icon.png" style="width:30px; margin-right:9px;" />Featured Streamer</h2>
-                <p>Our first featured streamer is <a href="http://www.twitch.tv/ldshadowz?tt_medium=live_embed&tt_content=text_link" >ldshadowz</a> from the UK! Be sure to <a href="http://www.twitch.tv/ldshadowz">visit his channel</a> and check him out! His schedule is currently shown in the background of this video.</p>
-                <p class="text-right" style="font-weight:bold;">Looking to get featured? <a href="http://steamcommunity.com/id/mchairmaster/" >Add me on Steam!</a></p>
+    <!--
+    <div class="row">
+        <h1><span class="fa fa-gift"></span> Daily Giveaway</h1>
+    </div>
+    -->
+    <div class="row" style="margin-top:56px;">
+        <div class="col-md-8">
+            <div class="text-left:" style="width:640px; margin:0 auto;">
+                <p>DotaInventory.com relies on support from you guys to continue to 
+                    improve and build the service.</p> 
+                <p>Every contribution is a great help and lets us know that our work is appreciated. Items
+                    donated will help us to run giveaways and give back to the community!
+                </p>
+                <p>Feel free to chat with us via social media or Steam at any time.</p>
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GPS4VB2GR89HJ" class="btn btn-xs btn-success"><span class="fa fa-paypal"></span> Support With Paypal</a>
+                <a href="support-us/" class="btn btn-xs btn-default">Donate Items</a>
+                <span class="fa fa-child" style="font-size: 36px;
+                      color: #5CB85C;"></span>
             </div>
-            <div class="col-md-6">
-                <object type="application/x-shockwave-flash" 
-                        height="278" 
-                        width="520" 
-                        id="live_embed_player_flash" 
-                        data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=ldshadowz" 
-                        bgcolor="#000000">
-                    <param  name="allowFullScreen" 
-                            value="true" />
-                    <param  name="allowScriptAccess" 
-                            value="always" />
-                    <param  name="allowNetworking" 
-                            value="all" />
-                    <param  name="movie" 
-                            value="http://www.twitch.tv/widgets/live_embed_player.swf" />
-                    <param  name="flashvars" 
-                            value="hostname=www.twitch.tv&channel=ldshadowz&auto_play=false&start_volume=50" />
-                </object>
-            </div>
-        </div>
 
-    </div>
-    <div id='front-social' class="text-center" style="margin-top:18px;">
-        <h3>Follow DotaInventory</h3>
-        <p>
-            <a href="http://steamcommunity.com/groups/dotainventory"><img src="img/steam_social.png" /></a>
-            <a href="http://twitter.com/dotainventory"><img src="img/twitter_social.png" /></a>
-            <a href="http://facebook.com/dotainventory"><img src="img/facebook_social.png" /></a>
-        </p>
+        </div>
+        <div class="col-md-4" style="font-size:96px;">
+            <p>
+                <a href="http://steamcommunity.com/groups/dotainventory"><span class="fa fa-steam-square"></span></a>
+                <a href="http://twitter.com/dotainventory"><span class="fa fa-twitter-square"></span></a>
+                <a href="http://facebook.com/dotainventory"><span class="fa fa-facebook-square"></span></a>
+            </p>
+        </div>
     </div>
 
 

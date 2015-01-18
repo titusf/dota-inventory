@@ -24,7 +24,9 @@ angular.module('myApp', [
                 //Item Routes.
                 $routeProvider.when('/items', {templateUrl: 'partials/item-categories.html', controller: 'ItemCategoriesCtrl'});
                 $routeProvider.when('/items/id/:itemId', {templateUrl: 'partials/item-detail.html', controller: 'ItemDetailCtrl'});
+                $routeProvider.when('/items/rarity', {templateUrl: 'partials/item-rarity-front.html', controller: 'ItemRarityCtrl'});
                 $routeProvider.when('/items/rarity/:rarity', {templateUrl: 'partials/item-list-rarity.html', controller: 'ItemListRarityCtrl'});
+                $routeProvider.when('/items/hero', {templateUrl: 'partials/item-heroes-front.html', controller: 'ItemHeroCtrl'});
                 $routeProvider.when('/items/hero/:heroName', {templateUrl: 'partials/item-list-hero.html', controller: 'ItemListHeroCtrl'});
                 $routeProvider.when('/items/set/:setName', {templateUrl: 'partials/item-list-set.html', controller: 'ItemListSetCtrl'});
                 $routeProvider.when('/items/name/:searchTerm', {templateUrl: 'partials/item-search.html', controller: 'ItemSearchCtrl'});
@@ -38,6 +40,8 @@ angular.module('myApp', [
                 $routeProvider.when('/faq', {templateUrl: 'partials/faq.html', controller: 'FaqCtrl'});
                 //Search Page.
                 $routeProvider.when('/search', {templateUrl: 'partials/search.html', controller: 'SearchCtrl'});
+                //Support Us / Donations page
+                $routeProvider.when('/support-us', {templateUrl: 'partials/support-us.html'})
                 //Redirect to homepage otherwise.
                 $routeProvider.otherwise({templateUrl: 'partials/front-page.html', controller: 'FrontPageCtrl'});
             }]);
