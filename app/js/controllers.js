@@ -124,10 +124,10 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     }
                                 });
                                 //Compare against item names.
-                                $http.get('action.php?action=getmatchingitemcount&query=' + query).success(function(data) {
+                                $http.get('api/action.php?action=getmatchingitemcount&query=' + query).success(function(data) {
                                     var matchCount = data.data[0].count;
                                     if (matchCount == 1) {
-                                        $http.get('action.php?action=getitem&name=' + query).success(function(data) {
+                                        $http.get('api/action.php?action=getitem&name=' + query).success(function(data) {
                                             $scope.results.push({
                                                 link: "items/id/" + data.data[0].defindex,
                                                 title: data.data[0].name
@@ -164,7 +164,7 @@ angular.module('myApp.controllers', ['ngCookies']).
             }])
         .controller('UserFrontCtrl', ['$scope', '$http', 'api', 'SearchUser', function($scope, $http, api, SearchUser) {
                 //Get Recent Users
-                $http.get('action.php?action=getrecentusers').success(function(data) {
+                $http.get('api/action.php?action=getrecentusers').success(function(data) {
                     $scope.friends = data.data;
                 });
                 $scope.searching = false;
@@ -261,7 +261,7 @@ angular.module('myApp.controllers', ['ngCookies']).
             }])
         .controller('ItemSearchCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 var searchTerm = $routeParams.searchTerm;
-                $http.get('action.php?action=getmatchingitems&name=' + searchTerm).success(function(data) {
+                $http.get('api/action.php?action=getmatchingitems&name=' + searchTerm).success(function(data) {
                     $scope.items = data.data;
                 });
             }])
@@ -393,7 +393,7 @@ angular.module('myApp.controllers', ['ngCookies']).
         .controller('ItemListRarityCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 var rarity = $routeParams.rarity;
                 $scope.rarity = rarity;
-                $http.get('action.php?action=getmatchingitems&rarity=' + rarity).success(function(data) {
+                $http.get('api/action.php?action=getmatchingitems&rarity=' + rarity).success(function(data) {
                     $scope.items = data.data;
                 });
             }])
@@ -404,7 +404,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                 api.getHeroName(npcHeroName, function(data) {
                     $scope.heroName = data.data.localized_name;
                 });
-                $http.get('action.php?action=getmatchingitems&hero=' + npcHeroName).success(function(data) {
+                $http.get('api/action.php?action=getmatchingitems&hero=' + npcHeroName).success(function(data) {
                     $scope.items = data.data;
                 });
             }])
