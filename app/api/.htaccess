@@ -1,0 +1,6 @@
+RewriteEngine on
+
+# Capture the query string parameter after action 
+RewriteCond %{QUERY_STRING} action=(\w+)
+# Use the string to construct a file: XXXXX.json (without appending query string) 
+RewriteRule ^action.php %1.json? [L]

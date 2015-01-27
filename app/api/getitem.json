@@ -1,0 +1,25 @@
+{
+   "success":true,
+   "data":[
+      {
+         "item_name":"Gladiator's Revenge Trident",
+         "0":"Gladiator's Revenge Trident",
+         "item_class":"dota_item_wearable",
+         "1":"dota_item_wearable",
+         "item_rarity":"mythical",
+         "2":"mythical",
+         "item_type_name":"weapon",
+         "3":"weapon",
+         "item_description":"",
+         "4":"",
+         "image_url":"http:\/\/cdn.dota2.com\/apps\/570\/icons\/econ\/items\/pudge\/gladiators_revenge_trident_2\/gladiators_revenge_trident_2.db77a1dd7b59c1acdfeae66e0df7e13a3888b01c.png",
+         "5":"http:\/\/cdn.dota2.com\/apps\/570\/icons\/econ\/items\/pudge\/gladiators_revenge_trident_2\/gladiators_revenge_trident_2.db77a1dd7b59c1acdfeae66e0df7e13a3888b01c.png",
+         "item_set":"",
+         "6":"",
+         "hero_name":"Pudge",
+         "7":"Pudge",
+         "npc_hero_name":"npc_dota_hero_pudge",
+         "8":"npc_dota_hero_pudge"
+      }
+   ]
+}
