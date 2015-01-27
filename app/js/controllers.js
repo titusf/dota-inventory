@@ -43,14 +43,11 @@ angular.module('myApp.controllers', ['ngCookies']).
         .controller('TitleCtrl', ['$scope', 'title', function($scope, title) {
                 $scope.title = title;
             }])
-        .controller('FrontPageCtrl', ['$scope', '$http', function($scope, $http) {
-                $http.get('friendslist.json').success(function(result) {
-                    $scope.users = result.data;
-                });
+        .controller('FrontPageCtrl', ['$scope', '$http', 'api', function($scope, $http, api) {
                 $scope.rarities = ["common", "uncommon", "rare", "mythical",
                     "legendary", "ancient", "immortal", "arcana"];
                 $scope.heroes = [];
-                $http.get('action.php?action=getheroes').success(function(data) {
+                api.getHeroes(function(data){
                     angular.forEach(data.data, function(value, key) {
                         var dbName = key.substring(14, key.length);
                         $scope.heroes.push({
@@ -80,7 +77,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                 $scope.loadingQuery = false;
                             } else if (query.substring(0, 29) === "http://steamcommunity.com/id/") {
                                 var vanity = query.substring(29, query.length);
-                                $http.get('action.php?action=getsteamid&vanityurl=' + vanity).success(function(data) {
+                                api.resolveVanityUrl(vanity).then(function(data){
                                     if (data.success === true) {
                                         var steamid = data.data;
                                         $scope.results.push({
@@ -150,9 +147,9 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('ItemCategoriesCtrl', ['$scope', '$http', '$location', 'Heroes', function($scope, $http, $location, Heroes) {
+        .controller('ItemCategoriesCtrl', ['$scope', 'api', '$location', 'Heroes', function($scope, api, $location, Heroes) {
                 $scope.heroes = [];
-                $http.get('action.php?action=getheroes').success(function(data) {
+                api.getHeroes(function(data){
                     angular.forEach(data.data, function(value, key) {
                         var dbName = Heroes.stripNpcPrefix(key);
                         $scope.heroes.push({
@@ -371,9 +368,9 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 }
             }])
-        .controller('ItemHeroCtrl', ['$scope', '$http', 'Heroes', function($scope, $http, Heroes) {
+        .controller('ItemHeroCtrl', ['$scope', 'api', 'Heroes', function($scope, api, Heroes) {
                 $scope.heroes = [];
-                $http.get('action.php?action=getheroes').success(function(data) {
+                api.getHeroes(function(data) {
                     angular.forEach(data.data, function(value, key) {
                         var dbName = Heroes.stripNpcPrefix(key);
                         $scope.heroes.push({
@@ -383,11 +380,11 @@ angular.module('myApp.controllers', ['ngCookies']).
                     });
                 });
             }])
-        .controller('UserItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
+        .controller('UserItemsCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
                 $scope.steamId = $routeParams.steamId;
                 $scope.itemsLoading = true;
                 $scope.totalDisplayed = 80;
-                $http.get('action.php?action=getinventory&steamid=' + $scope.steamId).success(function(data) {
+                api.getInventory($scope.steamId, function(data) {
                     $scope.itemsLoading = false;
                     $scope.items = data.data;
                     $scope.loading = false;
@@ -429,7 +426,7 @@ angular.module('myApp.controllers', ['ngCookies']).
         .controller('ItemDetailCtrl', ['$scope', '$routeParams', '$http', 'api', 'user', function($scope, $routeParams, $http, api, user) {
                 var defindex = $routeParams.itemId;
                 $scope.itemId = defindex;
-                $http.get('action.php?action=getitem&defindex=' + $scope.itemId).success(function(data) {
+                api.getItem($scope.itemId).success(function(data) {
                     var item = data.data[0];
                     var npc_hero_name = item.npc_hero_name;
                     $scope.item = item;
@@ -443,9 +440,6 @@ angular.module('myApp.controllers', ['ngCookies']).
                         item.item_description = 'No description available.';
                     }
                     $scope.item.hero_db = npc_hero_name.substring(14, npc_hero_name.length);
-                });
-                $http.get('friendslist.json').success(function(data) {
-                    $scope.traders = data.data;
                 });
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;

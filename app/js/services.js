@@ -204,6 +204,9 @@ angular.module('myApp.services', []).
 
                 return {
                     searchItems: searchItems,
+                    getItem: function(defindex){
+                        return $http.get('action.php?action=getitem&defindex=' + defindex);
+                    },
                     getLoggedInUser: function() {
                         return $http.get('action.php?action=getLoggedInUser')
                                 .then(function(response) {
