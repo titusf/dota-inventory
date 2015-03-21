@@ -20,9 +20,9 @@
         <link rel="stylesheet" href="css/app.css"/>
         <link rel="icon" href="favicon.ico" />
         <script>
-            (function(i, s, o, g, r, a, m) {
+            (function (i, s, o, g, r, a, m) {
                 i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function() {
+                i[r] = i[r] || function () {
                     (i[r].q = i[r].q || []).push(arguments)
                 }, i[r].l = 1 * new Date();
                 a = s.createElement(o),
@@ -59,10 +59,11 @@
                             <li ng-class="{active: isActive('/users')}"><a href="users/">
                                     <div><span class="glyphicon glyphicon-user"></span> User Inventories</div>
                                 </a></li>
-                            <li ng-class="{active: isActive('/trades')}"><a href="trades/">
-                                    <div><span class="glyphicon glyphicon-transfer"></span> Trades</div>
+                            <li ng-class="{active: isActive('/giveaways')}"><a href="giveaways/">
+                                    <div><span class="glyphicon glyphicon-gift"></span> Giveaways <span style="  position: absolute;
+                                                                                                        top: 38px;
+                                                                                                        right: 44px;" class="new-label">New!</span></div>
                                 </a></li>
-
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class='text-center' ng-hide="loggedIn"><a href="api/members/me/login" target="_self"><img id="login-steam" src="img/sits_small.png"></a></li>

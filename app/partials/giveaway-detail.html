@@ -1,0 +1,167 @@
+<style>
+    #giveaway-id{
+        background-color:#efefef;
+        border-radius:4px;
+        padding:24px 24px 8px 24px;
+        margin-top:22px;
+    }
+    #giveaway-id h2{
+        color:#565656;
+        margin: 9px 0 0 0;
+    }
+    #giveaway-id #giveaway-number{
+        font-size:66px;
+        color:#bd4c40;
+    }
+    #giveaway-id img#giveaway-emblem{
+        margin-right:22px;
+    }
+    .cta-button{
+        font-size: 28px;
+        font-weight: bold;
+    }
+    #tagline{
+        color: #5CB85C;
+        font-size: 22px;
+        font-style: italic;
+    }
+    #giveaway-details{
+        margin-top:12px;
+    }
+    #time-left, #entrants{
+        font-size:28px;
+    }
+    #giveaway-contents{
+        background-color: #484848;
+        color: #BD4C40;
+        border: 2px solid #bd4c40;
+        border-radius: 0 9px 0 9px;
+        padding: 0 9px;
+        box-shadow: 1px 3px 5px #6F6F6F;
+        text-shadow: 1px 1px #000;
+        background:url(img/dark_embroidery.png);
+    }
+    #hosted-by-label{
+        margin: 0;
+        color: #A9A9A9;
+        font-style: italic;
+        text-align: center;
+        background: #E3E3E3;
+    }
+    #running-time{
+        margin-top: 8px;
+        margin-bottom: 18px;
+    }
+    div.giveaway-item{
+        display:inline-block;
+        margin: 0 8px;
+    }
+    #giveaway-winner{
+        text-align: center;
+        background-color: #3B3B3B;
+        border: 2px solid #BD4C40;
+        color: #fff;
+        border-radius:4px;
+    }
+</style>
+<div class="row">
+    <!-- Title and Items list -->
+    <div class="col-md-8 text-center">
+        <h1>{{giveaway.title}}</h1>
+        <p ng-hide='expired' id="tagline">Enter to win <strong>free</strong> items in Dota 2</p>
+        <p ng-show='expired'>This giveaway is now expired. <span ng-if="winner">Congratulations to {{winner.name}} for winning!</span><span ng-if="!winner">The winner is being decided, check back soon.</span></p>
+        <div id="giveaway-contents">
+            <h2 class="clearfix"><span class="glyphicon glyphicon-gift"></span> Giveaway Items <span class="glyphicon glyphicon-gift"></span></h2>
+            <p>The winner will receive each of the following items</p>
+            <div class="text-center">
+                <div class="giveaway-item">
+                    <a href="items/id/4387"><img class="item-img" src="http://cdn.dota2.com/apps/570/icons/econ/items/mirana/mirana_nightsilver_owlion/mirana_nightsilver_owlion.7fb3d0f7438b664722615dd75d4797b04c87b316.png"></a>
+                    <div class="item-details">
+                        <h3><a href="items/hero/mirana"><img src="img/heroes/icons/mirana_icon.png"></a> <a class="rarity-text legendary" href="items/id/4387">Stryff the Owlion</a></h3>
+                    </div>
+                </div>
+                <div class="giveaway-item">
+                    <a href="items/id/4387"><img class="item-img" src="http://cdn.dota2.com/apps/570/icons/econ/items/mirana/mirana_nightsilver_owlion/mirana_nightsilver_owlion.7fb3d0f7438b664722615dd75d4797b04c87b316.png"></a>
+                    <div class="item-details">
+                        <h3><a href="items/hero/mirana"><img src="img/heroes/icons/mirana_icon.png"></a> <a class="rarity-text legendary" href="items/id/4387">Stryff the Owlion</a></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Giveaway ID, time left and sign up button -->
+    <div class="col-md-4">
+        <div id="giveaway-id" class="clearfix text-center">
+            <img id="giveaway-emblem" src="img/giveaway-chest.png" alt="red giveaway chest" class="pull-left"/>
+            <h2>Giveaway</h2>
+            <p id="giveaway-number">#<span>{{giveaway.id}}</span></p>
+            <div id="giveaway-host">
+                <p class="text-center" id="hosted-by-label">Hosted By:</p>
+                <img src="img/header_logo.png">
+            </div>
+        </div>
+        <div id="running-time" class="text-center">
+            <p>Run Date: <span id="start-date">{{giveaway.dateStart}}</span> - <span id="end-date">{{giveaway.dateFinish}}</span> (GMT+0)</p>
+        </div>
+        <div ng-hide='expired'>
+            <button ng-show="!entered" ng-click="enter()" class="btn btn-success btn-block cta-button"><span class="fa fa-steam-square"></span> Enter via Steam</button>
+            <button ng-show="entered" class="btn btn-success btn-block cta-button disabled"><span class="fa fa-ticket"></span> Entered!</button>
+        </div>
+        <button ng-show='expired' style='margin-bottom:12px;' class="btn btn-default btn-block disabled cta-button"><span class="fa fa-ticket"></span> Expired</button>
+        <div ng-hide='expired' id="giveaway-details" class="text-center">
+            <p><span id="time-left">{{timeLeft}}</span> time left</p>
+            <p ng-show="giveaway.entrants > 50"><span id="entrants">{{giveaway.entrants}}</span> entrants</p>
+        </div>
+        <div class='alert alert-info text-center' ng-if='expired && !winner'>
+            The winner is currently being decided.
+        </div>
+        <div ng-if='winner' id="giveaway-winner">
+            <p style='font-size:18px; margin:4px 0;'><img style="width:46px; display:inline-block;" ng-src="{{winner.avatar}}"/> {{winner.name}} <span class='winner-label'>Winner!</span></p>
+        </div>
+    </div>
+</div>
+<!-- ad -->
+<div>
+    <div class="text-center advert section" style="margin-top:24px;">
+        <p class='text-center'>Advertisement</p>
+        <div data-my-ad-sense></div>
+    </div>
+</div>
+<!-- external giveaway providers -->
+<h2 class='text-center'>Guidelines and Terms</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <h3>How to Enter</h3>
+            <div>
+                <p><span class="bignum">1.</span> Sign in through Steam. <a href="api/members/me/login" target="_self"><img id="login-steam" src="img/sits_small.png"></a></p>
+                <p><span class="bignum">2.</span> Click the 'Enter via Steam' button above.</p>
+                <p><span class="bignum">3.</span> Check back later to see if you've won!</p>
+
+                <p style='font-size:20px;' class='text-center' ><strong>That's It, Good Luck!</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <p><strong>Notifying winners and receiving prizes</strong></p>
+        <p>The winners will be displayed on this (the respective) giveaway page and notified through Steam. The items will be traded to your Steam account and the user must be able to accept a friend invite.</p>
+        <p >Please allow <strong>24 hours after the contest expires</strong> for us to add you through Steam.</p>
+
+        <p><strong>Choosing the winners</strong></p>
+        <p>The winners will be chosen by using a program/RNG to select users randomly out of the list of entrants.</p>
+        <p>If we do not receive a response from you - the winner - <strong>within 14 days of winning the contest</strong>, we reserve the right to re-allocate the prizes.</p>
+
+        <p><strong>Maintaining a fair system</strong></p>
+        <p>We reserve the right to withhold any prizes whilst we investigate any behaviour by a user that results in a less fair prize draw for other entrants.</p>
+    </div>
+
+</div>
+
+<div class='text-center' style='  border: 2px solid #D5D5D5;
+     padding-bottom: 9px;'>
+    <h3>Host <strong>your giveaway</strong> on DotaInventory.com</h3>
+    <p><em>Do you run a Twitch stream, YouTube channel or Dota 2 related website?</em> Host your giveaways here to gain more viewers and engage with more people.</p> 
+
+    <a class="btn btn-default" href="http://steamcommunity.com/id/mchairmaster/"><span class="fa fa-steam"></span> <strong>Contact me on Steam</strong> to get started</a>
+</div>

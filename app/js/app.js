@@ -34,6 +34,9 @@ angular.module('myApp', [
                 // Bundles Routes
                 $routeProvider.when('/bundles', {templateUrl: 'partials/bundles-list.html', controller: 'BundlesRootCtrl'});
                 $routeProvider.when('/bundles/:bundle_id_name', {templateUrl: 'partials/bundle-detail.html', controller: 'BundleDetailCtrl'});
+                // Giveaway routes
+                $routeProvider.when('/giveaways', {templateUrl: 'partials/giveaways-front.html', controller: 'GiveawayFrontCtrl'});
+                $routeProvider.when('/giveaways/:giveawayid', {templateUrl: 'partials/giveaway-detail.html', controller: 'GiveawayDetailCtrl'});
                 //Trade routes (lol)
                 $routeProvider.when('/trades', {templateUrl: 'partials/trade-front.html', controller: 'TradeCtrl'});
                 $routeProvider.when('/trades/id/:tradeId', {templateUrl: 'partials/trade-detail.html', controller: 'TradeDetailCtrl'});

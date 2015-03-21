@@ -654,7 +654,11 @@ li.hero p{
     color:#D9517A;
 }
 div.advert{
-
+    background: #EFEFEF;
+    padding-bottom: 13px;
+    padding-top: 1px;
+    color: #BD4C40;
+    padding:1px 4px 13px 4px;
 }
 div.advert p{
     margin:3px 0;
@@ -666,3 +670,22 @@ span.bignum{
 #item-detail-market{
 
 }
+span.new-label{
+    color: rgb(240, 238, 117);
+    font-style: italic;
+    font-size: 10px;
+    background-color: #5D5353;
+    padding: 0px 4px;
+    border-radius: 4px;
+}
+
+span.winner-label{
+      background: #BD4C40;
+  text-shadow: 1px 1px #C86B6B;
+  color: #3B2C2C;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-weight: bold;
+  border: 2px solid #8E1818;
+}
+

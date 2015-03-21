@@ -1,0 +1,142 @@
+<style>
+    .giveaway-list-item{
+        position: relative;
+        text-align: center;
+        background: #efefef;
+        padding: 8px 24px 8px 24px;
+        border: 2px solid #E2E2E2;
+        border-radius: 4px;
+    }
+    .giveaway-id{
+        font-size: 40px;
+        color: #bd4c40;
+    }
+    .giveaway-title{
+        font-size:24px;
+    }
+    .active-status-label{
+        font-size: 24px;
+        padding: 2px 18px;
+        border-radius: 4px;
+    }
+    .active-status-label.active{
+        background: #8FD133;
+        color: #fff;
+    }
+    .active-status-label.empty{
+        background: #E3E3E3;
+        color: #fff;
+    }
+    .hosted-by-label{
+        margin: 0;
+        color: #A9A9A9;
+        font-style: italic;
+        text-align: center;
+        background: #E3E3E3;
+    }
+    .label-container{
+        padding-top:11px;
+    }
+
+    .giveaway-list-item.empty{
+        border-style:dashed;
+        color: #A9A9B1;
+        background-color: #FFF;
+    }
+    .giveaway-list-item.empty .giveaway-id{
+        color:#A9A9A9;
+    }
+
+
+
+</style>
+
+<h1 class="text-center">Dota 2 Item Giveaways</h1>
+<p class="text-center">Regular giveaways from DotaInventory.com and partner sites; Twitch streamers and channels. Check back often to be in for a chance to win <strong>FREE</strong> items for your heroes in Dota 2.</p>
+
+<div id="giveaway-list">
+    <div class="row">
+        <div ng-repeat="giveaway in giveaways| limitTo:3" class="col-md-4" >
+
+            <div ng-if="giveaway.status === 'active'" class="giveaway-list-item">
+                <div class="row">
+                    <div class="col-md-3"><span class="giveaway-id">#{{giveaway.id}}</span></div>
+                    <div class="col-md-9">
+                        <div class="label-container"><a href="#"><span class="active-status-label active">Enter to Win</span></a></div>
+                    </div>
+                </div>
+                <p class="giveaway-title"><a href="giveaways/1">First Official Giveaway</a></p>
+                <div>
+                    <p class="hosted-by-label">Hosted By:</p>
+                    <img src="img/header_logo.png">
+                </div>
+            </div>
+
+            <div ng-if="giveaway.status === 'empty'" class="giveaway-list-item empty">
+                <div class="row">
+                    <div class="col-md-3"><span class="giveaway-id">#{{giveaway.id}}</span></div>
+                    <div class="col-md-9"><div class="label-container"><span class="active-status-label empty">Empty Spot</span></div></div>
+                </div>
+                <p class="giveaway-title">Host Your Giveaways at DotaInventory.com</p>
+                <a class="btn btn-default" href="http://steamcommunity.com/id/mchairmaster/"><span class="fa fa-steam"></span> <strong>Contact me on Steam</strong> to get started</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ad -->
+    <div>
+        <div class="text-center advert section" style="margin-top:24px;">
+            <p class='text-center'>Advertisement</p>
+            <div data-my-ad-sense></div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:24px;">
+        <div ng-repeat="giveaway in giveaways| limitFromTo:3:6" class="col-md-4" >
+
+            <div ng-if="giveaway.status === 'active'" class="giveaway-list-item">
+                <div class="row">
+                    <div class="col-md-3"><span class="giveaway-id">#{{giveaway.id}}</span></div>
+                    <div class="col-md-9">
+                        <div class="label-container"><a href="#"><span class="active-status-label active">Enter to Win</span></a></div>
+                    </div>
+                </div>
+                <p class="giveaway-title"><a href="giveaways/1">First Official Giveaway</a></p>
+                <div>
+                    <p class="hosted-by-label">Hosted By:</p>
+                    <img src="img/header_logo.png">
+                </div>
+            </div>
+
+            <div ng-if="giveaway.status === 'empty'" class="giveaway-list-item empty">
+                <div class="row">
+                    <div class="col-md-3"><span class="giveaway-id">#{{giveaway.id}}</span></div>
+                    <div class="col-md-9"><div class="label-container"><span class="active-status-label empty">Empty Spot</span></div></div>
+                </div>
+                <p class="giveaway-title">Host Your Giveaways at DotaInventory.com</p>
+                <a class="btn btn-default" href="http://steamcommunity.com/id/mchairmaster/"><span class="fa fa-steam"></span> <strong>Contact me on Steam</strong> to get started</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
