@@ -1,7 +1,7 @@
 <div class="item-box {{item.item_rarity}} clearfix">
     <div class="overlay-icons">
-        <span ng-if="!inWishList" ng-click="addToWishList()" class="glyphicon glyphicon-star-empty wishlist-icon"></span>
-        <span ng-if="inWishList" ng-click="removeFromWishList()" class="glyphicon glyphicon-star wishlist-icon-active"></span>
+        <span ng-if="!inWishlist" ng-click="addToWishlist()" class="glyphicon glyphicon-star-empty wishlist-icon"></span>
+        <span ng-if="inWishlist" ng-click="removeFromWishlist()" class="glyphicon glyphicon-star wishlist-icon-active"></span>
         <!--<span class="glyphicon glyphicon-star wishlist-icon-active"></span>-->
         <img ng-if="item.used_by_heroes" class="hero-icon" ng-src="{{constructHeroIconUrl(item.used_by_heroes)}}" />
     </div>

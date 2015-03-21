@@ -1,0 +1,69 @@
+<style>
+    .bundle-item{
+        margin-bottom:9px;
+    }
+    .bundle-item > *{
+        display:inline-block;
+    }
+    .bundle-item img{
+        width:104px;
+        margin-right:9px;
+        vertical-align:top;
+    }
+    .bundle-item h3{
+        margin-top:3px;
+    }
+    .bubble-label{
+        padding:2px 4px;
+        border-radius:4px;
+        color:#fff;
+    }
+    .bundle-item .price, .grey-label{
+        display: inline-block;
+        background-color: #eee;
+        padding: 2px 4px;
+        margin-left: 10px;
+        border-radius: 4px;
+    }
+    .big-price{
+        font-size:40px;
+        margin-bottom:0;
+    }
+    .bestPrice{
+        font-weight:bold;
+    }
+</style>
+
+<div class="text-center section">
+    <h1>{{bundle.normal_name}} <small>Dota 2 Bundle</small></h1>
+    <div class="row">
+        <div class="col-md-3">
+            <img style="border: 3px solid #333;" ng-src="{{bundleItem.image_url}}" />
+            <h3>Rarity: <span class="rarity {{bundleItem.item_rarity}} bubble-label"><a href="items/rarity/{{bundleItem.item_rarity}}">{{bundleItem.item_rarity}}</a></span></h3>
+            <h3>Hero: <img ng-src="img/heroes/icons/{{stripNpcPrefix(bundleItem.used_by_heroes)}}_icon.png"/> <a href="items/hero/{{stripNpcPrefix(bundleItem.used_by_heroes)}}">{{heroes[bundleItem.used_by_heroes]}}</a></h3>
+            <p><em>{{bundleItem.item_description}}</em></p>
+            <a ng-href="items/id/{{bundleItem.defindex}}" class="btn btn-xs btn-block btn-default">Go to item page</a>
+        </div>
+        <div class="col-md-7 text-left">
+            <div id="bundle-items">
+                <p><strong>Bundle Contents</strong></p>
+                <div class="clearfix bundle-item" ng-repeat="item in bundleItems">
+                    <img ng-src="{{item.image_url}}" />
+                    <div>
+                        <h3><a ng-href="items/id/{{item.defindex}}">{{item.item_name}}</a> <a target="_blank" class="btn btn-default btn-xs" ng-href="http://steamcommunity.com/market/listings/570/{{item.item_name}}"><span class="glyphicon glyphicon-new-window"></span> Market</a></h3>
+                        <p style="text-transform: capitalize;"><span ng-if='item.used_by_heroes' class="hero-name"><strong>{{heroes[item.used_by_heroes]}}</strong>'s</span> <span class="rarity-text {{item.item_rarity}}">{{item.item_rarity}}</span> {{item.item_type_name}} <span style="display:inline-block;" class="price">{{bundleItemPrices[item.defindex]}}</span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <strong>Bundle Price:</strong>
+            <p class="big-price" ng-class="{bestPrice: bundleBetter}">{{bundlePrice}}</p>
+            <a target="_blank" style="margin-bottom:4px;" class="btn btn-default btn-block btn-xs" ng-href="http://steamcommunity.com/market/listings/570/{{bundleItem.item_name}}"><span class="glyphicon glyphicon-new-window"></span> Go To Market</a>
+            <span class="grey-label">Bought Separately:</span>
+            <p class="big-price" ng-class="{bestPrice: contentsBetter}">{{contentsPrice}}</p>
+            <p ng-show="contentsPriceMissing"><span class="glyphicon glyphicon-warning-sign"></span> Prices Missing</p>
+        </div>
+    </div>
+</div>
+

@@ -3,12 +3,15 @@
     <h1>{{item.item_name}} <small>Dota 2 Item {{item_price}}</small></h1>
 </div>
 
+<div ng-show="item.item_class === 'bundle'" class="alert alert-info text-center">
+    <h3>Bundle Page Available</h3>
+    <p>This item is a bundle. <a href="bundles/{{bundleId}}"><strong>Visit the bundle page</strong></a></p>
+</div>
+
 <div class="section">
     <div class="row">
         <div class="col-md-3">
             <img class=" img-responsive main-item-img" ng-src="{{item.image_url}}" />
-
-
         </div>
         <div class="col-md-6">
             <div class="row" id="item-hero" ng-hide="noHero">
@@ -24,7 +27,8 @@
                     </div>
                     <div class="item-stat">
                         <p>FAV</p>
-                        <span class="glyphicon glyphicon-star-empty"></span>
+                        <span ng-if='inWishList' class="glyphicon glyphicon-ok"></span>
+                        <span ng-if='!inWishList' class='glyphicon glyphicon-remove'></span>
                     </div>
                     <div class="item-stat">
                         <p>RNK</p>
@@ -37,7 +41,7 @@
                     <a href="items/rarity/{{item.item_rarity}}">{{item.item_rarity}}</a>
                 </div>
                 <div class="col-md-4">{{item.item_type_name}}</div>
-                <div class="col-md-4">{{item.item_set}}</div>
+                <div class="col-md-4"><a ng-if="item.item_set !== 'No Item Set'" ng-href="bundles/{{item.item_set}}">{{item.item_set}}</a></div>
             </div>
             <div class="row" style="min-height: 110px;
                  border: 1px solid #eee;">
@@ -46,8 +50,8 @@
                 </div>
                 <div class="col-md-12 text-right" style="margin-bottom:9px;">
                     <div ng-if="loggedIn">
-                        <button ng-if="!inWishList" ng-click="addToWishList(itemId)" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-star"></span> Add to Want List</button>
-                        <button ng-if="inWishList" ng-click="removeFromWishList(itemId)" type="button" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-minus"></span> Remove from Want List</button>
+                        <button ng-if="!inWishList" ng-click="addToWishlist(itemId)" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-star"></span> Add to Want List</button>
+                        <button ng-if="inWishList" ng-click="removeFromWishlist(itemId)" type="button" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-minus"></span> Remove from Want List</button>
                     </div>
                 </div>
 
@@ -78,6 +82,7 @@
     </div>
 </div>
 <hr/>
+<!--
 <div class="section">
     <div class="row">
         <div class="col-md-4">
@@ -87,7 +92,9 @@
         </div>
     </div>
 </div>
+-->
 
+<p class='text-center'>Advertisement</p>
 <div class="text-center advert section"style="margin-top:24px;">
     <div data-my-ad-sense></div>
 </div>

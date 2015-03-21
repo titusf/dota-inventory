@@ -163,17 +163,22 @@
             <button type="button" class="btn btn-default btn-xs" ng-click="viewAsGrid()"><span class="glyphicon glyphicon-th"></span> Grid View</button>
             <button type="button" class="btn btn-default btn-xs" ng-click="viewAsList()"><span class="glyphicon glyphicon-list"></span> List View</button>
         </div>
-        <div class="alert alert-info text-center" ng-hide="filteredItems.length">
-            Nothing found.
+        <div class="alert alert-warning text-center" ng-hide="items.length">
+            <h2>0 Item Results</h2>
+            <p>It's a sad day when there are no items to display.</p>
+        </div>
+        <div class="alert alert-info text-center" ng-show="filteredItems.length == 0 && items.length">
+            <h2>Empty Filter Results</h2>
+            <p>Try changing the filters, there are other items to show.</p>
         </div>
         <div class="text-center">
-            <pagination boundary-links="false" total-items="filteredItems.length" items-per-page="96" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+            <pagination ng-show="filteredItems.length" boundary-links="false" total-items="filteredItems.length" items-per-page="96" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
         </div>
         <div class="dota-item" ng-repeat="item in filteredItems = (sortedItems| filter:{name:filterText, item_rarity:rarity, used_by_heroes:hero, item_class:class}) | limitFromTo:(currentPage-1)*96:currentPage*96">
-            <dota-item-block item="item" owners="owners" heroes="heroes"></dota-item-block>
+            <dota-item-block item="item" owners="owners[item.defindex]" heroes="heroes"></dota-item-block>
         </div> 
         <div class="text-center">
-            <pagination boundary-links="false" total-items="filteredItems.length" items-per-page="96" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+            <pagination ng-show="filteredItems.length" boundary-links="false" total-items="filteredItems.length" items-per-page="96" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
         </div>
     </div>
 </div>

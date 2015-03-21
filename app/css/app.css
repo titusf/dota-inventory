@@ -50,17 +50,15 @@ h1{
 }
 /* Front page icons */
 .feature .feature-icon{
-    display:inline-block;
-    font-size: 32px;
+    font-size: 40px;
     vertical-align:super;
     margin-right:14px;
-    width:32px;
+    width:40px;
     text-align:center;
+    float:left;
 }
 .feature .feature-description{
     padding-top:7px;
-    display:inline-block;
-    
 }
 
 /* Nav */
@@ -103,7 +101,7 @@ p.temporary{
 }
 
 #wrap > .container{
-    padding-top: 84px;
+    padding-top: 68px;
     padding-bottom: 13px;
 }
 #footer p{
@@ -378,7 +376,7 @@ body {
 
 /* Set the fixed height of the footer here */
 #footer {
-    height: 90px;
+    height: 150px;
     background-color: #1A1A1A;
     text-align: center;
     border-top:2px solid #E48A8A;
@@ -409,13 +407,6 @@ body {
 }
 .loading > img {
 }
-#login-steam{
-    margin-top:10px;
-}
-#nav-logo{
-
-}
-
 .page-title{
     padding:20px 30px;
 }
@@ -428,14 +419,13 @@ body {
 }
 
 #item-categories .rarity{
+    min-width:110px;
     color: #fff;
-    width: 12%;
     display: inline-block;
     text-align: center;
     margin-bottom: 4px;
-    border:1px solid #666;
     font-weight:bold;
-    text-transform:none;
+    border-radius:4px;
 }
 #item-categories .rarity a{
     display:block;
@@ -584,7 +574,7 @@ li.hero p{
     margin:10px;
 }
 .search-user-result{
-    width: 660px;
+    max-width: 660px;
     margin: 0 auto;
     padding: 5px;
     margin-bottom: 10px;
@@ -658,10 +648,16 @@ li.hero p{
 .simple-grey-box{
     background-color: #fafafa;
     border: 1px solid #eee;
-    padding: 2px;
+    padding: 3px 6px;
 }
 .simple-grey-box h3{
-    margin-top:4px;
+    color:#D9517A;
+}
+div.advert{
+
+}
+div.advert p{
+    margin:3px 0;
 }
 span.bignum{
     font-size:20px;

@@ -8,6 +8,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                     user.logout();
                     window.location.reload();
                 };
+                $scope.isCollapsed = true;
                 // Loading whether user is logged in.
                 user.steamidPromise.then(function(result) {
                     $scope.loggedIn = user.loggedIn;
@@ -17,8 +18,8 @@ angular.module('myApp.controllers', ['ngCookies']).
                     $scope.loadingInventory = false;
                     if (user.loggedIn) {
                         $scope.loadingProfile = true;
-                        user.profilePromise.then(function(result) {
-                            $scope.user = result.data;
+                        user.profilePromise.then(function(userProfile) {
+                            $scope.user = userProfile;
                             $scope.loadingProfile = false;
                             //Now load inventory.
                             $scope.loadingInventory = true;
@@ -43,11 +44,11 @@ angular.module('myApp.controllers', ['ngCookies']).
         .controller('TitleCtrl', ['$scope', 'title', function($scope, title) {
                 $scope.title = title;
             }])
-        .controller('FrontPageCtrl', ['$scope', '$http', 'api', function($scope, $http, api) {
+        .controller('FrontPageCtrl', ['$scope', '$http', 'api', 'Heroes', function($scope, $http, api, Heroes) {
                 $scope.rarities = ["common", "uncommon", "rare", "mythical",
                     "legendary", "ancient", "immortal", "arcana"];
                 $scope.heroes = [];
-                api.getHeroes(function(data){
+                api.getHeroes(function(data) {
                     angular.forEach(data.data, function(value, key) {
                         var dbName = key.substring(14, key.length);
                         $scope.heroes.push({
@@ -77,7 +78,7 @@ angular.module('myApp.controllers', ['ngCookies']).
                                 $scope.loadingQuery = false;
                             } else if (query.substring(0, 29) === "http://steamcommunity.com/id/") {
                                 var vanity = query.substring(29, query.length);
-                                api.resolveVanityUrl(vanity).then(function(data){
+                                api.resolveVanityUrl(vanity).then(function(data) {
                                     if (data.success === true) {
                                         var steamid = data.data;
                                         $scope.results.push({
@@ -114,24 +115,24 @@ angular.module('myApp.controllers', ['ngCookies']).
                                     }
                                 });
                                 //Compare against heroes.
-                                angular.forEach($scope.heroes, function(hero, index) {
-                                    hero.name = hero.name.toLowerCase();
-                                    if (hero.name.indexOf(query) !== -1) {
-                                        $scope.results.push({
-                                            link: "items/hero/" + hero.dbName,
-                                            title: "View All " + hero.name + " Items"
-                                        });
-                                    }
+                                Heroes.getArray().then(function(heroes) {
+                                    angular.forEach(heroes, function(heroName, dbKey) {
+                                        var heroNameLower = heroName.toLowerCase();
+                                        if (heroNameLower.indexOf(query) !== -1) {
+                                            $scope.results.push({
+                                                link: "items/hero/" + Heroes.stripNpcPrefix(dbKey),
+                                                title: "View All " + heroName + " Items"
+                                            });
+                                        }
+                                    });
                                 });
                                 //Compare against item names.
-                                $http.get('api/action.php?action=getmatchingitemcount&query=' + query).success(function(data) {
-                                    var matchCount = data.data[0].count;
+                                $http.get('api/items?fields=id,name&name=' + query).success(function(data) {
+                                    var matchCount = data.length;
                                     if (matchCount == 1) {
-                                        $http.get('api/action.php?action=getitem&name=' + query).success(function(data) {
-                                            $scope.results.push({
-                                                link: "items/id/" + data.data[0].defindex,
-                                                title: data.data[0].name
-                                            });
+                                        $scope.results.push({
+                                            link: "items/id/" + data[0].defindex,
+                                            title: data[0].name
                                         });
                                     } else {
                                         $scope.results.push({
@@ -147,22 +148,31 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
             }])
-        .controller('ItemCategoriesCtrl', ['$scope', 'api', '$location', 'Heroes', function($scope, api, $location, Heroes) {
+        .controller('ItemCategoriesCtrl', ['$scope', '$location', 'Heroes', 'title', function($scope, $location, Heroes, title) {
+                title.setTitle("Browse Dota 2 Items - DotaInventory.com");
+
                 $scope.heroes = [];
-                api.getHeroes(function(data){
-                    angular.forEach(data.data, function(value, key) {
-                        var dbName = Heroes.stripNpcPrefix(key);
+                Heroes.getArray().then(function(heroes) {
+                    angular.forEach(heroes, function(value, key) {
+                        var shortDbName = Heroes.stripNpcPrefix(key);
                         $scope.heroes.push({
                             name: value,
-                            dbName: dbName
+                            dbName: shortDbName
                         });
                     });
+                });
+                Heroes.getProperName("npc_dota_hero_ursa").then(function(heroName) {
+                    console.log(heroName);
+                }, function(fail) {
+                    console.log(fail);
                 });
                 $scope.goToSearchResults = function(query) {
                     $location.path('items/name/' + query);
                 };
             }])
-        .controller('UserFrontCtrl', ['$scope', '$http', 'api', 'SearchUser', function($scope, $http, api, SearchUser) {
+        .controller('UserFrontCtrl', ['$scope', '$http', 'api', 'SearchUser', 'title', function($scope, $http, api, SearchUser, title) {
+                title.setTitle("Steam User Search - DotaInventory.com")
+
                 //Get Recent Users
                 $http.get('api/action.php?action=getrecentusers').success(function(data) {
                     $scope.friends = data.data;
@@ -179,7 +189,6 @@ angular.module('myApp.controllers', ['ngCookies']).
                         //Get profile from this straight away.
                         performProfileFetch(userQuery);
                     } else if (SearchUser.isCommunityUrl(userQuery)) {
-                        console.log("fetching user");
                         //Attempt to get steamid from community URL.
                         SearchUser.getSteamidFromUrl(userQuery).then(function(result) {
                             performProfileFetch(result);
@@ -193,20 +202,18 @@ angular.module('myApp.controllers', ['ngCookies']).
                         $scope.invalid = true;
                         $scope.searching = false;
                         $scope.invalidReason = "You did not enter a valid Steamid or Community URL."
-                        console.log("Error");
+                        console.log("Error (user search)");
                     }
                 };
                 var performProfileFetch = function(steamid) {
-                    api.getUserDetails(steamid, function(response) {
-                        if (response.success === true) {
-                            $scope.profileSuccess = true;
-                            $scope.searching = false;
-                            $scope.user = response.data;
-                        }
+                    api.getUserDetails(steamid).then(function(response) {
+                        $scope.profileSuccess = true;
+                        $scope.searching = false;
+                        $scope.user = response.data;
                     });
                 };
             }])
-        .controller('UserDetailCtrl', ['$scope', '$routeParams', 'api', 'ItemList', 'user', function($scope, $routeParams, api, itemList, user) {
+        .controller('UserDetailCtrl', ['$scope', '$routeParams', 'api', 'user', 'title', function($scope, $routeParams, api, user, title) {
                 var steamid = $routeParams.steamId;
                 $scope.steamId = steamid;
 
@@ -216,53 +223,51 @@ angular.module('myApp.controllers', ['ngCookies']).
                 // Set the default number of items to display.
                 $scope.totalDisplayed = 120;
 
-
                 // Check if this is the logged in user's page.
                 if (user.loggedIn && user.steamid === steamid) {
                     if (user.steamid === steamid) {
-                        $scope.loading = false;
                         $scope.loggedInUserProfile = true;
-                        user.profilePromise.then(function(result) {
-                            $scope.user = result.data;
-                        });
-                        user.inventoryPromise.then(function() {
-                            $scope.items = user.inventory;
-                        });
                     }
                     // Otherwise, this is not a logged in user's page. (Or user is not logged in.)
-                } else {
+                }
 
-                    api.getUserDetails($scope.steamId, function(data) {
-                        if (data.success == true) {
-                            $scope.userApiFail = false;
-                            $scope.user = data.data;
-                            $scope.loading = false;
-                            if ($scope.user.community_visibility_state !== '3') {
-                                $scope.user.isprivate = true;
-                            }
-                            api.getInventory($scope.steamId, function(data) {
-                                $scope.loading = false;
-                                if (data.success == true) {
-                                    $scope.items = data.data;
-                                    $scope.itemsApiFail = false;
-                                } else {
-                                    $scope.itemsApiFail = true;
-                                    $scope.errorMessage = data.data;
-                                }
+                api.getUserDetails($scope.steamId).then(function(response) {
+                    title.setTitle(response.data.personaname + "'s Inventory - DotaInventory.com");
+                    $scope.userApiFail = false;
+                    $scope.user = response.data;
+                    $scope.loading = false;
+                    if ($scope.user.community_visibility_state !== '3') {
+                        $scope.user.isprivate = true;
+                    }
+                    api.getInventory($scope.steamId, function(inventoryItems) {
+                        $scope.loading = false;
+                        var defindexes = [];
+                        angular.forEach(inventoryItems, function(item, key) {
+                            defindexes.push(item.defindex);
+                        });
+                        if (defindexes.length > 0) {
+                            // Now pass in the array of defindexes to itemSearch api call.
+                            api.searchItems(null, null, null, null, defindexes).then(function(items) {
+                                $scope.items = items;
                             });
                         } else {
-                            $scope.loading = false;
-                            $scope.userApiFail = true;
-                            $scope.errorMessage = data.data;
+                            $scope.items = [];
                         }
+                    }, function(fail) {
+                        $scope.itemsApiFail = true;
+                        $scope.errorMessage = fail;
                     });
-                }
+                }, function(fail) {
+                    $scope.loading = false;
+                    $scope.userApiFail = true;
+                    $scope.errorMessage = fail;
+                });
 
             }])
         .controller('ItemSearchCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
                 var searchTerm = $routeParams.searchTerm;
-                $http.get('api/action.php?action=getmatchingitems&name=' + searchTerm).success(function(data) {
-                    $scope.items = data.data;
+                $http.get('api/items?name=' + searchTerm).success(function(data) {
+                    $scope.items = data;
                 });
             }])
         .controller('FriendsListCtrl', ['$scope', '$routeParams', 'api', 'title', 'ItemList', function($scope, $routeParams, api, title, itemList) {
@@ -276,10 +281,12 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.totalDisplayed = 120;
                 $scope.loadingUser = true;
                 $scope.percentComplete = 0;
+
+                $scope.items = [];
                 //Get main user's details.
-                api.getUserDetails(steamId, function(data) {
+                api.getUserDetails(steamId).then(function(response) {
                     $scope.loadingUser = false;
-                    $scope.user = data.data;
+                    $scope.user = response.data;
                     if ($scope.user.community_visibility_state === '3') {
                         $scope.user.ispublic = true;
                     } else {
@@ -287,28 +294,31 @@ angular.module('myApp.controllers', ['ngCookies']).
                     }
                 });
                 $scope.loadingFriends = true;
+
+                var defindexMasterList = [];
+                var owners = [];
+
                 //Get friendslist / staemids.
-                api.getFriendsList(steamId, function(data) {
-                    var friend_ids = data.data;
-                    console.log(friend_ids.length);
+                api.getFriendsList(steamId, function(friends) {
+                    var friend_ids = friends;
                     $scope.friendCount = friend_ids.length;
                     var friendslist = new Array();
                     //Iterate over steamids and load profiles.
                     angular.forEach(friend_ids, function(friend, n) {
-                        api.getUserDetails(friend['friend_steamid'], function(data) {
-                            if (data.success === true) {
-                                var friend = data.data;
-                                friend.loading = false;
-                                friendslist.push(friend);
-                                loadInUserInventory(friend);
-                            }
+                        api.getUserDetails(friend['friend_steamid']).then(function(response) {
+                            var friend = response.data;
+                            friend.loading = false;
+                            friendslist.push(friend);
+                            combineDefindexLists(friend);
+                        }, function(error) {
+                            console.log("Could not load friend: " + friend['friend_steamid']);
                         });
                     });
+
                     $scope.loadingFriends = false;
                     title.setTitle($scope.user.personaname + "'s Friendslist");
                     $scope.friendslist = friendslist;
-                    $scope.items = itemList.getItemList();
-                    $scope.owners = itemList.getOwners();
+                    //$scope.items = itemList.getItemList();
                     $scope.item_count = 0;
 
                     $scope.friendsPrivate = 0;
@@ -317,41 +327,79 @@ angular.module('myApp.controllers', ['ngCookies']).
                         return Math.floor((value / total) * 100);
                     }
 
-                    function loadInUserInventory(friend) {
+                    function combineDefindexLists(friend) {
                         friend.loading = true;
                         if (friend.community_visibility_state === '3') {
-                            api.getInventory(friend.steamid, function(data) {
+                            api.getUserInventory(friend.steamid).then(function(response) {
+                                var inventory = response.data;
+                                friend.inventory_private = false;
+
+                                // Loop that attempts to add defindexes without dupes.
+                                for (var i = 0; i < inventory.length; i++) {
+                                    var inventoryItem = inventory[i];
+                                    // Owner stuff (add to)
+                                    if (typeof owners[inventoryItem.defindex] === "undefined") {
+                                        owners[inventoryItem.defindex] = [];
+                                    }
+                                    owners[inventoryItem.defindex].push({
+                                        details: {
+                                            steamid: friend.steamid,
+                                            personaname: friend.personaname
+                                        },
+                                        quantity: inventoryItem.quantity
+                                    });
+
+                                    var isItemAlreadyThere = false;
+                                    for (var j = 0; j < defindexMasterList.length; j++) {
+                                        if (inventoryItem.defindex === defindexMasterList[j]) {
+                                            isItemAlreadyThere = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!isItemAlreadyThere) {
+                                        defindexMasterList.push(inventoryItem.defindex);
+                                    }
+                                }
+                            }, function(error) {
+                                friend.inventory_private = true;
+                            }).finally(function() {
                                 friend.loading = false;
                                 $scope.friendsLoaded++;
                                 $scope.percentComplete = toPercent($scope.friendsLoaded, $scope.friendCount);
-                                if (data.success === true) {
 
-                                    friend.inventory_private = false;
-                                    var friendItems = data.data;
-                                    itemList.addUserItems(friendItems, friend);
-                                    $scope.item_count = itemList.getLength();
-                                } else {
-                                    $scope.friendslistPrivate.push(friend);
-                                    $scope.friendsPrivate++;
-                                    friend.inventory_private = true;
-                                    console.log(friend.personaname + " is private");
+                                if ($scope.percentComplete === 100) {
+                                    getItemsViaMultiRequests();
+                                    $scope.owners = owners;
                                 }
                             });
                         } else {
+                            friend.inventory_private = true;
                             friend.loading = false;
                             $scope.friendsLoaded++;
                         }
                     }
-                });
-            }])
-        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', 'user', function($scope, $routeParams, api, user) {
+
+                    function getItemsViaMultiRequests() {
+                        while (defindexMasterList.length) {
+                            api.searchItems(null, null, null, null, defindexMasterList.splice(0, 100)).then(function(items) {
+                                $scope.items = $scope.items.concat(items);
+                            });
+                        }
+                    }
+
+                }
+                );
+            }
+        ])
+        .controller('UserWishListCtrl', ['$scope', '$routeParams', 'api', 'user', 'title', function($scope, $routeParams, api, user, title) {
                 var steamid = $routeParams.steamId;
                 $scope.steamid = steamid;
-                api.getUserDetails(steamid, function(data) {
-                    $scope.user = data.data;
+                api.getUserDetails(steamid).then(function(response) {
+                    $scope.user = response.data;
+                    title.setTitle($scope.user.personaname + "'s Wishlist - DotaInventory.com");
                 });
                 api.getWishList(steamid).then(function(response) {
-                    $scope.items = response.data;
+                    $scope.items = response;
                 });
                 $scope.deleteWishList = function() {
                     var result = confirm("Really delete ALL items?");
@@ -360,7 +408,6 @@ angular.module('myApp.controllers', ['ngCookies']).
                             window.location.reload();
                         });
                     }
-
                 };
                 if (user.loggedIn && user.steamid === steamid) {
                     if (user.steamid === steamid) {
@@ -371,7 +418,7 @@ angular.module('myApp.controllers', ['ngCookies']).
         .controller('ItemHeroCtrl', ['$scope', 'api', 'Heroes', function($scope, api, Heroes) {
                 $scope.heroes = [];
                 api.getHeroes(function(data) {
-                    angular.forEach(data.data, function(value, key) {
+                    angular.forEach(data, function(value, key) {
                         var dbName = Heroes.stripNpcPrefix(key);
                         $scope.heroes.push({
                             name: value,
@@ -386,48 +433,51 @@ angular.module('myApp.controllers', ['ngCookies']).
                 $scope.totalDisplayed = 80;
                 api.getInventory($scope.steamId, function(data) {
                     $scope.itemsLoading = false;
-                    $scope.items = data.data;
+                    $scope.items = data;
                     $scope.loading = false;
                 });
             }])
-        .controller('ItemListRarityCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
+        .controller('ItemListRarityCtrl', ['$scope', '$routeParams', 'api', 'title', function($scope, $routeParams, api, title) {
                 var rarity = $routeParams.rarity;
+                title.setTitle(rarity + " Dota 2 Items - DotaInventory.com");
                 $scope.rarity = rarity;
-                $http.get('api/action.php?action=getmatchingitems&rarity=' + rarity).success(function(data) {
-                    $scope.items = data.data;
+                api.searchItems([rarity], null, null, null, null).then(function(items) {
+                    $scope.items = items;
                 });
             }])
-        .controller('ItemListHeroCtrl', ['$scope', '$routeParams', '$http', 'api', function($scope, $routeParams, $http, api) {
+        .controller('ItemListHeroCtrl', ['$scope', '$routeParams', 'api', 'Heroes', 'title', function($scope, $routeParams, api, Heroes, title) {
                 var npcHeroName = 'npc_dota_hero_' + $routeParams.heroName;
                 $scope.npcHeroName = $routeParams.heroName;
                 $scope.heroName = $routeParams.heroName;
-                api.getHeroName(npcHeroName, function(data) {
-                    $scope.heroName = data.data.localized_name;
+
+                Heroes.getProperName(npcHeroName).then(function(properName) {
+                    $scope.heroName = properName;
+                    title.setTitle(properName + " Hero Items - DotaInventory.com");
                 });
-                $http.get('api/action.php?action=getmatchingitems&hero=' + npcHeroName).success(function(data) {
-                    $scope.items = data.data;
+                api.searchItems(null, [npcHeroName], null, null, null).then(function(items) {
+                    $scope.items = items;
                 });
             }])
-        .controller('ItemListTypeCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
+        .controller('ItemListTypeCtrl', ['$scope', '$routeParams', 'api', 'title', function($scope, $routeParams, api, title) {
                 var typeName = $routeParams.typeName;
+                title.setTitle("Dota 2 " + typeName + "s - DotaInventory.com");
                 $scope.typeName = typeName;
                 api.getItemsByType(typeName).then(function(successData) {
-                    if (successData.success === true) {
-                        $scope.items = successData.data;
-                    } else {
-
-                    }
+                    $scope.items = successData;
                 });
             }])
         .controller('FriendsItemsCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
 
 
             }])
-        .controller('ItemDetailCtrl', ['$scope', '$routeParams', '$http', 'api', 'user', function($scope, $routeParams, $http, api, user) {
+        .controller('ItemDetailCtrl', ['$scope', '$routeParams', 'api', 'user', 'Member', 'title', function($scope, $routeParams, api, user, Member, title) {
                 var defindex = $routeParams.itemId;
                 $scope.itemId = defindex;
                 api.getItem($scope.itemId).success(function(data) {
-                    var item = data.data[0];
+                    var item = data[0];
+
+                    title.setTitle(item.item_name + " - DotaInventory.com");
+
                     var npc_hero_name = item.npc_hero_name;
                     $scope.item = item;
                     if ($scope.item.item_set === "") {
@@ -440,13 +490,23 @@ angular.module('myApp.controllers', ['ngCookies']).
                         item.item_description = 'No description available.';
                     }
                     $scope.item.hero_db = npc_hero_name.substring(14, npc_hero_name.length);
+                    if ($scope.item.item_class === "bundle") {
+                        api.getBundleIds().then(function(response) {
+                            var bundles = response.data;
+                            angular.forEach(bundles, function(bundle, key) {
+                                if (item.item_name.indexOf(bundle.normal_name) > -1) {
+                                    $scope.bundleId = bundle.id_name;
+                                }
+                            });
+                        });
+                    }
                 });
                 $scope.loggedIn = user.loggedIn;
                 $scope.ownsItem = false;
 
                 api.getItemPrice(defindex).then(function(resultData) {
-                    $scope.marketResultCount = resultData.data.data.length;
-                    var firstResult = resultData.data.data[0];
+                    $scope.marketResultCount = resultData.data.length;
+                    var firstResult = resultData.data[0];
                     var lowest_price = (firstResult.lowest_price / 100).toFixed(2);
                     var median_price = (firstResult.median_price / 100).toFixed(2);
                     var date_fetched = firstResult.date_fetched;
@@ -457,52 +517,29 @@ angular.module('myApp.controllers', ['ngCookies']).
                     };
                 });
 
-                api.getActiveTrades(defindex).then(function(resultData) {
-                    if (resultData.success === true) {
-                        $scope.itemTrades = resultData.data;
+                Member.isLoggedIn().then(function(success) {
+                    $scope.loggedIn = true;
+                    Member.isItemInInventory(defindex).then(function(itemIsInInventory) {
+                        if (itemIsInInventory)
+                            $scope.ownsItem = true;
+                    });
+                    Member.isItemInWishlist(defindex).then(function(itemIsInWishlist) {
+                        if (itemIsInWishlist)
+                            $scope.inWishList = true;
+                    });
 
-                    } else {
-                        console.log(resultData.data);
+                    $scope.removeFromWishlist = function(defindex) {
+                        Member.removeFromWishlist(defindex).then(function(ok) {
+                            $scope.inWishList = false;
+                        });
                     }
-                }, function(failResponse) {
-
+                    $scope.addToWishlist = function(defindex) {
+                        Member.addToWishlist(defindex).then(function(ok) {
+                            $scope.inWishList = true;
+                        });
+                    }
                 });
 
-                if (user.loggedIn) {
-                    var inventoryPromise = user.inventoryPromise;
-                    inventoryPromise.then(function() {
-                        var inventory = user.inventory;
-                        angular.forEach(inventory, function(item, n) {
-                            if (item.defindex === defindex) {
-                                $scope.ownsItem = true;
-                            }
-                        });
-                    });
-
-                    user.wishlistPromise.then(function(success) {
-                        // Is this item in the user's wishlist?
-                        $scope.inWishList = user.isInWishList(defindex);
-                        $scope.addToWishList = function(defindex) {
-                            user.addToWishList(defindex);
-                            $scope.inWishList = true;
-                        };
-                        $scope.removeFromWishList = function(defindex) {
-                            user.removeFromWishList(defindex);
-                            $scope.inWishList = false;
-                        };
-                    });
-                }
-                $scope.submitTrade = function(tradeText) {
-                    api.addTrade(defindex, user.steamid, tradeText).then(function(successResponse) {
-                        if (successResponse.success === true) {
-
-                        } else {
-                            var tradeError = successResponse.data;
-                            $scope.submitTradeFail = true;
-                            $scope.submitTradeFailReason = tradeError;
-                        }
-                    });
-                };
                 $scope.currentPage = 1;
                 $scope.limiter = 10;
                 $scope.$watch('currentPage', function() {
@@ -516,12 +553,64 @@ angular.module('myApp.controllers', ['ngCookies']).
                 }
             }])
         .controller('TradeCtrl', ['$scope', 'api', function($scope, api) {
-                api.getLatestTrades().then(function(successData) {
-                    $scope.latestTrades = successData.data.data;
-                });
+
             }])
         .controller('TradeDetailCtrl', ['$scope', '$routeParams', 'api', function($scope, $routeParams, api) {
                 $scope.tradeId = $routeParams.tradeId;
+            }])
+        .controller('BundlesRootCtrl', ['$scope', 'api', 'title', function($scope, api, title) {
+                title.setTitle("Dota 2 Bundles - DotaInventory.com");
+                api.getBundleIds().then(function(response) {
+                    $scope.bundles = response.data;
+                });
+            }])
+        .controller('BundleDetailCtrl', ['$scope', '$routeParams', 'api', 'Heroes', 'Price', 'title', function($scope, $routeParams, api, Heroes, Price, title) {
+                var id_name = $routeParams.bundle_id_name;
+                api.getBundle(id_name).then(function(response) {
+                    var bundle = response.data;
+                    title.setTitle(bundle.normal_name + " Bundle - DotaInventory.com");
+                    $scope.bundle = bundle;
+
+                    var bundlePrice = 0;
+                    api.searchItems(null, null, null, [bundle.normal_name], null).then(function(response) {
+                        angular.forEach(response, function(item, key) {
+                            if (item.item_class === "bundle") {
+                                $scope.bundleItem = item;
+                                // Get bundle price.
+                                Price.getLatest(item.defindex).then(function(result) {
+                                    bundlePrice = result.lowest_price;
+                                    $scope.bundlePrice = Price.format(result.lowest_price);
+                                });
+                            }
+                        });
+                    });
+
+                    var bundleItemIds = [];
+                    $scope.bundleItemPrices = [];
+                    var contentsPrice = 1;
+                    angular.forEach(bundle.contents, function(item, key) {
+                        bundleItemIds.push(item.defindex);
+                        Price.getLatest(item.defindex).then(function(result) {
+                            if (typeof (result.lowest_price) !== "undefined") {
+                                $scope.bundleItemPrices[item.defindex] = Price.format(result.lowest_price);
+                                var lowestPrice = parseInt(result.lowest_price);
+                                contentsPrice += lowestPrice;
+                                $scope.contentsPrice = Price.format(contentsPrice);
+                            } else {
+                                $scope.contentsPriceMissing = true;
+                            }
+                        });
+                    });
+                    api.searchItems(null, null, null, null, bundleItemIds).then(function(items) {
+                        $scope.bundleItems = items;
+                    });
+                });
+                Heroes.getArray().then(function(heroes) {
+                    $scope.heroes = heroes;
+                });
+                $scope.stripNpcPrefix = function(db_name) {
+                    return Heroes.stripNpcPrefix(db_name);
+                };
             }])
         .controller('StatsCtrl', ['$scope', 'api', function($scope, api) {
                 api.getStats(function(data) {

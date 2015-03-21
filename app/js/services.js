@@ -25,21 +25,24 @@ angular.module('myApp.services', []).
                 // Otherwise save the steamid as logged in user.
                 function setLoggedInUser() {
                     user.steamidPromise = api.getLoggedInUser().then(function(response) {
-                        var steamid = response.data.data;
-                        if (steamid !== "") {
+                        var steamid = response.data.steamid;
+                        if (steamid !== "" && steamid !== "false") {
                             user.loggedIn = true;
                             user.steamid = steamid;
                             // Since user is logged in - populate properties.
-                            user.inventoryPromise = $http.get("api/action.php?action=getinventory&steamid=" + user.steamid).success(function(result) {
+                            user.inventoryPromise = $http.get("api/users/" + user.steamid + "/inventory").success(function(result) {
                                 setInventory(result.data);
                             });
-                            user.profilePromise = $http.get("api/action.php?action=getuser&steamid=" + user.steamid).then(function(result) {
+                            user.profilePromise = $http.get("api/users/" + user.steamid).then(function(result) {
                                 return result.data;
                             });
                             user.wishlistPromise = api.getWishList(steamid).then(function(result) {
                                 user.wishlist = result.data;
                             });
                         }
+                    }, function(denied) {
+                        // Not logged in.
+                        console.log("Could not get logged in steamid. Not logged in!");
                     });
 
                 }
@@ -55,7 +58,7 @@ angular.module('myApp.services', []).
 
                 user.getProfile = function(callback) {
                     if (user.loggedIn === true) {
-                        $http.get('api/action.php?action=getuser&steamid=' + user.steamid).success(function(data) {
+                        $http.get('api/users/' + user.steamid).success(function(data) {
                             callback(data.data);
                         });
                     } else {
@@ -121,12 +124,10 @@ angular.module('myApp.services', []).
                         //Then this URL contains vanity name.
                         var vanityName = communityUrl.substr(communityUrl.lastIndexOf('/') + 1);
                         api.resolveVanityUrl(vanityName).then(function(result) {
-                            if (result.data.success === true) {
-                                var steamid = result.data.data;
-                                deferred.resolve(steamid);
-                            } else {
-                                deferred.reject(result.data.data);
-                            }
+                            var steamid = result.data.steamid;
+                            deferred.resolve(steamid);
+                        }, function(error) {
+                            deferred.reject(result.data.data);
                         });
                     } else {
                         // Seems like input is not a valid Community URL.
@@ -138,19 +139,6 @@ angular.module('myApp.services', []).
                     getSteamidFromUrl: getSteamidFromUrl,
                     isSteamid: isSteamid,
                     isCommunityUrl: isCommunityUrl
-                };
-            }])
-        .factory('SearchItem', ['api', function(api) {
-                /**
-                 * Expects an object with item properties set to be searched on.
-                 * e.g. criteria.rarity if set, should be in the form of a rarity 
-                 * string or an array of rarity strings.
-                 * @param {object} criteria
-                 * @returns {array} search results
-                 */
-                var searchItems = function(criteria) {
-                    rarities = (typeof (criteria.rarities) !== 'undefined') ? criteria.rarities : null;
-                    api.searchItems()
                 };
             }])
         .factory('SiteSearch', ['api', 'SearchUser', function(api, SearchUser) {
@@ -171,11 +159,121 @@ angular.module('myApp.services', []).
                 };
             }])
         .factory('Heroes', ['api', function(api) {
-                return{
+                var heroesPromise = api.getAllHeroes();
+                var heroesService = {
+                    getArray: function() {
+                        return heroesPromise.then(function(response) {
+                            // Return just the resulting array of Hero names.
+                            return response.data;
+                        }, function(reason) {
+                            console.log("API Fail: could not get Heroes.");
+                        });
+                    },
+                    getProperName: function(db_hero_name) {
+                        return this.getArray().then(function(response) {
+                            return response[db_hero_name];
+                        });
+                    },
                     stripNpcPrefix: function(db_hero_name) {
                         return db_hero_name.substring(14);
                     }
                 };
+                return heroesService;
+            }])
+        .factory('Member', ['api', function(api) {
+                var steamidPromise = api.getLoggedInUser();
+                var inventoryPromise = null;
+                var wishlistPromise = null;
+                // Refreshes the wishlist and inventory promise objects.
+                var reloadMember = function() {
+                    steamidPromise.then(function(response) {
+                        // Set the inventory promise.
+                        inventoryPromise = api.getUserInventory(response.data.steamid);
+                        wishlistPromise = api.getUserWishlist(response.data.steamid);
+                    }, function(errorResponse) {
+                        // Don't set anything, since could not get steamid.
+                    });
+                };
+                // initial 'reload'.
+                reloadMember();
+
+                var memberService = {
+                    isLoggedIn: function() {
+                        return steamidPromise.then(function(steamid) {
+                            return true;
+                        }, function(errorResponse) {
+                            return false;
+                        });
+                    },
+                    getSteamid: function() {
+                        return steamidPromise.then(function(steamid) {
+                            return steamid;
+                        }, function(errorResponse) {
+                            console.log("[Member Service] User is not logged in: could not return steamid.");
+                            return false;
+                        });
+                    },
+                    isItemInInventory: function(defindex) {
+                        return inventoryPromise.then(function(response) {
+                            var isInInventory = false;
+                            angular.forEach(response.data, function(item, key) {
+                                if (item.defindex === defindex)
+                                    isInInventory = true;
+                            });
+                            return isInInventory;
+                        });
+                    },
+                    isItemInWishlist: function(defindex) {
+                        return wishlistPromise.then(function(response) {
+                            var isInWishlist = false;
+                            angular.forEach(response.data, function(item, key) {
+                                if (item.defindex === defindex)
+                                    isInWishlist = true;
+                            });
+                            return isInWishlist;
+                        });
+                    },
+                    removeFromWishlist: function(defindex) {
+                        return api.removeFromWishList(defindex).then(function(ok) {
+                            reloadMember();
+                        });
+                    },
+                    addToWishlist: function(defindex) {
+                        return api.addToWishList(defindex).then(function(ok) {
+                            reloadMember();
+                        });
+                    }
+                };
+                return memberService;
+            }])
+        .factory('Items', ['api', function(api) {
+                var itemsService = {
+                    search: function() {
+
+                    }
+
+                };
+
+                return itemsService;
+            }])
+        .factory('Price', ['api', function(api) {
+                var priceService = {
+                    getLatest: function(defindex){
+                        return api.getItemPrice(defindex).then(function(response){
+                            return response.data[0];
+                        });
+                    },
+                    getAll: function(defindex){
+                        return api.getItemPrice(defindex).then(function(response){
+                            return response.data;
+                        });
+                    },
+                    format: function(priceInt){
+                        return "$" + (priceInt / 100).toFixed(2);
+                    }
+                };
+
+                return priceService;
             }])
         .factory('api', ['$http', function($http) {
                 /**
@@ -187,47 +285,49 @@ angular.module('myApp.services', []).
                  * @param {string} name
                  * @returns {$http.get} search results
                  */
-                var searchItems = function(rarities, heroes, types, name) {
-                    var queryString = 'api/action.php?action=searchItems';
+                var searchItems = function(rarities, heroes, types, name, defindexes) {
+                    // Construct the params object dynamically so as not to include unwanted params.
+                    var params = {};
                     if (rarities !== null && rarities.length > 0)
-                        queryString += "?rarities=" + rarities.join(',');
+                        params.rarity = rarities.join(',');
                     if (heroes !== null && heroes.length > 0)
-                        queryString += "?heroes=" + heroes.join(',');
+                        params.hero = heroes.join(',');
                     if (types !== null && types.length > 0)
-                        queryString += "?types=" + types.join(',');
+                        params.type = types.join(',');
                     if (name !== null && name !== "")
-                        queryString += "?name=" + name;
-                    // Now that queryString has been constructed, call to the API.
-                    // !!! NOT IMPLEMENTED SERVER SIDE - RETURNS DUMMY DATA.
-                    return $http.get("items_result.json");
+                        params.name = name;
+                    if (defindexes !== null && defindexes.length > 0)
+                        params.defindex = defindexes.join(',');
+                    return $http.get("api/items", {params: params}).then(function(response) {
+                        return response.data;
+                    }, function(fail) {
+                        console.log("API Item search failed.");
+                    });
                 };
 
                 return {
                     searchItems: searchItems,
-                    getItem: function(defindex){
-                        return $http.get('api/action.php?action=getitem&defindex=' + defindex);
+                    getItem: function(defindex) {
+                        return $http.get('api/items/' + defindex);
                     },
                     getLoggedInUser: function() {
-                        return $http.get('api/action.php?action=getLoggedInUser')
-                                .then(function(response) {
-                                    return response;
-                                });
+                        return $http.get('api/members/me/steamid');
                     },
                     logout: function() {
-                        return $http.get('api/action.php?action=logout')
+                        return $http.get('api/members/me/logout')
                                 .then(function(response) {
                                     console.log(response.data.success);
                                 });
                     },
                     addToWishList: function(defindex) {
-                        return $http.post('api/action.php',
-                                {action: 'addToWishList', defindex: defindex}).then(function(response) {
+                        // e.g. [PUT] members/me/wishlist/3000
+                        return $http.put('api/members/me/wishlist/' + defindex).then(function(response) {
                             return response.data;
                         });
                     },
                     removeFromWishList: function(defindex) {
-                        return $http.post('api/action.php',
-                                {action: 'removeFromWishList', defindex: defindex}).then(function(response) {
+                        // e.g. [DELETE] members/me/wishlist/3000
+                        return $http.delete('api/members/me/wishlist/' + defindex).then(function(response) {
                             return response.data;
                         });
                     },
@@ -238,72 +338,51 @@ angular.module('myApp.services', []).
                         });
                     },
                     getWishList: function(steamid) {
-                        return $http.get('api/action.php?action=getWishList&steamid=' + steamid)
+                        return $http.get('api/members/' + steamid + '/wishlist')
                                 .then(function(response) {
-                                    console.log(response.data);
+                                    console.log("WISHLIST API " + response);
                                     return response.data;
                                 });
                     },
-                    addTrade: function(defindex, steamid, message) {
-                        return $http.post('api/action.php',
-                                {action: 'addTrade', defindex: defindex, steamid: steamid, message: message}
-                        ).then(function(data) {
-                            return data.data;
-                        }, function(failData) {
-
-                        });
-                    },
-                    getTrade: function(tradeId) {
-
+                    getUserWishlist: function(steamid) {
+                        return $http.get('api/members/' + steamid + '/wishlist');
                     },
                     getItemPrice: function(defindex) {
-                        return $http.get('api/action.php?action=getitemprice&defindex=' + defindex)
+                        return $http.get('api/items/' + defindex + '/price')
                                 .then(function(successData) {
                                     return successData;
                                 });
                     },
-                    getLatestTrades: function() {
-                        return $http.get('api/action.php?action=getlatesttrades')
-                                .then(function(successResponse) {
-                                    return successResponse;
-                                });
-                    },
-                    getActiveTrades: function(defindex) {
-                        return $http.get('api/action.php?action=getitemtrades&defindex=' + defindex)
-                                .then(function(successResponse) {
-                                    return successResponse.data;
-                                }, function(failResponse) {
-
-                                });
-                    },
-                    getUserTrades: function(steamid) {
-
-                    },
                     resolveVanityUrl: function(vanityName) {
-                        return $http.get('api/action.php?action=getsteamid&vanityurl=' + vanityName).then(function(result) {
+                        return $http.get('api/users/vanity/' + vanityName).then(function(result) {
                             return result;
                         });
                     },
                     getInventory: function(steamid, callback) {
-                        $http.get("api/action.php?action=getinventory&steamid=" + steamid).success(function(data) {
+                        $http.get('api/users/' + steamid + '/inventory').success(function(data) {
                             callback(data);
                         });
+                    },
+                    getUserInventory: function(steamid) {
+                        return $http.get('api/users/' + steamid + '/inventory');
                     },
                     getUserDetails: function(steamid, callback) {
-                        $http.get('api/action.php?action=getuser&steamid=' + steamid).success(function(data) {
-                            callback(data);
-                        });
+                        return $http.get('api/users/' + steamid);
                     },
                     getFriendsList: function(steamid, callback) {
-                        $http.get('api/action.php?action=getfriendslist&steamid=' + steamid).success(function(data) {
+                        $http.get('api/users/' + steamid + '/friends').success(function(data) {
                             callback(data);
                         });
                     },
                     getHeroes: function(callback) {
-                        $http.get('api/action.php?action=getheroes').success(function(data) {
+                        $http.get('api/items/heroes').success(function(data) {
                             callback(data);
                         });
                     },
+                    getAllHeroes: function() {
+                        return $http.get('api/items/heroes');
+                    },
+                    // To be refactored out of API.
                     getFriendsOwning: function(steamid, defindex, callback) {
                         $http.get('api/action.php?action=getfriendsowning&steamid=' + steamid + '&defindex=' + defindex).success(function(data) {
                             callback(data);
@@ -314,17 +393,18 @@ angular.module('myApp.services', []).
                             callback(data);
                         });
                     },
-                    getHeroName: function(npcHeroName, callback) {
-                        $http.get('api/action.php?action=getheroname&npcheroname=' + npcHeroName).success(function(data) {
-                            callback(data);
-                        });
-                    },
                     getItemsByType: function(itemTypeName) {
-                        return $http.get('api/action.php?action=getitemsbytype&type=' + itemTypeName).then(function(success) {
+                        return $http.get('api/items?type=' + itemTypeName).then(function(success) {
                             return success.data;
                         }, function(fail) {
 
                         });
+                    },
+                    getBundleIds: function(){
+                        return $http.get('api/bundles');
+                    },
+                    getBundle: function(id_name){
+                        return $http.get('api/bundles/' + id_name);
                     }
                 };
             }])

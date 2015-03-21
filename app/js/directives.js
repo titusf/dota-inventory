@@ -115,42 +115,37 @@ angular.module('myApp.directives', []).
                 }
             };
         }).
-        directive('dotaItemBlock', ['Heroes', 'user', function(Heroes, user) {
+        directive('dotaItemBlock', ['Heroes', 'Member', function(Heroes, Member) {
                 return{
                     restrict: 'E',
                     scope: {
                         item: '=',
-                        owners: '=',
-                        heroes: '='
+                        owners: '='
                     },
                     templateUrl: 'templates/dota-item-block.html',
                     link: function(scope, elem, attrs) {
                         var defindex = scope.item.defindex;
+                        Heroes.getArray().then(function(result){
+                            scope.heroes = result;
+                        });
                         scope.constructHeroIconUrl = function(db_hero_name) {
                             return "img/heroes/icons/" + Heroes.stripNpcPrefix(db_hero_name) + "_icon.png";
                         };
-                        scope.addToWishList = function() {
-                            user.addToWishList(defindex);
-                            scope.inWishList = true;
-                        };
-                        scope.removeFromWishList = function(){
-                            user.removeFromWishList(defindex);
-                            scope.inWishList = false;
-                        };
-                        user.wishlistPromise.then(function(result) {
-                            if(isInWishList(user.wishlist) === true){
-                                scope.inWishList = true;
-                            }
+                        Member.isLoggedIn().then(function(ok) {
+                            Member.isItemInWishlist(defindex).then(function(isInWishlist){
+                                scope.inWishlist = isInWishlist;
+                            });
+                            scope.addToWishlist = function() {
+                                Member.addToWishlist(defindex).then(function(ok){
+                                    scope.inWishlist = true;
+                                });
+                            };
+                            scope.removeFromWishlist = function() {
+                                Member.removeFromWishlist(defindex).then(function(ok){
+                                    scope.inWishlist = false;
+                                });
+                            };
                         });
-                        function isInWishList(wishlist){
-                            for(var i=0; i<wishlist.length; i++){
-                                if(wishlist[i].defindex === defindex){
-                                    return true;
-                                }
-                            }
-                            return false;
-                        }
-
                     }
                 };
             }]).

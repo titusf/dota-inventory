@@ -31,6 +31,9 @@ angular.module('myApp', [
                 $routeProvider.when('/items/set/:setName', {templateUrl: 'partials/item-list-set.html', controller: 'ItemListSetCtrl'});
                 $routeProvider.when('/items/name/:searchTerm', {templateUrl: 'partials/item-search.html', controller: 'ItemSearchCtrl'});
                 $routeProvider.when('/items/type/:typeName', {templateUrl: 'partials/item-list-type.html', controller: 'ItemListTypeCtrl'});
+                // Bundles Routes
+                $routeProvider.when('/bundles', {templateUrl: 'partials/bundles-list.html', controller: 'BundlesRootCtrl'});
+                $routeProvider.when('/bundles/:bundle_id_name', {templateUrl: 'partials/bundle-detail.html', controller: 'BundleDetailCtrl'});
                 //Trade routes (lol)
                 $routeProvider.when('/trades', {templateUrl: 'partials/trade-front.html', controller: 'TradeCtrl'});
                 $routeProvider.when('/trades/id/:tradeId', {templateUrl: 'partials/trade-detail.html', controller: 'TradeDetailCtrl'});
